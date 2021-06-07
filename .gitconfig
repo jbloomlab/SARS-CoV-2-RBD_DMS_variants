@@ -1,0 +1,2 @@
+[filter "strip-notebook-metadata"]
+    clean = "jupyter nbconvert --ClearMetadataPreprocessor.enabled=True --to=notebook --stdin --stdout --log-level=ERROR"

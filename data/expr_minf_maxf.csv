@@ -1,0 +1,9 @@
+﻿library,bin,min_fluorescence,max_fluorescence
+lib1,b1,-201,663
+lib1,b2,664,7116
+lib1,b3,7117,23056
+lib1,b4,23057,175984
+lib2,b1,-201,663
+lib2,b2,664,6061
+lib2,b3,6062,19927
+lib2,b4,19987,175984

@@ -1,0 +1,31 @@
+SARS-CoV-2: &SARS-CoV-2_parse_specs
+  query_clip5: 4
+  query_clip3: 4
+  termini5:
+    filter:
+      clip5: 4
+      mutation_nt_count: 1
+      mutation_op_count: null
+  gene:
+    filter:
+      mutation_nt_count: 90
+      mutation_op_count: null
+    return: [mutations, accuracy]
+  spacer:
+    filter:
+      mutation_nt_count: 1
+      mutation_op_count: null
+  barcode:
+    filter:
+      mutation_nt_count: 0
+      mutation_op_count: null
+    return: [sequence, accuracy]
+  termini3:
+    filter:
+      clip3: 4
+      mutation_nt_count: 1
+      mutation_op_count: null
+
+E484K: *SARS-CoV-2_parse_specs
+N501Y: *SARS-CoV-2_parse_specs
+B_1_351: *SARS-CoV-2_parse_specs
