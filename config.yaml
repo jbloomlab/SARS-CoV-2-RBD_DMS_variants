@@ -1,0 +1,68 @@
+# config for analysis
+
+# conda environment file
+environment: environment.yml
+
+# most CPUs to ever use at once
+max_cpus: 16
+
+# amplicons sequenced by PacBio
+amplicons: data/PacBio_amplicons.gb
+
+# the primary target for which we are calling mutations
+primary_target: SARS-CoV-2
+
+# how to parse the amplicon
+feature_parse_specs: data/feature_parse_specs.yaml
+
+# do we get the sequencing data from the 'HutchServer' or 'SRA'?
+seqdata_source: HutchServer
+
+# list of PacBio sequencing runs linking barcodes to variants
+pacbio_runs: data/PacBio_runs.csv
+
+# list of Illumina sequencing runs of barcodes
+barcode_runs: data/barcode_runs.csv
+
+# wildtype sequence of mutagenized gene
+wildtype_sequence: data/wildtype_sequence.fasta
+site_number_offset: 330  # add this to sequential sites to get RBD numbering
+
+# URLs from which we download binding & expression of mutants & variants
+mut_bind_expr_url: https://media.githubusercontent.com/media/jbloomlab/SARS-CoV-2-RBD_DMS/master/results/single_mut_effects/single_mut_effects.csv
+
+# output directories / files
+summary_dir: results/summary
+figs_dir: results/figures
+ccs_dir: results/ccs
+process_ccs_dir: results/process_ccs
+processed_ccs_file: results/process_ccs/processed_ccs.csv
+variants_dir: results/variants
+nt_variant_table_file: results/variants/nucleotide_variant_table.csv
+codon_variant_table_file: results/variants/codon_variant_table.csv
+counts_dir: results/counts
+variant_counts_file: results/counts/variant_counts.csv
+
+# parameters for running PacBio `ccs` program
+min_ccs_accuracy: 0.999
+min_ccs_passes: 3
+min_ccs_length: 50
+max_ccs_length: 5000
+
+# max error rate in gene / barcode CCSs retained for consensu building
+max_error_rate: 0.0001
+
+# Parameters for processing Illumina barcodes, assuming this structure:
+#  [R2 binds] - [upstream] - [barcode] - [downstream] - [R1 binds]
+#  This orientation is hard-wired in the barcode parser, but here it is opposite
+#  Therefore, supplied the "downstream" sequence as reverse complemented upstream
+# Passed to `dms_variants.illuminabarcodeparser.IlluminaBarcodeParser`:
+illumina_barcode_parser_params:
+  upstream: GCTCGCGGCCGC
+  downstream: ''
+  minq: 20
+  upstream_mismatch: 1
+  downstream_mismatch: 0
+
+# Input files for analyses from the data subdirectory
+RBD_sites: data/RBD_sites.csv
