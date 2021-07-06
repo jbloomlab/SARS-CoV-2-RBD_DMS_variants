@@ -57,7 +57,7 @@ rule make_summary:
     """Create Markdown summary of analysis."""
     input:
         dag=os.path.join(config['summary_dir'], 'dag.svg'),
-        get_mut_bind_expr=config['mut_bind_expr'],
+        get_mut_bind_expr=config['mut_bind_expr_url'],
         process_ccs=nb_markdown('process_ccs.ipynb'),
         build_variants=nb_markdown('build_variants.ipynb'),
         codon_variant_table=config['codon_variant_table_file'],
@@ -129,7 +129,7 @@ rule count_variants:
 rule get_mut_bind_expr:
     """Download SARS-CoV-2 mutation ACE2-binding and expression from URL."""
     output:
-        file=config['mut_bind_expr']
+        file=config['mut_bind_expr_url']
     run:
         urllib.request.urlretrieve(config['mut_bind_expr_url'], output.file)
         
