@@ -165,34 +165,17 @@ rule process_ccs:
 
 if config['seqdata_source'] == 'HutchServer':
 
-    rule build_ccs:
-        """Run PacBio ``ccs`` program to build CCSs from subreads."""
+    rule get_ccs:
+        """Symbolically link CCS files."""
         input:
-            subreads=lambda wildcards: (pacbio_runs
+            ccs_fastq=lambda wildcards: (pacbio_runs
                                         .set_index('pacbioRun')
-                                        .at[wildcards.pacbioRun, 'subreads']
+                                        .at[wildcards.pacbioRun, 'ccs']
                                         )
         output:
-            ccs_report=os.path.join(config['ccs_dir'], "{pacbioRun}_report.txt"),
             ccs_fastq=os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz")
-        params:
-            min_ccs_length=config['min_ccs_length'],
-            max_ccs_length=config['max_ccs_length'],
-            min_ccs_passes=config['min_ccs_passes'],
-            min_ccs_accuracy=config['min_ccs_accuracy']
-        threads: config['max_cpus']
         shell:
-            """
-            ccs \
-                --min-length {params.min_ccs_length} \
-                --max-length {params.max_ccs_length} \
-                --min-passes {params.min_ccs_passes} \
-                --min-rq {params.min_ccs_accuracy} \
-                --report-file {output.ccs_report} \
-                --num-threads {threads} \
-                {input.subreads} \
-                {output.ccs_fastq}
-            """
+            "os.symlink({input.ccs_fastq}, {output.ccs_fastq})"
 
 elif config['seqdata_source'] == 'SRA':
     raise RuntimeError('getting sequence data from SRA not yet implemented')
