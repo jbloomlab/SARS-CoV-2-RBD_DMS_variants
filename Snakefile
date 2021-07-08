@@ -151,10 +151,10 @@ rule process_ccs:
         expand(os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz"),
                pacbioRun=pacbio_runs['pacbioRun']),
         config['amplicons'],
-        ([] if config['seqdata_source'] != 'HutchServer' else
-         expand(os.path.join(config['ccs_dir'], "{pacbioRun}_report.txt"),
-                pacbioRun=pacbio_runs['pacbioRun'])
-         )
+        #([] if config['seqdata_source'] != 'HutchServer' else
+        #expand(os.path.join(config['ccs_dir'], "{pacbioRun}_report.txt"),
+        #        pacbioRun=pacbio_runs['pacbioRun'])
+        # )
     output:
         config['processed_ccs_file'],
         nb_markdown=nb_markdown('process_ccs.ipynb')
