@@ -4,6 +4,7 @@
 import glob
 import itertools
 import os.path
+import os
 import textwrap
 import urllib.request
 
@@ -57,10 +58,10 @@ rule make_summary:
     """Create Markdown summary of analysis."""
     input:
         dag=os.path.join(config['summary_dir'], 'dag.svg'),
-        get_mut_bind_expr=config['mut_bind_expr_url'],
+        get_mut_bind_expr=config['mut_bind_expr'],
         process_ccs=nb_markdown('process_ccs.ipynb'),
-        build_variants=nb_markdown('build_variants.ipynb'),
-        codon_variant_table=config['codon_variant_table_file'],
+        # build_variants=nb_markdown('build_variants.ipynb'),
+        # codon_variant_table=config['codon_variant_table_file'],
         
         # commenting out steps that we don't have data for yet
         # variant_counts_file=config['variant_counts_file'],
@@ -88,21 +89,23 @@ rule make_summary:
 
             1. Get prior Wuhan-1 RBD DMS mutation-level [binding and expression data]({path(input.get_mut_bind_expr)}). 
             
-            2. [Process PacBio CCSs]({path(input.process_ccs)}).
-
-            3. [Build variants from CCSs]({path(input.build_variants)}).
-               Creates a [codon variant table]({path(input.codon_variant_table)})
-               linking barcodes to the mutations in the variants.
             
-            4. [Count variants by barcode]({path(input.count_variants)}).
-               Creates a [variant counts file]({path(input.variant_counts_file)})
-               giving counts of each barcoded variant in each condition.
+            
             
 
             """
             ).strip())
             
             
+# 3. [Process PacBio CCSs]({path(input.process_ccs)}).
+# 
+# 4. [Build variants from CCSs]({path(input.build_variants)}).
+#    Creates a [codon variant table]({path(input.codon_variant_table)})
+#    linking barcodes to the mutations in the variants.
+# 
+# 4. [Count variants by barcode]({path(input.count_variants)}).
+#    Creates a [variant counts file]({path(input.variant_counts_file)})
+#    giving counts of each barcoded variant in each condition.
 
 rule make_dag:
     # error message, but works: https://github.com/sequana/sequana/issues/115
@@ -129,7 +132,7 @@ rule count_variants:
 rule get_mut_bind_expr:
     """Download SARS-CoV-2 mutation ACE2-binding and expression from URL."""
     output:
-        file=config['mut_bind_expr_url']
+        file=config['mut_bind_expr']
     run:
         urllib.request.urlretrieve(config['mut_bind_expr_url'], output.file)
         
@@ -151,10 +154,6 @@ rule process_ccs:
         expand(os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz"),
                pacbioRun=pacbio_runs['pacbioRun']),
         config['amplicons'],
-        #([] if config['seqdata_source'] != 'HutchServer' else
-        #expand(os.path.join(config['ccs_dir'], "{pacbioRun}_report.txt"),
-        #        pacbioRun=pacbio_runs['pacbioRun'])
-        # )
     output:
         config['processed_ccs_file'],
         nb_markdown=nb_markdown('process_ccs.ipynb')
@@ -174,8 +173,8 @@ if config['seqdata_source'] == 'HutchServer':
                                         )
         output:
             ccs_fastq=os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz")
-        shell:
-            "os.symlink({input.ccs_fastq}, {output.ccs_fastq})"
+        run:
+            os.symlink(input.ccs_fastq, output.ccs_fastq)
 
 elif config['seqdata_source'] == 'SRA':
     raise RuntimeError('getting sequence data from SRA not yet implemented')

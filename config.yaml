@@ -33,6 +33,7 @@ mut_bind_expr_url: https://media.githubusercontent.com/media/jbloomlab/SARS-CoV-
 
 # output directories / files
 summary_dir: results/summary
+mut_bind_expr: results/prior_DMS_data/mutant_ACE2binding_expression.csv
 figs_dir: results/figures
 ccs_dir: results/ccs
 process_ccs_dir: results/process_ccs
