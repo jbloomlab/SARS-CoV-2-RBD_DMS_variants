@@ -38,17 +38,17 @@ assert len(pacbio_runs['pacbioRun'].unique()) == len(pacbio_runs['pacbioRun'])
 barcode_runs = pd.read_csv(config['barcode_runs'])
 
 # barcode runs with R1 files expanded by glob
-# barcode_runs_expandR1 = (
-#     barcode_runs
-#     .assign(R1=lambda x: x['R1'].str.split('; ').map(
-#                     lambda y: list(itertools.chain(*map(glob.glob, y)))),
-#             n_R1=lambda x: x['R1'].map(len),
-#             # sample_lib=lambda x: x['sample'] + '_' + x['library'],
-#             )
-#     )
-# 
-# if any(barcode_runs_expandR1['n_R1'] < 1):
-#     raise ValueError(f"no R1 for {barcode_runs_expandR1.query('n_R1 < 1')}")    
+barcode_runs_expandR1 = (
+    barcode_runs
+    .assign(R1=lambda x: x['R1'].str.split('; ').map(
+                    lambda y: list(itertools.chain(*map(glob.glob, y)))),
+            n_R1=lambda x: x['R1'].map(len),
+            # sample_lib=lambda x: x['sample'] + '_' + x['library'],
+            )
+    )
+
+if any(barcode_runs_expandR1['n_R1'] < 1):
+    raise ValueError(f"no R1 for {barcode_runs_expandR1.query('n_R1 < 1')}")    
 
 # Rules -----------------------------------------------------------------------
 
