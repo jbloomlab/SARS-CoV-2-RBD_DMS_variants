@@ -68,7 +68,7 @@ ORIGIN
       961 ctaaaaaaag atgaatgtga atcgaatcct aagagaatta atgatacggc gaccaccgag
      1021 atctacactc tttccctaca cgacgctctt ccgatctNNN NNNNNNNNNN NNNgcggcc
 //
-LOCUS       E484K                   1079 bp    DNA        linear       07-JUN-2021
+LOCUS       E484K                    1079 bp    DNA        linear       07-JUN-2021
 DEFINITION  PacBio amplicon for deep mutational scanning of SARS-CoV-2 RBD
 ACCESSION   None
 SOURCE      Tyler Starr
@@ -136,7 +136,7 @@ ORIGIN
       961 ctaaaaaaag atgaatgtga atcgaatcct aagagaatta atgatacggc gaccaccgag
      1021 atctacactc tttccctaca cgacgctctt ccgatctNNN NNNNNNNNNN NNNgcggcc
 //
-LOCUS       N501Y                   1079 bp    DNA        linear       07-JUN-2021
+LOCUS       N501Y                    1079 bp    DNA        linear       07-JUN-2021
 DEFINITION  PacBio amplicon for deep mutational scanning of SARS-CoV-2 RBD
 ACCESSION   None
 SOURCE      Tyler Starr
@@ -204,7 +204,7 @@ ORIGIN
       961 ctaaaaaaag atgaatgtga atcgaatcct aagagaatta atgatacggc gaccaccgag
      1021 atctacactc tttccctaca cgacgctctt ccgatctNNN NNNNNNNNNN NNNgcggcc
 //
-LOCUS       B_1_351                 1079 bp    DNA        linear       07-JUN-2021
+LOCUS       B_1_351                  1079 bp    DNA        linear       07-JUN-2021
 DEFINITION  PacBio amplicon for deep mutational scanning of SARS-CoV-2 RBD
 ACCESSION   None
 SOURCE      Tyler Starr
