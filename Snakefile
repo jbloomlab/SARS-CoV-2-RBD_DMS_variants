@@ -89,7 +89,7 @@ rule make_summary:
 
             1. Get prior Wuhan-1 RBD DMS mutation-level [binding and expression data]({path(input.get_mut_bind_expr)}). 
             
-            
+            2. [Process PacBio CCSs]({path(input.process_ccs)}).
             
             
 
@@ -97,7 +97,7 @@ rule make_summary:
             ).strip())
             
             
-# 3. [Process PacBio CCSs]({path(input.process_ccs)}).
+
 # 
 # 4. [Build variants from CCSs]({path(input.build_variants)}).
 #    Creates a [codon variant table]({path(input.codon_variant_table)})
