@@ -60,12 +60,10 @@ rule make_summary:
         dag=os.path.join(config['summary_dir'], 'dag.svg'),
         get_mut_bind_expr=config['mut_bind_expr'],
         process_ccs=nb_markdown('process_ccs.ipynb'),
-        # build_variants=nb_markdown('build_variants.ipynb'),
-        # codon_variant_table=config['codon_variant_table_file'],
-        
-        # commenting out steps that we don't have data for yet
-        # variant_counts_file=config['variant_counts_file'],
-        # count_variants=nb_markdown('count_variants.ipynb'),
+        build_variants=nb_markdown('build_variants.ipynb'),
+        codon_variant_table=config['codon_variant_table_file'],
+        variant_counts_file=config['variant_counts_file'],
+        count_variants=nb_markdown('count_variants.ipynb'),
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -91,21 +89,16 @@ rule make_summary:
             
             2. [Process PacBio CCSs]({path(input.process_ccs)}).
             
-            
+            3. [Build variants from CCSs]({path(input.build_variants)}).
+               Creates a [codon variant table]({path(input.codon_variant_table)})
+               linking barcodes to the mutations in the variants.
+
+            4. [Count variants by barcode]({path(input.count_variants)}).
+               Creates a [variant counts file]({path(input.variant_counts_file)})
+               giving counts of each barcoded variant in each condition.
 
             """
             ).strip())
-            
-            
-
-# 
-# 4. [Build variants from CCSs]({path(input.build_variants)}).
-#    Creates a [codon variant table]({path(input.codon_variant_table)})
-#    linking barcodes to the mutations in the variants.
-# 
-# 4. [Count variants by barcode]({path(input.count_variants)}).
-#    Creates a [variant counts file]({path(input.variant_counts_file)})
-#    giving counts of each barcoded variant in each condition.
 
 rule make_dag:
     # error message, but works: https://github.com/sequana/sequana/issues/115
