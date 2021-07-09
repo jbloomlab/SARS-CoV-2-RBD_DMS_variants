@@ -4,7 +4,7 @@
 environment: environment.yml
 
 # most CPUs to ever use at once
-max_cpus: 16
+max_cpus: 8
 
 # amplicons sequenced by PacBio
 amplicons: data/PacBio_amplicons.gb
