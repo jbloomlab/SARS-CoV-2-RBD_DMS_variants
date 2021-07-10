@@ -7,13 +7,19 @@ environment: environment.yml
 max_cpus: 8
 
 # amplicons sequenced by PacBio
-amplicons: data/PacBio_amplicons.gb
+amplicons_Wuhan_Hu_1: data/PacBio_amplicon_Wuhan_Hu_1.gb
+amplicons_E484K: data/PacBio_amplicon_E484K.gb
+amplicons_N501Y: data/PacBio_amplicon_N501Y.gb
+amplicons_B1351: data/PacBio_amplicon_B1351.gb
 
 # the primary target for which we are calling mutations
 primary_target: SARS-CoV-2
 
 # how to parse the amplicon
-feature_parse_specs: data/feature_parse_specs.yaml
+feature_parse_specs_Wuhan_Hu_1: data/feature_parse_specs_Wuhan_Hu_1.yaml
+feature_parse_specs_E484K: data/feature_parse_specs_E484K.yaml
+feature_parse_specs_N501Y: data/feature_parse_specs_N501Y.yaml
+feature_parse_specs_B1351: data/feature_parse_specs_B1351.yaml
 
 # do we get the sequencing data from the 'HutchServer' or 'SRA'?
 seqdata_source: HutchServer
@@ -37,7 +43,7 @@ mut_bind_expr: results/prior_DMS_data/mutant_ACE2binding_expression.csv
 figs_dir: results/figures
 ccs_dir: results/ccs
 process_ccs_dir: results/process_ccs
-processed_ccs_file_Wuhan-Hu-1: results/process_ccs/processed_ccs_Wuhan-Hu-1.csv
+processed_ccs_file_Wuhan_Hu_1: results/process_ccs/processed_ccs_Wuhan_Hu_1.csv
 processed_ccs_file_E484K: results/process_ccs/processed_ccs_E484K.csv
 processed_ccs_file_N501Y: results/process_ccs/processed_ccs_N501Y.csv
 processed_ccs_file_B1351: results/process_ccs/processed_ccs_B1351.csv
