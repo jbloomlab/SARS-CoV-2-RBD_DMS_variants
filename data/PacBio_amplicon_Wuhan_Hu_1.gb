@@ -1,4 +1,4 @@
-LOCUS       Wuhan-Hu-1               1079 bp    DNA        linear       07-APR-2020
+LOCUS       Wuhan_Hu_1               1079 bp    DNA        linear       07-APR-2020
 DEFINITION  PacBio amplicon for deep mutational scanning of SARS-CoV-2 RBD
 ACCESSION   None
 VERSION
