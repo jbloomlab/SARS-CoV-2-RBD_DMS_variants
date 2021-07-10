@@ -37,7 +37,10 @@ mut_bind_expr: results/prior_DMS_data/mutant_ACE2binding_expression.csv
 figs_dir: results/figures
 ccs_dir: results/ccs
 process_ccs_dir: results/process_ccs
-processed_ccs_file: results/process_ccs/processed_ccs.csv
+processed_ccs_file_Wuhan-Hu-1: results/process_ccs/processed_ccs_Wuhan-Hu-1.csv
+processed_ccs_file_E484K: results/process_ccs/processed_ccs_E484K.csv
+processed_ccs_file_N501Y: results/process_ccs/processed_ccs_N501Y.csv
+processed_ccs_file_B1351: results/process_ccs/processed_ccs_B1351.csv
 variants_dir: results/variants
 nt_variant_table_file: results/variants/nucleotide_variant_table.csv
 codon_variant_table_file: results/variants/codon_variant_table.csv
