@@ -11,9 +11,7 @@ amplicons_Wuhan_Hu_1: data/PacBio_amplicon_Wuhan_Hu_1.gb
 amplicons_E484K: data/PacBio_amplicon_E484K.gb
 amplicons_N501Y: data/PacBio_amplicon_N501Y.gb
 amplicons_B1351: data/PacBio_amplicon_B1351.gb
-
-# the primary target for which we are calling mutations
-primary_target: SARS-CoV-2
+amplicons_all: data/PacBio_amplicons_all.gb
 
 # how to parse the amplicon
 feature_parse_specs_Wuhan_Hu_1: data/feature_parse_specs_Wuhan_Hu_1.yaml
