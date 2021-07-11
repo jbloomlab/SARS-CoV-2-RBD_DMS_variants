@@ -100,6 +100,7 @@ You may need to run this if you are tracking these files and haven't installed `
 Then the large results files were added for tracking with:
 ```
 git lfs track results/variants/codon_variant_table_*.csv
+git lfs track results/counts/variant_counts.csv
 ```
 
 ## Updating the conda environment
