@@ -1,24 +1,30 @@
 # cluster configuration for running Snakefile on Hutch cluster
 
 __default__:
-  cpus: 1
+  cpus: 2
   time: 0-4
   mem: 32000
   name: "{rule}"
   constraint: '"gizmog|gizmoj|gizmok"'
 
-build_ccs:
-  cpus: 8
-  time: 4-0
-  mem: 100000
-  
-build_variants:
-  cpus: 8
-  time: 4-0
-  mem: 100000
 
-process_ccs:
-  cpus: 8
+process_ccs_Wuhan_Hu_1:
+  cpus: 4
+  time: 1-0
+  mem: 250000
+  
+process_ccs_E484K:
+  cpus: 4
+  time: 1-0
+  mem: 250000
+  
+process_ccs_N501Y:
+  cpus: 4
+  time: 1-0
+  mem: 250000
+  
+process_ccs_B1351:
+  cpus: 4
   time: 1-0
   mem: 250000
 
@@ -32,7 +38,4 @@ compute_expression_meanFs:
   time: 1-0
   mem: 100000
 
-global_epistasis_expression:
-  cpus: 4
-  time: 1-0
-  mem: 100000
+
