@@ -56,9 +56,9 @@ You likely want to submit [run_Hutch_cluster.bash](run_Hutch_cluster.bash) itsel
 ### Configure `.git` to not track Jupyter notebook metadata
 To simplify git tracking of Jupyter notebooks, we have added the filter described [here](https://stackoverflow.com/questions/28908319/how-to-clear-an-ipython-notebooks-output-in-all-cells-from-the-linux-terminal/58004619#58004619) to strip notebook metadata to [.gitattributes](.gitattributes) and [.gitconfig](.gitconfig).
 The **first time** you check out this repo, run the following command to use this configuration (see [here](https://stackoverflow.com/a/18330114)):
-
+```
    git config --local include.path ../.gitconfig
-
+```
 Then don't worry about it anymore.
 
 ## Configuring the analysis
@@ -69,7 +69,6 @@ You should modify the analysis by changing this configuration file; do **not** h
 The input files pointed to by [config.yaml](config.yaml) are in the [./data/](data) subdirectory.
 See the [./data/README.md](./data/README.md) file for details.
 
-Note that the raw sequencing data are on the SRA in BioProject [PRJNA639956](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA639956) as well as on the Hutch cluster.
 
 ## Cluster configuration
 There is a cluster configuration file [cluster.yaml](cluster.yaml) that configures [Snakefile](Snakefile) for the Fred Hutch cluster, as recommended by the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/snakefiles/configuration.html).
@@ -98,7 +97,10 @@ The following commands were then run:
     git lfs install
 
 You may need to run this if you are tracking these files and haven't installed `git-lfs` in your user account.
-Then the large results files were added for tracking with: xxx
+Then the large results files were added for tracking with:
+```
+git lfs track results/variants/codon_variant_table_*.csv
+```
 
 ## Updating the conda environment
 The [environment.yml](environment.yml) file contains a fully pinned conda environment.
