@@ -103,17 +103,3 @@ git lfs track results/variants/codon_variant_table_*.csv
 git lfs track results/counts/variant_counts.csv
 ```
 
-## Updating the conda environment
-The [environment.yml](environment.yml) file contains a fully pinned conda environment.
-An environment without all of the versions pinned is in [environment_unpinned.yml](environment_unpinned.yml).
-If you need to update the environment, the suggested way to do it is add the new requirement to [environment_unpinned.yml](environment_unpinned.yml), then build that environment and finally export the pinned version:
-
-    conda env create -f environment_unpinned.yml --prefix ./env
-
-Then activate the environment with:
-
-    conda activate ./env
-
-Finally, export the pinned version with:
-
-    conda env export --prefix ./env > environment.yml
