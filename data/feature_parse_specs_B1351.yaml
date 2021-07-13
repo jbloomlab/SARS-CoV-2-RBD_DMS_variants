@@ -1,4 +1,4 @@
-SARS-CoV-2: &SARS-CoV-2_parse_specs
+B1351:
   query_clip5: 4
   query_clip3: 4
   termini5:
@@ -26,6 +26,3 @@ SARS-CoV-2: &SARS-CoV-2_parse_specs
       mutation_nt_count: 1
       mutation_op_count: null
 
-E484K: *SARS-CoV-2_parse_specs
-N501Y: *SARS-CoV-2_parse_specs
-B_1_351: *SARS-CoV-2_parse_specs

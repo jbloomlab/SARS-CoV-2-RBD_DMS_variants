@@ -30,7 +30,7 @@ def nb_markdown(nb):
 
 # Global variables extracted from config --------------------------------------
 pacbio_runs = (pd.read_csv(config['pacbio_runs'], dtype = str)
-               .assign(pacbioRun=lambda x: x['library'] + '_' + x['run'])
+               .assign(pacbioRun=lambda x: x['library'] + '_' + x['bg'] + '_' + x['run'])
                )
 assert len(pacbio_runs['pacbioRun'].unique()) == len(pacbio_runs['pacbioRun'])
 
@@ -59,9 +59,14 @@ rule make_summary:
     input:
         dag=os.path.join(config['summary_dir'], 'dag.svg'),
         get_mut_bind_expr=config['mut_bind_expr'],
-        process_ccs=nb_markdown('process_ccs.ipynb'),
-        build_variants=nb_markdown('build_variants.ipynb'),
-        codon_variant_table=config['codon_variant_table_file'],
+        process_ccs_Wuhan_Hu_1=nb_markdown('process_ccs_Wuhan_Hu_1.ipynb'),
+        process_ccs_E484K=nb_markdown('process_ccs_E484K.ipynb'),
+        process_ccs_N501Y=nb_markdown('process_ccs_N501Y.ipynb'),
+        process_ccs_B1351=nb_markdown('process_ccs_B1351.ipynb'),
+        barcode_variant_table_Wuhan_Hu_1=config['codon_variant_table_file_Wuhan_Hu_1'],
+        barcode_variant_table_E484K=config['codon_variant_table_file_E484K'],
+        barcode_variant_table_N501Y=config['codon_variant_table_file_N501Y'],
+        barcode_variant_table_B1351=config['codon_variant_table_file_B1351'],
         variant_counts_file=config['variant_counts_file'],
         count_variants=nb_markdown('count_variants.ipynb'),
     output:
@@ -87,13 +92,9 @@ rule make_summary:
 
             1. Get prior Wuhan-1 RBD DMS mutation-level [binding and expression data]({path(input.get_mut_bind_expr)}). 
             
-            2. [Process PacBio CCSs]({path(input.process_ccs)}).
+            2. Process PacBio CCSs for each background: [Wuhan_Hu_1]({path(input.process_ccs_Wuhan_Hu_1)}), [E484K]({path(input.process_ccs_E484K)}), [N501Y]({path(input.process_ccs_N501Y)}), [B.1.351]({path(input.process_ccs_B1351)}). Creates barcode-variant lookup tables for each background: [Wuhan_Hu_1]({path(input.barcode_variant_table_Wuhan_Hu_1)}), [E484K]({path(input.barcode_variant_table_E484K)}), [N501Y]({path(input.barcode_variant_table_N501Y)}), [B.1.351]({path(input.barcode_variant_table_B1351)}).
             
-            3. [Build variants from CCSs]({path(input.build_variants)}).
-               Creates a [codon variant table]({path(input.codon_variant_table)})
-               linking barcodes to the mutations in the variants.
-
-            4. [Count variants by barcode]({path(input.count_variants)}).
+            3. [Count variants by barcode]({path(input.count_variants)}).
                Creates a [variant counts file]({path(input.variant_counts_file)})
                giving counts of each barcoded variant in each condition.
 
@@ -112,7 +113,10 @@ rule make_dag:
 rule count_variants:
     """Count codon variants from Illumina barcode runs."""
     input:
-        config['codon_variant_table_file'],
+        config['codon_variant_table_file_Wuhan_Hu_1'],
+        config['codon_variant_table_file_E484K'],
+        config['codon_variant_table_file_N501Y'],
+        config['codon_variant_table_file_B1351'],
         config['barcode_runs']
     output:
         config['variant_counts_file'],
@@ -129,29 +133,60 @@ rule get_mut_bind_expr:
     run:
         urllib.request.urlretrieve(config['mut_bind_expr_url'], output.file)
         
-rule build_variants:
-    """Build variant table from processed CCSs."""
-    input:
-        config['processed_ccs_file']
-    output:
-        config['codon_variant_table_file'],
-        nb_markdown=nb_markdown('build_variants.ipynb')
-    params:
-        nb='build_variants.ipynb'
-    shell:
-        "python scripts/run_nb.py {params.nb} {output.nb_markdown}"
 
-rule process_ccs:
-    """Process the PacBio CCSs."""
+rule process_ccs_Wuhan_Hu_1:
+    """Process the PacBio CCSs for Wuhan_Hu_1 background and build variant table."""
     input:
         expand(os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz"),
                pacbioRun=pacbio_runs['pacbioRun']),
-        config['amplicons'],
     output:
-        config['processed_ccs_file'],
-        nb_markdown=nb_markdown('process_ccs.ipynb')
+        config['processed_ccs_file_Wuhan_Hu_1'],
+    	config['codon_variant_table_file_Wuhan_Hu_1'],
+        nb_markdown=nb_markdown('process_ccs_Wuhan_Hu_1.ipynb')
     params:
-        nb='process_ccs.ipynb'
+        nb='process_ccs_Wuhan_Hu_1.ipynb'
+    shell:
+        "python scripts/run_nb.py {params.nb} {output.nb_markdown}"
+        
+rule process_ccs_E484K:
+    """Process the PacBio CCSs for E484K background and build variant table."""
+    input:
+        expand(os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz"),
+               pacbioRun=pacbio_runs['pacbioRun']),
+    output:
+        config['processed_ccs_file_E484K'],
+    	config['codon_variant_table_file_E484K'],
+        nb_markdown=nb_markdown('process_ccs_E484K.ipynb')
+    params:
+        nb='process_ccs_E484K.ipynb'
+    shell:
+        "python scripts/run_nb.py {params.nb} {output.nb_markdown}"
+        
+rule process_ccs_N501Y:
+    """Process the PacBio CCSs for N501Y background and build variant table."""
+    input:
+        expand(os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz"),
+               pacbioRun=pacbio_runs['pacbioRun']),
+    output:
+        config['processed_ccs_file_N501Y'],
+    	config['codon_variant_table_file_N501Y'],
+        nb_markdown=nb_markdown('process_ccs_N501Y.ipynb')
+    params:
+        nb='process_ccs_N501Y.ipynb'
+    shell:
+        "python scripts/run_nb.py {params.nb} {output.nb_markdown}"
+        
+rule process_ccs_B1351:
+    """Process the PacBio CCSs for B1351 background and build variant table."""
+    input:
+        expand(os.path.join(config['ccs_dir'], "{pacbioRun}_ccs.fastq.gz"),
+               pacbioRun=pacbio_runs['pacbioRun']),
+    output:
+        config['processed_ccs_file_B1351'],
+    	config['codon_variant_table_file_B1351'],
+        nb_markdown=nb_markdown('process_ccs_B1351.ipynb')
+    params:
+        nb='process_ccs_B1351.ipynb'
     shell:
         "python scripts/run_nb.py {params.nb} {output.nb_markdown}"
 

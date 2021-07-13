@@ -11,11 +11,15 @@ _*
 src/
 env/
 
-results/
+results/*
 !results/summary
 
 !results/variants
 results/variants/*
+!results/variants/codon_variant_table_*.csv
+
+!results/counts
+results/counts/*
 !results/counts/variant_counts.csv
 
 !results/expression_meanFs
