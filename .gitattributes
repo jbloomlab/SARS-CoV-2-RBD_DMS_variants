@@ -9,3 +9,5 @@ results/variants/codon_variant_table_Wuhan_Hu_1.csv filter=lfs diff=lfs merge=lf
 results/variants/codon_variant_table_B1351.csv filter=lfs diff=lfs merge=lfs -text
 results/variants/codon_variant_table_E484K.csv filter=lfs diff=lfs merge=lfs -text
 results/variants/codon_variant_table_N501Y.csv filter=lfs diff=lfs merge=lfs -text
+results/binding_Kd/bc_binding.csv filter=lfs diff=lfs merge=lfs -text
+results/expression_meanF/bc_expression.csv filter=lfs diff=lfs merge=lfs -text

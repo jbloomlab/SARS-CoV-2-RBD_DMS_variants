@@ -101,5 +101,7 @@ Then the large results files were added for tracking with:
 ```
 git lfs track results/variants/codon_variant_table_*.csv
 git lfs track results/counts/variant_counts.csv
+git lfs track results/binding_Kd/bc_binding.csv
+git lfs track results/expression_meanF/bc_expression.csv
 ```
 
