@@ -11,3 +11,4 @@ results/variants/codon_variant_table_E484K.csv filter=lfs diff=lfs merge=lfs -te
 results/variants/codon_variant_table_N501Y.csv filter=lfs diff=lfs merge=lfs -text
 results/binding_Kd/bc_binding.csv filter=lfs diff=lfs merge=lfs -text
 results/expression_meanF/bc_expression.csv filter=lfs diff=lfs merge=lfs -text
+results/final_variant_scores/final_variant_scores.csv filter=lfs diff=lfs merge=lfs -text
