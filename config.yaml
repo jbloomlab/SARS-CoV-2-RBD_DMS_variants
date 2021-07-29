@@ -55,6 +55,12 @@ codon_variant_table_file_N501Y: results/variants/codon_variant_table_N501Y.csv
 codon_variant_table_file_B1351: results/variants/codon_variant_table_B1351.csv
 counts_dir: results/counts
 variant_counts_file: results/counts/variant_counts.csv
+expression_sortseq_dir: results/expression_meanF
+expression_sortseq_file: results/expression_meanF/bc_expression.csv
+Titeseq_Kds_dir: results/binding_Kd
+Titeseq_Kds_file: results/binding_Kd/bc_binding.csv
+final_variant_scores_dir: results/final_variant_scores
+final_variant_scores_mut_file: results/final_variant_scores/final_variant_scores.csv
 
 # parameters for running PacBio `ccs` program
 min_ccs_accuracy: 0.999

@@ -69,6 +69,12 @@ rule make_summary:
         barcode_variant_table_B1351=config['codon_variant_table_file_B1351'],
         variant_counts_file=config['variant_counts_file'],
         count_variants=nb_markdown('count_variants.ipynb'),
+        fit_titrations='results/summary/compute_binding_Kd.md',
+        variant_Kds_file=config['Titeseq_Kds_file'],
+        calculate_expression='results/summary/compute_expression_meanF.md',
+        variant_expression_file=config['expression_sortseq_file'],
+        collapse_scores='results/summary/collapse_scores.md',
+        mut_phenos_file=config['final_variant_scores_mut_file'],
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -98,6 +104,14 @@ rule make_summary:
                Creates a [variant counts file]({path(input.variant_counts_file)})
                giving counts of each barcoded variant in each condition.
 
+            4. [Fit titration curves]({path(input.fit_titrations)}) to calculate per-barcode K<sub>D</sub>, recorded in [this file]({path(input.variant_Kds_file)}).
+            
+            5. [Analyze Sort-seq]({path(input.calculate_expression)}) to calculate per-barcode RBD expression, recorded in [this file]({path(input.variant_expression_file)}).
+            
+            6. [Derive final genotype-level phenotypes from replicate barcoded sequences]({path(input.collapse_scores)}).
+               Generates final phenotypes, recorded in [this file]({path(input.mut_phenos_file)}).
+
+
             """
             ).strip())
 
@@ -109,6 +123,75 @@ rule make_dag:
         os.path.join(config['summary_dir'], 'dag.svg')
     shell:
         "snakemake --forceall --dag | dot -Tsvg > {output}"
+
+rule collapse_scores:
+    input:
+        config['Titeseq_Kds_file'],
+        config['expression_sortseq_file']
+    output:
+        config['final_variant_scores_mut_file'],
+        md='results/summary/collapse_scores.md',
+        md_files=directory('results/summary/collapse_scores_files')
+    envmodules:
+        'R/3.6.2-foss-2019b'
+    params:
+        nb='collapse_scores.Rmd',
+        md='collapse_scores.md',
+        md_files='collapse_scores_files'
+    shell:
+        """
+        R -e \"rmarkdown::render(input=\'{params.nb}\')\";
+        mv {params.md} {output.md};
+        mv {params.md_files} {output.md_files}
+        """
+
+rule fit_titrations:
+    input:
+        config['codon_variant_table_file_Wuhan_Hu_1'],
+        config['codon_variant_table_file_E484K'],
+        config['codon_variant_table_file_N501Y'],
+        config['codon_variant_table_file_B1351'],
+        config['variant_counts_file']
+    output:
+        config['Titeseq_Kds_file'],
+        md='results/summary/compute_binding_Kd.md',
+        md_files=directory('results/summary/compute_binding_Kd_files')
+    envmodules:
+        'R/3.6.2-foss-2019b'
+    params:
+        nb='compute_binding_Kd.Rmd',
+        md='compute_binding_Kd.md',
+        md_files='compute_binding_Kd_files'
+    shell:
+        """
+        R -e \"rmarkdown::render(input=\'{params.nb}\')\";
+        mv {params.md} {output.md};
+        mv {params.md_files} {output.md_files}
+        """
+
+rule calculate_expression:
+    input:
+        config['codon_variant_table_file_Wuhan_Hu_1'],
+        config['codon_variant_table_file_E484K'],
+        config['codon_variant_table_file_N501Y'],
+        config['codon_variant_table_file_B1351'],
+        config['variant_counts_file']
+    output:
+        config['expression_sortseq_file'],
+        md='results/summary/compute_expression_meanF.md',
+        md_files=directory('results/summary/compute_expression_meanF_files')
+    envmodules:
+        'R/3.6.2-foss-2019b'
+    params:
+        nb='compute_expression_meanF.Rmd',
+        md='compute_expression_meanF.md',
+        md_files='compute_expression_meanF_files'
+    shell:
+        """
+        R -e \"rmarkdown::render(input=\'{params.nb}\')\";
+        mv {params.md} {output.md};
+        mv {params.md_files} {output.md_files}
+        """
 
 rule count_variants:
     """Count codon variants from Illumina barcode runs."""

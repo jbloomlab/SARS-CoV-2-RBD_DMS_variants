@@ -22,11 +22,14 @@ results/variants/*
 results/counts/*
 !results/counts/variant_counts.csv
 
-!results/expression_meanFs
-results/expression_meanFs/*
-!results/expression_meanFs/expression_meanFs.csv
+!results/expression_meanF
+results/expression_meanF/*
+!results/expression_meanF/bc_expression.csv
 
-!results/binding_Kds
-!results/binding_Kds/*
-!results/binding_Kds.csv
-!results/binding_Kds/binding_Kds_homologs.csv
+!results/binding_Kd
+results/binding_Kd/*
+!results/binding_Kd/bc_binding.csv
+
+!results/final_variant_scores
+results/final_variant_scores/*
+!results/final_variant_scores/final_variant_scores.csv
