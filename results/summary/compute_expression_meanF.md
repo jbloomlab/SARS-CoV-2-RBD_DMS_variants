@@ -40,7 +40,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.4 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -136,14 +136,14 @@ for(i in 1:nrow(barcode_runs)){
 }
 ```
 
-    ## [1] "reads < cells for pool1 SortSeq_bin1 , un-normalized (ratio 0.728502027027027 )"
-    ## [1] "reads < cells for pool1 SortSeq_bin2 , un-normalized (ratio 0.764815885416667 )"
-    ## [1] "reads < cells for pool1 SortSeq_bin3 , un-normalized (ratio 0.876096867838044 )"
-    ## [1] "reads < cells for pool1 SortSeq_bin4 , un-normalized (ratio 0.902074040767386 )"
-    ## [1] "reads < cells for pool2 SortSeq_bin1 , un-normalized (ratio 0.65715 )"
-    ## [1] "reads < cells for pool2 SortSeq_bin2 , un-normalized (ratio 0.855886858974359 )"
-    ## [1] "reads < cells for pool2 SortSeq_bin3 , un-normalized (ratio 0.825986776859504 )"
-    ## [1] "reads < cells for pool2 SortSeq_bin4 , un-normalized (ratio 0.878098809523809 )"
+    ## [1] "read:cell ratio for pool1 SortSeq_bin1 is 1.49833378378378"
+    ## [1] "read:cell ratio for pool1 SortSeq_bin2 is 1.57463307291667"
+    ## [1] "read:cell ratio for pool1 SortSeq_bin3 is 1.80408311688312"
+    ## [1] "read:cell ratio for pool1 SortSeq_bin4 is 1.85808003597122"
+    ## [1] "read:cell ratio for pool2 SortSeq_bin1 is 1.352421875"
+    ## [1] "read:cell ratio for pool2 SortSeq_bin2 is 1.75994038461538"
+    ## [1] "read:cell ratio for pool2 SortSeq_bin3 is 1.6969894214876"
+    ## [1] "read:cell ratio for pool2 SortSeq_bin4 is 1.80519077380952"
 
 ``` r
 #annotate each barcode as to whether it's a homolog variant, SARS-CoV-2 wildtype, synonymous muts only, stop, nonsynonymous, >1 nonsynonymous mutations
@@ -255,7 +255,7 @@ grid.arrange(p1,ncol=1)
 invisible(dev.print(pdf, paste(config$expression_sortseq_dir,"/violin-plot_meanF-by-target.pdf",sep="")))
 ```
 
-We have generated expression measurements for 95.08% of the barcodes in
+We have generated expression measurements for 96.91% of the barcodes in
 our libraries.
 
 ## Data Output
