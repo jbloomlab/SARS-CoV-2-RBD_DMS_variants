@@ -43,7 +43,7 @@ barcode_runs_expandR1 = (
     .assign(R1=lambda x: x['R1'].str.split('; ').map(
                     lambda y: list(itertools.chain(*map(glob.glob, y)))),
             n_R1=lambda x: x['R1'].map(len),
-            # sample_lib=lambda x: x['sample'] + '_' + x['library'],
+            sample_lib=lambda x: x['sample'] + '_' + x['library'],
             )
     )
 

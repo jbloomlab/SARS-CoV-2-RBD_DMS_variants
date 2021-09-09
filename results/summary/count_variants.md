@@ -282,72 +282,16 @@ display(HTML(barcode_runs.to_html(index=False)))
   <tbody>
     <tr>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
-      <td>SortSeq</td>
-      <td>1</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>500500</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib1_bin1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin1_4_S40_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin1_3_S39_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin1_2_S38_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin1_1_S37_R1_001.fastq.gz]</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
-      <td>SortSeq_bin2</td>
-      <td>SortSeq</td>
-      <td>2</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>309000</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib1_bin2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin2_1_S41_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin2_2_S42_R1_001.fastq.gz]</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
-      <td>SortSeq_bin3</td>
-      <td>SortSeq</td>
-      <td>3</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>710000</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib1_bin3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin3_1_S43_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin3_2_S44_R1_001.fastq.gz]</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
-      <td>SortSeq_bin4</td>
-      <td>SortSeq</td>
-      <td>4</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>2080000</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib1_bin4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin4_1_S45_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib1_bin4_2_S46_R1_001.fastq.gz]</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
       <td>TiteSeq_01_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>858664</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s01-b1</td>
+      <td>210816</td>
+      <td>1410589</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s01-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s01-b1_S1_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b1_S1_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -356,12 +300,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>460882</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s01-b2</td>
+      <td>210816</td>
+      <td>533374</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s01-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s01-b2_S2_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b2_S2_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -370,12 +314,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>1250537</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s01-b3</td>
+      <td>210816</td>
+      <td>1697538</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s01-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s01-b3_S3_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b3_S3_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -384,12 +328,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>7549363</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s01-b4</td>
+      <td>210816</td>
+      <td>6497928</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s01-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s01-b4_S4_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b4_S4_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -398,12 +342,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>1324428</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s02-b1</td>
+      <td>210816</td>
+      <td>1587111</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s02-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s02-b1_S5_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b1_S5_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -412,12 +356,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>926365</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s02-b2</td>
+      <td>210816</td>
+      <td>882688</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s02-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s02-b2_S6_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b2_S6_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -426,12 +370,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>1663441</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s02-b3</td>
+      <td>210816</td>
+      <td>2168488</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s02-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s02-b3_S7_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b3_S7_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -440,12 +384,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>6226953</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s02-b4</td>
+      <td>210816</td>
+      <td>5908495</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s02-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s02-b4_S8_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b4_S8_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -454,12 +398,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>2278383</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s03-b1</td>
+      <td>210816</td>
+      <td>2236680</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s03-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s03-b1_S9_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b1_S9_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -468,12 +412,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>1230724</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s03-b2</td>
+      <td>210816</td>
+      <td>1125722</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s03-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s03-b2_S10_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b2_S10_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -482,12 +426,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>1959289</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s03-b3</td>
+      <td>210816</td>
+      <td>3404113</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s03-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s03-b3_S11_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b3_S11_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -496,12 +440,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>4428498</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s03-b4</td>
+      <td>210816</td>
+      <td>3354021</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s03-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s03-b4_S12_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b4_S12_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -510,12 +454,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>4939429</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s04-b1</td>
+      <td>210816</td>
+      <td>3228357</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s04-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s04-b1_S13_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b1_S13_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -524,12 +468,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>2213476</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s04-b2</td>
+      <td>210816</td>
+      <td>3777633</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s04-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s04-b2_S14_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b2_S14_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -538,12 +482,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>2032674</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s04-b3</td>
+      <td>210816</td>
+      <td>2507212</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s04-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s04-b3_S15_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b3_S15_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -552,12 +496,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>1063886</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s04-b4</td>
+      <td>210816</td>
+      <td>522258</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s04-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s04-b4_S16_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b4_S16_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -566,12 +510,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>8563762</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s05-b1</td>
+      <td>210816</td>
+      <td>5380520</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s05-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s05-b1_S17_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b1_S17_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -580,12 +524,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>1854929</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s05-b2</td>
+      <td>210816</td>
+      <td>4516641</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s05-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s05-b2_S18_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b2_S18_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -594,12 +538,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>199348</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s05-b3</td>
+      <td>210816</td>
+      <td>458022</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s05-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s05-b3_S19_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b3_S19_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -608,12 +552,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>5275</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s05-b4</td>
+      <td>210816</td>
+      <td>2412</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s05-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s05-b4_S20_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b4_S20_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -622,12 +566,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>10038244</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s06-b1</td>
+      <td>210816</td>
+      <td>6953452</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s06-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s06-b1_S21_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b1_S21_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -636,12 +580,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>358173</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s06-b2</td>
+      <td>210816</td>
+      <td>3350686</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s06-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s06-b2_S22_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b2_S22_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -650,12 +594,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>1708</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s06-b3</td>
+      <td>210816</td>
+      <td>4212</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s06-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s06-b3_S23_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b3_S23_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -664,12 +608,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>730</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s06-b4</td>
+      <td>210816</td>
+      <td>304</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s06-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s06-b4_S24_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b4_S24_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -678,12 +622,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>10039342</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s07-b1</td>
+      <td>210816</td>
+      <td>8037439</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s07-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s07-b1_S25_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b1_S25_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -692,12 +636,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>293635</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s07-b2</td>
+      <td>210816</td>
+      <td>2440419</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s07-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s07-b2_S26_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b2_S26_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -706,12 +650,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>1088</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s07-b3</td>
+      <td>210816</td>
+      <td>1587</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s07-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s07-b3_S27_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b3_S27_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -720,12 +664,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>631</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s07-b4</td>
+      <td>210816</td>
+      <td>470</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s07-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s07-b4_S28_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b4_S28_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -734,12 +678,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>10026201</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s08-b1</td>
+      <td>210816</td>
+      <td>8013743</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s08-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s08-b1_S29_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b1_S29_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -748,12 +692,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>267959</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s08-b2</td>
+      <td>210816</td>
+      <td>2313562</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s08-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s08-b2_S30_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b2_S30_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -762,12 +706,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>1113</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s08-b3</td>
+      <td>210816</td>
+      <td>1458</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s08-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s08-b3_S31_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b3_S31_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -776,12 +720,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>661</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s08-b4</td>
+      <td>210816</td>
+      <td>276</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s08-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s08-b4_S32_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b4_S32_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -790,12 +734,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>9930895</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s09-b1</td>
+      <td>210816</td>
+      <td>8191465</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s09-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s09-b1_S33_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b1_S33_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -804,12 +748,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>280327</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s09-b2</td>
+      <td>210816</td>
+      <td>2003725</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s09-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s09-b2_S34_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b2_S34_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -818,12 +762,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>1273</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s09-b3</td>
+      <td>210816</td>
+      <td>882</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s09-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s09-b3_S35_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b3_S35_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -832,69 +776,13 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>865</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s09-b4</td>
+      <td>210816</td>
+      <td>275</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s09-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s09-b4_S36_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b4_S36_R1_001.fastq.gz]</td>
       <td>1</td>
-    </tr>
-    <tr>
-      <td>pool2</td>
-      <td>SortSeq_bin1</td>
-      <td>SortSeq</td>
-      <td>1</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>624000</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib2_bin1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin1_1_S87_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin1_3_S89_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin1_4_S90_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin1_2_S88_R1_001.fastq.gz]</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>pool2</td>
-      <td>SortSeq_bin2</td>
-      <td>SortSeq</td>
-      <td>2</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>2010000</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib2_bin2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin2_1_S91_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin2_2_S92_R1_001.fastq.gz]</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>pool2</td>
-      <td>SortSeq_bin3</td>
-      <td>SortSeq</td>
-      <td>3</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>840000</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib2_bin3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin3_2_S94_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin3_1_S93_R1_001.fastq.gz]</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>pool2</td>
-      <td>SortSeq_bin4</td>
-      <td>SortSeq</td>
-      <td>4</td>
-      <td>NaN</td>
-      <td>210603</td>
-      <td>1560000</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210603_lib2_bin4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin4_2_S96_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210603_lib2_bin4_1_S95_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
@@ -902,12 +790,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>1102235</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s10-b1</td>
+      <td>210816</td>
+      <td>747246</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s10-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s10-b1_S51_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b1_S37_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -916,12 +804,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>412625</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s10-b2</td>
+      <td>210816</td>
+      <td>632407</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s10-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s10-b2_S52_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b2_S38_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -930,12 +818,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>833282</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s10-b3</td>
+      <td>210816</td>
+      <td>1569589</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s10-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s10-b3_S53_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b3_S39_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -944,12 +832,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>1.0</td>
-      <td>210610</td>
-      <td>7770201</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s10-b4</td>
+      <td>210816</td>
+      <td>7076796</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s10-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s10-b4_S54_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b4_S40_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -958,12 +846,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>1429448</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s11-b1</td>
+      <td>210816</td>
+      <td>508269</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s11-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s11-b1_S55_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b1_S41_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -972,12 +860,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>621648</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s11-b2</td>
+      <td>210816</td>
+      <td>1360633</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s11-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s11-b2_S56_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b2_S42_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -986,12 +874,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>1209232</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s11-b3</td>
+      <td>210816</td>
+      <td>2122153</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s11-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s11-b3_S57_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b3_S43_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1000,12 +888,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>2.0</td>
-      <td>210610</td>
-      <td>6782535</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s11-b4</td>
+      <td>210816</td>
+      <td>6133995</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s11-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s11-b4_S58_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b4_S44_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1014,12 +902,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>2161487</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s12-b1</td>
+      <td>210816</td>
+      <td>1471208</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s12-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s12-b1_S59_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b1_S45_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1028,12 +916,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>890528</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s12-b2</td>
+      <td>210816</td>
+      <td>1351829</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s12-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s12-b2_S60_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b2_S46_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1042,12 +930,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>2140300</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s12-b3</td>
+      <td>210816</td>
+      <td>3465388</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s12-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s12-b3_S61_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b3_S47_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1056,12 +944,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>3.0</td>
-      <td>210610</td>
-      <td>5008266</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s12-b4</td>
+      <td>210816</td>
+      <td>3785496</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s12-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s12-b4_S62_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b4_S48_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1070,12 +958,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>4372920</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s13-b1</td>
+      <td>210816</td>
+      <td>2711471</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s13-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s13-b1_S63_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b1_S49_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1084,12 +972,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>2711953</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s13-b2</td>
+      <td>210816</td>
+      <td>3855154</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s13-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s13-b2_S64_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b2_S50_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1098,12 +986,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>2031012</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s13-b3</td>
+      <td>210816</td>
+      <td>3017813</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s13-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s13-b3_S65_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b3_S51_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1112,12 +1000,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>4.0</td>
-      <td>210610</td>
-      <td>1045585</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s13-b4</td>
+      <td>210816</td>
+      <td>564315</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s13-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s13-b4_S66_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b4_S52_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1126,12 +1014,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>8137667</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s14-b1</td>
+      <td>210816</td>
+      <td>6181987</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s14-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s14-b1_S67_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b1_S53_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1140,12 +1028,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>1866397</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s14-b2</td>
+      <td>210816</td>
+      <td>3991649</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s14-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s14-b2_S68_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b2_S54_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1154,12 +1042,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>140215</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s14-b3</td>
+      <td>210816</td>
+      <td>438596</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s14-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s14-b3_S69_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b3_S55_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1168,12 +1056,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>5.0</td>
-      <td>210610</td>
-      <td>2833</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s14-b4</td>
+      <td>210816</td>
+      <td>1844</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s14-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s14-b4_S70_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b4_S56_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1182,12 +1070,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>9720053</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s15-b1</td>
+      <td>210816</td>
+      <td>8575711</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s15-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s15-b1_S71_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b1_S57_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1196,12 +1084,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>343360</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s15-b2</td>
+      <td>210816</td>
+      <td>1572345</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s15-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s15-b2_S72_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b2_S58_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1210,12 +1098,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>2113</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s15-b3</td>
+      <td>210816</td>
+      <td>2862</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s15-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s15-b3_S73_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b3_S59_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1224,12 +1112,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>6.0</td>
-      <td>210610</td>
-      <td>556</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s15-b4</td>
+      <td>210816</td>
+      <td>190</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s15-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s15-b4_S74_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b4_S60_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1238,12 +1126,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>9961600</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s16-b1</td>
+      <td>210816</td>
+      <td>9233079</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s16-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s16-b1_S75_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b1_S61_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1252,12 +1140,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>211258</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s16-b2</td>
+      <td>210816</td>
+      <td>870320</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s16-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s16-b2_S76_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b2_S62_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1266,12 +1154,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>920</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s16-b3</td>
+      <td>210816</td>
+      <td>617</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s16-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s16-b3_S77_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b3_S63_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1280,12 +1168,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>7.0</td>
-      <td>210610</td>
-      <td>582</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s16-b4</td>
+      <td>210816</td>
+      <td>129</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s16-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s16-b4_S78_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b4_S64_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1294,12 +1182,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>9678450</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s17-b1</td>
+      <td>210816</td>
+      <td>9320303</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s17-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s17-b1_S79_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b1_S65_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1308,12 +1196,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>204572</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s17-b2</td>
+      <td>210816</td>
+      <td>772536</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s17-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s17-b2_S80_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b2_S66_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1322,12 +1210,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>874</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s17-b3</td>
+      <td>210816</td>
+      <td>571</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s17-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s17-b3_S81_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b3_S67_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1336,12 +1224,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>8.0</td>
-      <td>210610</td>
-      <td>659</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s17-b4</td>
+      <td>210816</td>
+      <td>141</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s17-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s17-b4_S82_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b4_S68_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1350,12 +1238,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>1</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>10067541</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s18-b1</td>
+      <td>210816</td>
+      <td>9320303</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s18-b1</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s18-b1_S83_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b1_S69_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1364,12 +1252,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>2</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>197954</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s18-b2</td>
+      <td>210816</td>
+      <td>772536</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s18-b2</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s18-b2_S84_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b2_S70_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1378,12 +1266,12 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>3</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>986</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s18-b3</td>
+      <td>210816</td>
+      <td>571</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s18-b3</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s18-b3_S85_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b3_S71_R1_001.fastq.gz]</td>
       <td>1</td>
     </tr>
     <tr>
@@ -1392,13 +1280,125 @@ display(HTML(barcode_runs.to_html(index=False)))
       <td>TiteSeq</td>
       <td>4</td>
       <td>9.0</td>
-      <td>210610</td>
-      <td>643</td>
-      <td>/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/</td>
-      <td>210610_s18-b4</td>
+      <td>210816</td>
+      <td>141</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210816_s18-b4</td>
       <td>*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210614_D00300_1254_AHLLWLBCX3/Unaligned/Project_tstarr/210610_s18-b4_S86_R1_001.fastq.gz]</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b4_S72_R1_001.fastq.gz]</td>
       <td>1</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>SortSeq_bin1</td>
+      <td>SortSeq</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>1480000</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib1_bin1</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_2_S74_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_1_S73_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_3_S75_R1_001.fastq.gz]</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>SortSeq_bin2</td>
+      <td>SortSeq</td>
+      <td>2</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>3840000</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib1_bin2</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_1_S76_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_2_S77_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_3_S78_R1_001.fastq.gz]</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>SortSeq_bin3</td>
+      <td>SortSeq</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>3272500</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib1_bin3</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_2_S80_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_1_S79_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_3_S81_R1_001.fastq.gz]</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>SortSeq_bin4</td>
+      <td>SortSeq</td>
+      <td>4</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>3336000</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib1_bin4</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_3_S84_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_1_S82_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_2_S83_R1_001.fastq.gz]</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>pool2</td>
+      <td>SortSeq_bin1</td>
+      <td>SortSeq</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>1280000</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib2_bin1</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_2_S86_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_1_S85_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_3_S87_R1_001.fastq.gz]</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>pool2</td>
+      <td>SortSeq_bin2</td>
+      <td>SortSeq</td>
+      <td>2</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>3120000</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib2_bin2</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_3_S90_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_1_S88_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_2_S89_R1_001.fastq.gz]</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>pool2</td>
+      <td>SortSeq_bin3</td>
+      <td>SortSeq</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>3025000</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib2_bin3</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_2_S92_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_1_S91_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_3_S93_R1_001.fastq.gz]</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>pool2</td>
+      <td>SortSeq_bin4</td>
+      <td>SortSeq</td>
+      <td>4</td>
+      <td>NaN</td>
+      <td>210811</td>
+      <td>3360000</td>
+      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
+      <td>210811_lib2_bin4</td>
+      <td>*R1*.fastq.gz</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_2_S95_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_1_S94_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_3_S96_R1_001.fastq.gz]</td>
+      <td>3</td>
     </tr>
   </tbody>
 </table>
@@ -1524,12 +1524,12 @@ display(HTML(
   </thead>
   <tbody>
     <tr>
-      <td>pool2</td>
-      <td>154919</td>
-    </tr>
-    <tr>
       <td>pool1</td>
       <td>174804</td>
+    </tr>
+    <tr>
+      <td>pool2</td>
+      <td>154919</td>
     </tr>
   </tbody>
 </table>
@@ -1602,34 +1602,34 @@ display(HTML(fates.head().to_html(index=False)))
   </thead>
   <tbody>
     <tr>
-      <td>CACAGTGCAGATCTAC</td>
-      <td>1709</td>
+      <td>TCAGCACTACGGAAAC</td>
+      <td>504</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
-      <td>ACAAGGTGCTTAACAT</td>
-      <td>1542</td>
+      <td>ATACTTATGTATAGAC</td>
+      <td>498</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
-      <td>TAACAGGGGACCCTGG</td>
-      <td>1281</td>
+      <td>CGTCCTTGCTGTCGAG</td>
+      <td>480</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
-      <td>TAACGTTAATCTAGTA</td>
-      <td>1199</td>
+      <td>AAGGAAGTAGCCCCTT</td>
+      <td>477</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
-      <td>CGATTAGACACAGGCA</td>
-      <td>1185</td>
+      <td>CTACTCTATATTCAAA</td>
+      <td>462</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
   </tbody>
 </table>
@@ -1651,33 +1651,33 @@ display(HTML(fates.head().to_html(index=False)))
   <tbody>
     <tr>
       <td>valid barcode</td>
-      <td>363668</td>
+      <td>1401160</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>invalid barcode</td>
-      <td>131769</td>
+      <td>313727</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>low quality barcode</td>
-      <td>29175</td>
+      <td>66748</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>failed chastity filter</td>
-      <td>22692</td>
+      <td>27326</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>unparseable barcode</td>
-      <td>13912</td>
+      <td>26207</td>
       <td>pool1</td>
-      <td>SortSeq_bin1</td>
+      <td>TiteSeq_01_bin1</td>
     </tr>
   </tbody>
 </table>
@@ -1742,644 +1742,644 @@ display(HTML(fates
     <tr>
       <th rowspan="40" valign="top">pool1</th>
       <th>SortSeq_bin1</th>
-      <td>22692</td>
-      <td>131769</td>
-      <td>29175</td>
-      <td>13912</td>
-      <td>363668</td>
+      <td>25110</td>
+      <td>435884</td>
+      <td>59972</td>
+      <td>33793</td>
+      <td>1078183</td>
     </tr>
     <tr>
       <th>SortSeq_bin2</th>
-      <td>15281</td>
-      <td>58466</td>
-      <td>19563</td>
-      <td>6234</td>
-      <td>274972</td>
+      <td>57437</td>
+      <td>657901</td>
+      <td>142246</td>
+      <td>68207</td>
+      <td>2936893</td>
     </tr>
     <tr>
       <th>SortSeq_bin3</th>
-      <td>43557</td>
-      <td>167602</td>
-      <td>55867</td>
-      <td>18404</td>
-      <td>794090</td>
+      <td>55814</td>
+      <td>648207</td>
+      <td>138007</td>
+      <td>59785</td>
+      <td>2867027</td>
     </tr>
     <tr>
       <th>SortSeq_bin4</th>
-      <td>130853</td>
-      <td>510764</td>
-      <td>169028</td>
-      <td>52153</td>
-      <td>2414669</td>
+      <td>59361</td>
+      <td>686860</td>
+      <td>147224</td>
+      <td>65302</td>
+      <td>3009319</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin1</th>
-      <td>48296</td>
-      <td>237288</td>
-      <td>66763</td>
-      <td>9723</td>
-      <td>911006</td>
+      <td>27326</td>
+      <td>313727</td>
+      <td>66748</td>
+      <td>26207</td>
+      <td>1401160</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin2</th>
-      <td>22472</td>
-      <td>39340</td>
-      <td>29176</td>
-      <td>9542</td>
-      <td>470411</td>
+      <td>8411</td>
+      <td>92074</td>
+      <td>19583</td>
+      <td>10902</td>
+      <td>422482</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin3</th>
-      <td>59659</td>
-      <td>301952</td>
-      <td>79047</td>
-      <td>24233</td>
-      <td>1077054</td>
+      <td>29568</td>
+      <td>338575</td>
+      <td>73228</td>
+      <td>26256</td>
+      <td>1535028</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin4</th>
-      <td>398297</td>
-      <td>1786598</td>
-      <td>537243</td>
-      <td>95526</td>
-      <td>7297287</td>
+      <td>114278</td>
+      <td>1283460</td>
+      <td>287019</td>
+      <td>97643</td>
+      <td>5846987</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin1</th>
-      <td>70007</td>
-      <td>292851</td>
-      <td>96307</td>
-      <td>15951</td>
-      <td>1350569</td>
+      <td>26390</td>
+      <td>303590</td>
+      <td>64761</td>
+      <td>27399</td>
+      <td>1344544</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin2</th>
-      <td>46864</td>
-      <td>176667</td>
-      <td>61880</td>
-      <td>15177</td>
-      <td>844233</td>
+      <td>20086</td>
+      <td>208274</td>
+      <td>48355</td>
+      <td>19077</td>
+      <td>954321</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin3</th>
-      <td>84587</td>
-      <td>528922</td>
-      <td>111569</td>
-      <td>32903</td>
-      <td>1456994</td>
+      <td>32582</td>
+      <td>377600</td>
+      <td>81080</td>
+      <td>35233</td>
+      <td>1701203</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin4</th>
-      <td>354209</td>
-      <td>1510511</td>
-      <td>463443</td>
-      <td>103730</td>
-      <td>6596143</td>
+      <td>101100</td>
+      <td>1130551</td>
+      <td>245215</td>
+      <td>95102</td>
+      <td>5220928</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin1</th>
-      <td>121923</td>
-      <td>503658</td>
-      <td>165966</td>
-      <td>40069</td>
-      <td>2276539</td>
+      <td>37474</td>
+      <td>426421</td>
+      <td>95264</td>
+      <td>37008</td>
+      <td>1918414</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin2</th>
-      <td>65325</td>
-      <td>386160</td>
-      <td>82367</td>
-      <td>24471</td>
-      <td>1091430</td>
+      <td>20872</td>
+      <td>229121</td>
+      <td>48470</td>
+      <td>19744</td>
+      <td>1032300</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin3</th>
-      <td>103947</td>
-      <td>560496</td>
-      <td>140738</td>
-      <td>33526</td>
-      <td>1794748</td>
+      <td>58421</td>
+      <td>681964</td>
+      <td>144471</td>
+      <td>53352</td>
+      <td>2892343</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin4</th>
-      <td>244076</td>
-      <td>995141</td>
-      <td>318516</td>
-      <td>83842</td>
-      <td>4470236</td>
+      <td>58170</td>
+      <td>619463</td>
+      <td>143851</td>
+      <td>58407</td>
+      <td>3015276</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin1</th>
-      <td>278586</td>
-      <td>1372960</td>
-      <td>361110</td>
-      <td>74041</td>
-      <td>4938958</td>
+      <td>54712</td>
+      <td>613188</td>
+      <td>125983</td>
+      <td>48339</td>
+      <td>2643005</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin2</th>
-      <td>126526</td>
-      <td>633838</td>
-      <td>164039</td>
-      <td>29780</td>
-      <td>2194769</td>
+      <td>61637</td>
+      <td>741582</td>
+      <td>149624</td>
+      <td>52777</td>
+      <td>3078492</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin3</th>
-      <td>106759</td>
-      <td>515990</td>
-      <td>139352</td>
-      <td>29252</td>
-      <td>1887440</td>
+      <td>40438</td>
+      <td>416432</td>
+      <td>98779</td>
+      <td>34315</td>
+      <td>2099291</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin4</th>
-      <td>58432</td>
-      <td>124016</td>
-      <td>75502</td>
-      <td>16362</td>
-      <td>1166049</td>
+      <td>17196</td>
+      <td>160562</td>
+      <td>43466</td>
+      <td>15760</td>
+      <td>904630</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin1</th>
-      <td>482619</td>
-      <td>2518480</td>
-      <td>641780</td>
-      <td>119033</td>
-      <td>8639374</td>
+      <td>86583</td>
+      <td>1029280</td>
+      <td>210981</td>
+      <td>72204</td>
+      <td>4438344</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin2</th>
-      <td>109064</td>
-      <td>360517</td>
-      <td>135805</td>
-      <td>36348</td>
-      <td>2011018</td>
+      <td>75598</td>
+      <td>815752</td>
+      <td>179072</td>
+      <td>69650</td>
+      <td>3809744</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin3</th>
-      <td>11344</td>
-      <td>23959</td>
-      <td>14357</td>
-      <td>3918</td>
-      <td>235894</td>
+      <td>8321</td>
+      <td>77775</td>
+      <td>19291</td>
+      <td>10030</td>
+      <td>434653</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin4</th>
-      <td>803</td>
-      <td>1009</td>
-      <td>349</td>
-      <td>2423</td>
-      <td>4272</td>
+      <td>520</td>
+      <td>2165</td>
+      <td>432</td>
+      <td>5786</td>
+      <td>8481</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin1</th>
-      <td>569724</td>
-      <td>2612669</td>
-      <td>741899</td>
-      <td>147355</td>
-      <td>10193750</td>
+      <td>132843</td>
+      <td>1506848</td>
+      <td>326909</td>
+      <td>111102</td>
+      <td>6751350</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin2</th>
-      <td>20567</td>
-      <td>67852</td>
-      <td>26049</td>
-      <td>5845</td>
-      <td>381986</td>
+      <td>60642</td>
+      <td>643630</td>
+      <td>143512</td>
+      <td>50229</td>
+      <td>3038763</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin3</th>
-      <td>73</td>
-      <td>73</td>
-      <td>22</td>
-      <td>224</td>
-      <td>297</td>
+      <td>325</td>
+      <td>2291</td>
+      <td>549</td>
+      <td>619</td>
+      <td>11284</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin4</th>
-      <td>744</td>
-      <td>2197</td>
-      <td>633</td>
-      <td>1119</td>
-      <td>8787</td>
+      <td>395</td>
+      <td>1774</td>
+      <td>374</td>
+      <td>3767</td>
+      <td>7071</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin1</th>
-      <td>534313</td>
-      <td>2376123</td>
-      <td>699807</td>
-      <td>142009</td>
-      <td>9638258</td>
+      <td>152043</td>
+      <td>1664791</td>
+      <td>368249</td>
+      <td>127097</td>
+      <td>7612770</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin2</th>
-      <td>16442</td>
-      <td>54399</td>
-      <td>18999</td>
-      <td>9900</td>
-      <td>269219</td>
+      <td>42543</td>
+      <td>469731</td>
+      <td>102926</td>
+      <td>42405</td>
+      <td>2140046</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin3</th>
-      <td>126</td>
-      <td>157</td>
-      <td>61</td>
-      <td>332</td>
-      <td>697</td>
+      <td>212</td>
+      <td>504</td>
+      <td>112</td>
+      <td>527</td>
+      <td>1702</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin4</th>
-      <td>222</td>
-      <td>893</td>
-      <td>293</td>
-      <td>159</td>
-      <td>4173</td>
+      <td>168</td>
+      <td>926</td>
+      <td>218</td>
+      <td>407</td>
+      <td>4318</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin1</th>
-      <td>546949</td>
-      <td>2579915</td>
-      <td>733951</td>
-      <td>137747</td>
-      <td>10383615</td>
+      <td>133313</td>
+      <td>1561482</td>
+      <td>335070</td>
+      <td>113355</td>
+      <td>7167389</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin2</th>
-      <td>15176</td>
-      <td>51919</td>
-      <td>17625</td>
-      <td>6922</td>
-      <td>251990</td>
+      <td>45834</td>
+      <td>495828</td>
+      <td>106511</td>
+      <td>46247</td>
+      <td>2234706</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin3</th>
-      <td>174</td>
-      <td>152</td>
-      <td>40</td>
-      <td>1363</td>
-      <td>650</td>
+      <td>110</td>
+      <td>475</td>
+      <td>76</td>
+      <td>999</td>
+      <td>1395</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin4</th>
-      <td>302</td>
-      <td>136</td>
-      <td>35</td>
-      <td>1037</td>
-      <td>592</td>
+      <td>189</td>
+      <td>1342</td>
+      <td>73</td>
+      <td>2133</td>
+      <td>282</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin1</th>
-      <td>576213</td>
-      <td>2577947</td>
-      <td>751020</td>
-      <td>151183</td>
-      <td>10536550</td>
+      <td>156059</td>
+      <td>1734792</td>
+      <td>374595</td>
+      <td>129919</td>
+      <td>7906099</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin2</th>
-      <td>15263</td>
-      <td>55706</td>
-      <td>19831</td>
-      <td>5541</td>
-      <td>281694</td>
+      <td>31746</td>
+      <td>358803</td>
+      <td>78777</td>
+      <td>26975</td>
+      <td>1619554</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin3</th>
-      <td>478</td>
-      <td>87</td>
-      <td>51</td>
-      <td>1301</td>
-      <td>336</td>
+      <td>323</td>
+      <td>472</td>
+      <td>111</td>
+      <td>2812</td>
+      <td>1796</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin4</th>
-      <td>99</td>
-      <td>23</td>
-      <td>16</td>
-      <td>545</td>
-      <td>113</td>
+      <td>58</td>
+      <td>223</td>
+      <td>29</td>
+      <td>779</td>
+      <td>495</td>
     </tr>
     <tr>
       <th rowspan="40" valign="top">pool2</th>
       <th>SortSeq_bin1</th>
-      <td>16301</td>
-      <td>135802</td>
-      <td>24616</td>
-      <td>12184</td>
-      <td>276379</td>
+      <td>21357</td>
+      <td>416194</td>
+      <td>50353</td>
+      <td>56206</td>
+      <td>841152</td>
     </tr>
     <tr>
       <th>SortSeq_bin2</th>
-      <td>75634</td>
-      <td>436276</td>
-      <td>118416</td>
-      <td>32633</td>
-      <td>1564321</td>
+      <td>55516</td>
+      <td>722369</td>
+      <td>135620</td>
+      <td>64611</td>
+      <td>2670367</td>
     </tr>
     <tr>
       <th>SortSeq_bin3</th>
-      <td>25102</td>
-      <td>134669</td>
-      <td>37870</td>
-      <td>14120</td>
-      <td>515895</td>
+      <td>52354</td>
+      <td>636939</td>
+      <td>129546</td>
+      <td>54545</td>
+      <td>2498610</td>
     </tr>
     <tr>
       <th>SortSeq_bin4</th>
-      <td>72220</td>
-      <td>388746</td>
-      <td>110947</td>
-      <td>35497</td>
-      <td>1518344</td>
+      <td>60506</td>
+      <td>733364</td>
+      <td>147327</td>
+      <td>68770</td>
+      <td>2950412</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin1</th>
-      <td>45032</td>
-      <td>154636</td>
-      <td>69673</td>
-      <td>11654</td>
-      <td>1169133</td>
+      <td>9148</td>
+      <td>116061</td>
+      <td>22174</td>
+      <td>8739</td>
+      <td>440940</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin2</th>
-      <td>16376</td>
-      <td>46062</td>
-      <td>24661</td>
-      <td>5360</td>
-      <td>403783</td>
+      <td>8361</td>
+      <td>109375</td>
+      <td>21010</td>
+      <td>7065</td>
+      <td>417275</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin3</th>
-      <td>33083</td>
-      <td>113446</td>
-      <td>51103</td>
-      <td>13895</td>
-      <td>799932</td>
+      <td>26059</td>
+      <td>324493</td>
+      <td>62823</td>
+      <td>21568</td>
+      <td>1269043</td>
     </tr>
     <tr>
       <th>TiteSeq_01_bin4</th>
-      <td>313274</td>
-      <td>1269465</td>
-      <td>491130</td>
-      <td>260310</td>
-      <td>7305763</td>
+      <td>118677</td>
+      <td>1489368</td>
+      <td>289294</td>
+      <td>100511</td>
+      <td>5935478</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin1</th>
-      <td>54204</td>
-      <td>205638</td>
-      <td>85047</td>
-      <td>15481</td>
-      <td>1365403</td>
+      <td>6748</td>
+      <td>89409</td>
+      <td>17275</td>
+      <td>6191</td>
+      <td>346367</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin2</th>
-      <td>24852</td>
-      <td>56395</td>
-      <td>37791</td>
-      <td>7282</td>
-      <td>594816</td>
+      <td>24962</td>
+      <td>317080</td>
+      <td>59832</td>
+      <td>20368</td>
+      <td>1203344</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin3</th>
-      <td>47130</td>
-      <td>202074</td>
-      <td>71289</td>
-      <td>41446</td>
-      <td>1069685</td>
+      <td>35127</td>
+      <td>447118</td>
+      <td>84464</td>
+      <td>29032</td>
+      <td>1756846</td>
     </tr>
     <tr>
       <th>TiteSeq_02_bin4</th>
-      <td>292917</td>
-      <td>1203676</td>
-      <td>444768</td>
-      <td>250726</td>
-      <td>6914960</td>
+      <td>107767</td>
+      <td>1323046</td>
+      <td>265812</td>
+      <td>87325</td>
+      <td>5231867</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin1</th>
-      <td>90465</td>
-      <td>304379</td>
-      <td>142762</td>
-      <td>36344</td>
-      <td>2225052</td>
+      <td>29241</td>
+      <td>377070</td>
+      <td>72161</td>
+      <td>24281</td>
+      <td>1440718</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin2</th>
-      <td>35369</td>
-      <td>106973</td>
-      <td>50243</td>
-      <td>23702</td>
-      <td>812238</td>
+      <td>19015</td>
+      <td>257848</td>
+      <td>47223</td>
+      <td>16718</td>
+      <td>984381</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin3</th>
-      <td>89819</td>
-      <td>326777</td>
-      <td>138673</td>
-      <td>100155</td>
-      <td>2038990</td>
+      <td>55913</td>
+      <td>681297</td>
+      <td>133706</td>
+      <td>48191</td>
+      <td>2780367</td>
     </tr>
     <tr>
       <th>TiteSeq_03_bin4</th>
-      <td>230281</td>
-      <td>951073</td>
-      <td>353081</td>
-      <td>185131</td>
-      <td>5385148</td>
+      <td>59244</td>
+      <td>750270</td>
+      <td>142794</td>
+      <td>47724</td>
+      <td>2902784</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin1</th>
-      <td>188268</td>
-      <td>639150</td>
-      <td>279609</td>
-      <td>90242</td>
-      <td>4485344</td>
+      <td>39070</td>
+      <td>493816</td>
+      <td>93395</td>
+      <td>33800</td>
+      <td>1917323</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin2</th>
-      <td>112163</td>
-      <td>307152</td>
-      <td>165782</td>
-      <td>119261</td>
-      <td>2663714</td>
+      <td>65058</td>
+      <td>781755</td>
+      <td>156347</td>
+      <td>53691</td>
+      <td>3204708</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin3</th>
-      <td>79785</td>
-      <td>435639</td>
-      <td>123305</td>
-      <td>50435</td>
-      <td>1798588</td>
+      <td>44244</td>
+      <td>543624</td>
+      <td>106731</td>
+      <td>46589</td>
+      <td>2159414</td>
     </tr>
     <tr>
       <th>TiteSeq_04_bin4</th>
-      <td>44402</td>
-      <td>201561</td>
-      <td>67588</td>
-      <td>10943</td>
-      <td>996280</td>
+      <td>10297</td>
+      <td>140523</td>
+      <td>24411</td>
+      <td>10551</td>
+      <td>489256</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin1</th>
-      <td>340236</td>
-      <td>1233133</td>
-      <td>520112</td>
-      <td>243590</td>
-      <td>8197251</td>
+      <td>64870</td>
+      <td>811995</td>
+      <td>162398</td>
+      <td>52666</td>
+      <td>3263911</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin2</th>
-      <td>77697</td>
-      <td>378067</td>
-      <td>115087</td>
-      <td>41154</td>
-      <td>1730851</td>
+      <td>68241</td>
+      <td>846107</td>
+      <td>166988</td>
+      <td>61202</td>
+      <td>3335463</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin3</th>
-      <td>4820</td>
-      <td>19603</td>
-      <td>6627</td>
-      <td>1689</td>
-      <td>106818</td>
+      <td>6694</td>
+      <td>99010</td>
+      <td>17296</td>
+      <td>7772</td>
+      <td>335456</td>
     </tr>
     <tr>
       <th>TiteSeq_05_bin4</th>
-      <td>758</td>
-      <td>553</td>
-      <td>224</td>
-      <td>2634</td>
-      <td>3568</td>
+      <td>271</td>
+      <td>1398</td>
+      <td>217</td>
+      <td>3319</td>
+      <td>4053</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin1</th>
-      <td>451920</td>
-      <td>1744407</td>
-      <td>686153</td>
-      <td>289681</td>
-      <td>10498046</td>
+      <td>144029</td>
+      <td>1820090</td>
+      <td>360142</td>
+      <td>116931</td>
+      <td>7281395</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin2</th>
-      <td>14927</td>
-      <td>73850</td>
-      <td>21829</td>
-      <td>8454</td>
-      <td>326065</td>
+      <td>24716</td>
+      <td>328070</td>
+      <td>61639</td>
+      <td>22814</td>
+      <td>1225081</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin3</th>
-      <td>83</td>
-      <td>23</td>
-      <td>24</td>
-      <td>280</td>
-      <td>192</td>
+      <td>135</td>
+      <td>294</td>
+      <td>41</td>
+      <td>3841</td>
+      <td>649</td>
     </tr>
     <tr>
       <th>TiteSeq_06_bin4</th>
-      <td>595</td>
-      <td>1571</td>
-      <td>557</td>
-      <td>1328</td>
-      <td>8739</td>
+      <td>192</td>
+      <td>38</td>
+      <td>25</td>
+      <td>1824</td>
+      <td>124</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin1</th>
-      <td>500688</td>
-      <td>1966275</td>
-      <td>763379</td>
-      <td>313901</td>
-      <td>11596109</td>
+      <td>165255</td>
+      <td>2099705</td>
+      <td>397628</td>
+      <td>132052</td>
+      <td>8226207</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin2</th>
-      <td>7948</td>
-      <td>35084</td>
-      <td>10660</td>
-      <td>9371</td>
-      <td>149340</td>
+      <td>16478</td>
+      <td>208095</td>
+      <td>39972</td>
+      <td>16660</td>
+      <td>811923</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin3</th>
-      <td>97</td>
-      <td>17</td>
-      <td>7</td>
-      <td>311</td>
-      <td>96</td>
+      <td>119</td>
+      <td>518</td>
+      <td>107</td>
+      <td>1832</td>
+      <td>2060</td>
     </tr>
     <tr>
       <th>TiteSeq_07_bin4</th>
-      <td>193</td>
-      <td>615</td>
-      <td>234</td>
-      <td>207</td>
-      <td>4114</td>
+      <td>1368</td>
+      <td>140</td>
+      <td>14</td>
+      <td>6604</td>
+      <td>133</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin1</th>
-      <td>436728</td>
-      <td>1789379</td>
-      <td>682275</td>
-      <td>284142</td>
-      <td>10712385</td>
+      <td>142992</td>
+      <td>1782858</td>
+      <td>347636</td>
+      <td>127355</td>
+      <td>7073711</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin2</th>
-      <td>8638</td>
-      <td>38549</td>
-      <td>11008</td>
-      <td>8250</td>
-      <td>161805</td>
+      <td>12721</td>
+      <td>165049</td>
+      <td>31934</td>
+      <td>11120</td>
+      <td>635735</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin3</th>
-      <td>133</td>
-      <td>56</td>
-      <td>19</td>
-      <td>1503</td>
-      <td>215</td>
+      <td>100</td>
+      <td>227</td>
+      <td>54</td>
+      <td>2175</td>
+      <td>936</td>
     </tr>
     <tr>
       <th>TiteSeq_08_bin4</th>
-      <td>359</td>
-      <td>645</td>
-      <td>205</td>
-      <td>1041</td>
-      <td>2341</td>
+      <td>102</td>
+      <td>49</td>
+      <td>9</td>
+      <td>1140</td>
+      <td>45</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin1</th>
-      <td>474999</td>
-      <td>1867655</td>
-      <td>717099</td>
-      <td>331697</td>
-      <td>11063558</td>
+      <td>149118</td>
+      <td>1868460</td>
+      <td>371898</td>
+      <td>129325</td>
+      <td>7373815</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin2</th>
-      <td>7477</td>
-      <td>38019</td>
-      <td>11327</td>
-      <td>7513</td>
-      <td>161378</td>
+      <td>12078</td>
+      <td>156337</td>
+      <td>29807</td>
+      <td>12012</td>
+      <td>605846</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin3</th>
-      <td>413</td>
-      <td>27</td>
-      <td>26</td>
-      <td>1315</td>
-      <td>191</td>
+      <td>449</td>
+      <td>3042</td>
+      <td>227</td>
+      <td>5736</td>
+      <td>2754</td>
     </tr>
     <tr>
       <th>TiteSeq_09_bin4</th>
-      <td>115</td>
-      <td>8</td>
-      <td>4</td>
-      <td>765</td>
-      <td>26</td>
+      <td>133</td>
+      <td>121</td>
+      <td>18</td>
+      <td>2835</td>
+      <td>88</td>
     </tr>
   </tbody>
 </table>

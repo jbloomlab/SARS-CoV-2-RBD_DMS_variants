@@ -67,22 +67,23 @@ sessionInfo()
     ## other attached packages:
     ##  [1] egg_0.4.5         gridExtra_2.3     forcats_0.4.0     stringr_1.4.0    
     ##  [5] dplyr_0.8.3       purrr_0.3.3       readr_1.3.1       tidyr_1.0.0      
-    ##  [9] tibble_3.0.2      ggplot2_3.3.0     tidyverse_1.3.0   data.table_1.12.8
+    ##  [9] tibble_3.0.1      ggplot2_3.3.0     tidyverse_1.3.0   data.table_1.12.8
     ## [13] yaml_2.2.0        knitr_1.26       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.1.0 xfun_0.11        haven_2.2.0      colorspace_1.4-1
-    ##  [5] vctrs_0.3.1      generics_0.0.2   htmltools_0.4.0  rlang_0.4.7     
-    ##  [9] pillar_1.4.5     glue_1.3.1       withr_2.1.2      DBI_1.1.0       
-    ## [13] dbplyr_1.4.2     modelr_0.1.5     readxl_1.3.1     lifecycle_0.2.0 
-    ## [17] munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0 rvest_0.3.5     
-    ## [21] evaluate_0.14    fansi_0.4.0      broom_0.7.0      Rcpp_1.0.3      
-    ## [25] scales_1.1.0     backports_1.1.5  jsonlite_1.6     fs_1.3.1        
-    ## [29] hms_0.5.2        digest_0.6.23    stringi_1.4.3    grid_3.6.2      
-    ## [33] cli_2.0.0        tools_3.6.2      magrittr_1.5     crayon_1.3.4    
-    ## [37] pkgconfig_2.0.3  ellipsis_0.3.0   xml2_1.2.2       reprex_0.3.0    
-    ## [41] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_2.0    httr_1.4.1      
-    ## [45] rstudioapi_0.10  R6_2.4.1         compiler_3.6.2
+    ##  [1] tidyselect_0.2.5 xfun_0.11        haven_2.2.0      lattice_0.20-38 
+    ##  [5] colorspace_1.4-1 vctrs_0.2.4      generics_0.0.2   htmltools_0.4.0 
+    ##  [9] rlang_0.4.5      pillar_1.4.3     glue_1.3.1       withr_2.1.2     
+    ## [13] DBI_1.1.0        dbplyr_1.4.2     modelr_0.1.5     readxl_1.3.1    
+    ## [17] lifecycle_0.2.0  munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0
+    ## [21] rvest_0.3.5      evaluate_0.14    fansi_0.4.0      broom_0.5.6     
+    ## [25] Rcpp_1.0.3       scales_1.1.0     backports_1.1.5  jsonlite_1.6    
+    ## [29] fs_1.3.1         hms_0.5.2        digest_0.6.23    stringi_1.4.3   
+    ## [33] grid_3.6.2       cli_2.0.0        tools_3.6.2      magrittr_1.5    
+    ## [37] crayon_1.3.4     pkgconfig_2.0.3  ellipsis_0.3.0   xml2_1.2.2      
+    ## [41] reprex_0.3.0     lubridate_1.7.4  assertthat_0.2.1 rmarkdown_2.0   
+    ## [45] httr_1.4.1       rstudioapi_0.10  R6_2.4.1         nlme_3.1-143    
+    ## [49] compiler_3.6.2
 
 ## Setup
 

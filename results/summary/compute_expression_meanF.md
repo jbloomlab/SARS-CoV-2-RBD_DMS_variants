@@ -61,23 +61,23 @@ sessionInfo()
     ##  [4] lsei_1.2-0          survival_3.1-8      MASS_7.3-51.4      
     ##  [7] forcats_0.4.0       stringr_1.4.0       dplyr_0.8.3        
     ## [10] purrr_0.3.3         readr_1.3.1         tidyr_1.0.0        
-    ## [13] tibble_3.0.2        ggplot2_3.3.0       tidyverse_1.3.0    
+    ## [13] tibble_3.0.1        ggplot2_3.3.0       tidyverse_1.3.0    
     ## [16] data.table_1.12.8   yaml_2.2.0          knitr_1.26         
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.1.0 xfun_0.11        lattice_0.20-38  splines_3.6.2   
-    ##  [5] haven_2.2.0      colorspace_1.4-1 vctrs_0.3.1      generics_0.0.2  
-    ##  [9] htmltools_0.4.0  rlang_0.4.7      pillar_1.4.5     glue_1.3.1      
+    ##  [1] tidyselect_0.2.5 xfun_0.11        splines_3.6.2    haven_2.2.0     
+    ##  [5] lattice_0.20-38  colorspace_1.4-1 vctrs_0.2.4      generics_0.0.2  
+    ##  [9] htmltools_0.4.0  rlang_0.4.5      pillar_1.4.3     glue_1.3.1      
     ## [13] withr_2.1.2      DBI_1.1.0        dbplyr_1.4.2     modelr_0.1.5    
     ## [17] readxl_1.3.1     lifecycle_0.2.0  munsell_0.5.0    gtable_0.3.0    
     ## [21] cellranger_1.1.0 rvest_0.3.5      evaluate_0.14    fansi_0.4.0     
-    ## [25] broom_0.7.0      Rcpp_1.0.3       scales_1.1.0     backports_1.1.5 
+    ## [25] broom_0.5.6      Rcpp_1.0.3       scales_1.1.0     backports_1.1.5 
     ## [29] jsonlite_1.6     fs_1.3.1         hms_0.5.2        digest_0.6.23   
     ## [33] stringi_1.4.3    grid_3.6.2       cli_2.0.0        tools_3.6.2     
     ## [37] magrittr_1.5     crayon_1.3.4     pkgconfig_2.0.3  Matrix_1.2-18   
     ## [41] ellipsis_0.3.0   xml2_1.2.2       reprex_0.3.0     lubridate_1.7.4 
     ## [45] assertthat_0.2.1 rmarkdown_2.0    httr_1.4.1       rstudioapi_0.10 
-    ## [49] R6_2.4.1         compiler_3.6.2
+    ## [49] R6_2.4.1         nlme_3.1-143     compiler_3.6.2
 
 ## Setup
 
@@ -136,14 +136,14 @@ for(i in 1:nrow(barcode_runs)){
 }
 ```
 
-    ## [1] "reads < cells for pool1 SortSeq_bin1 , un-normalized (ratio 0.726609390609391 )"
-    ## [1] "reads < cells for pool1 SortSeq_bin2 , un-normalized (ratio 0.889877022653722 )"
-    ## [1] "read:cell ratio for pool1 SortSeq_bin3 is 1.11843661971831"
-    ## [1] "read:cell ratio for pool1 SortSeq_bin4 is 1.16089855769231"
-    ## [1] "reads < cells for pool2 SortSeq_bin1 , un-normalized (ratio 0.442915064102564 )"
-    ## [1] "reads < cells for pool2 SortSeq_bin2 , un-normalized (ratio 0.778269154228856 )"
-    ## [1] "reads < cells for pool2 SortSeq_bin3 , un-normalized (ratio 0.614160714285714 )"
-    ## [1] "reads < cells for pool2 SortSeq_bin4 , un-normalized (ratio 0.973297435897436 )"
+    ## [1] "reads < cells for pool1 SortSeq_bin1 , un-normalized (ratio 0.728502027027027 )"
+    ## [1] "reads < cells for pool1 SortSeq_bin2 , un-normalized (ratio 0.764815885416667 )"
+    ## [1] "reads < cells for pool1 SortSeq_bin3 , un-normalized (ratio 0.876096867838044 )"
+    ## [1] "reads < cells for pool1 SortSeq_bin4 , un-normalized (ratio 0.902074040767386 )"
+    ## [1] "reads < cells for pool2 SortSeq_bin1 , un-normalized (ratio 0.65715 )"
+    ## [1] "reads < cells for pool2 SortSeq_bin2 , un-normalized (ratio 0.855886858974359 )"
+    ## [1] "reads < cells for pool2 SortSeq_bin3 , un-normalized (ratio 0.825986776859504 )"
+    ## [1] "reads < cells for pool2 SortSeq_bin4 , un-normalized (ratio 0.878098809523809 )"
 
 ``` r
 #annotate each barcode as to whether it's a homolog variant, SARS-CoV-2 wildtype, synonymous muts only, stop, nonsynonymous, >1 nonsynonymous mutations
@@ -255,7 +255,7 @@ grid.arrange(p1,ncol=1)
 invisible(dev.print(pdf, paste(config$expression_sortseq_dir,"/violin-plot_meanF-by-target.pdf",sep="")))
 ```
 
-We have generated expression measurements for 76.04% of the barcodes in
+We have generated expression measurements for 95.08% of the barcodes in
 our libraries.
 
 ## Data Output
