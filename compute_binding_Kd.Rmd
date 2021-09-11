@@ -166,7 +166,7 @@ dt[,TiteSeq_min_cell_filtered := sum(c(c(TiteSeq_01_totalcount,TiteSeq_02_totalc
 
 #function that fits a nls regression to the titration series, including an option to filter below certain thresholds for average cells across all samples, and number of samples below a cutoff of cells
 fit.titration <- function(y.vals,x.vals,count.vals,min.cfu=cutoff,
-                          min.means=0.75,min.average=1.5,Kd.start=1e-9,
+                          min.means=0.8,min.average=cutoff,Kd.start=1e-9,
                           a.start=3,a.lower=2,a.upper=3,
                           b.start=1,b.lower=1,b.upper=1.5){
   indices <- count.vals>min.cfu & !is.na(y.vals)
@@ -359,16 +359,6 @@ plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-
 plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[2])
 plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[1])
 plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[2])
-```
-
-Next, let's spot check curves that are missing two values
-
-```{r 2_missing_points_Kd, fig.width=8, fig.height=8, fig.align="center",dpi=300, warning=FALSE, results=FALSE,dev="png"}
-par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[1])
-plot.titration(which(dt$library=="pool1" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[2])
-plot.titration(which(dt$library=="pool2" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[1])
-plot.titration(which(dt$library=="pool2" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[2])
 ```
 
 ## Data filtering by fit quality

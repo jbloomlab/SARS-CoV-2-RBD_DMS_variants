@@ -159,7 +159,6 @@ hist(log10(dt[library=="pool2" & !is.na(expression),expr_count]+0.1),xlab="cell 
 
 ```
 
-```
 Filter out expression measurements determined from <10 estimated cells
 
 ```{r filter_min_cfu}

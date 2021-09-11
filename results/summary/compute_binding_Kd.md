@@ -36,7 +36,7 @@ Session info for reproducing environment:
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.4 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -283,7 +283,7 @@ with determined meanbin that is required for a titration to be reported.
 
     #function that fits a nls regression to the titration series, including an option to filter below certain thresholds for average cells across all samples, and number of samples below a cutoff of cells
     fit.titration <- function(y.vals,x.vals,count.vals,min.cfu=cutoff,
-                              min.means=0.75,min.average=1.5,Kd.start=1e-9,
+                              min.means=0.8,min.average=cutoff,Kd.start=1e-9,
                               a.start=3,a.lower=2,a.upper=3,
                               b.start=1,b.lower=1,b.upper=1.5){
       indices <- count.vals>min.cfu & !is.na(y.vals)
@@ -327,8 +327,8 @@ our library barcodes. We will also spot check titration curves from
 across our measurement range, and spot check curves whose fit parameters
 hit the different boundary conditions of the fit variables.
 
-We successfully generated *K*<sub>D</sub> estimates for 146836 of our
-pool1 barcodes (84%) and 124348 of our lib2 barcodes (80.27%).
+We successfully generated *K*<sub>D</sub> estimates for 136408 of our
+pool1 barcodes (78.03%) and 115150 of our lib2 barcodes (74.33%).
 
 Why were estimates not returned for some barcodes? The histograms below
 show that many barcodes with unsuccessful titration fits have lower
@@ -512,16 +512,6 @@ the main bulk of curves.
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-11_Kd-1.png" style="display: block; margin: auto;" />
 
-Next, let’s spot check curves that are missing two values
-
-    par(mfrow=c(2,2))
-    plot.titration(which(dt$library=="pool1" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[1])
-    plot.titration(which(dt$library=="pool1" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[2])
-    plot.titration(which(dt$library=="pool2" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[1])
-    plot.titration(which(dt$library=="pool2" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[2])
-
-<img src="compute_binding_Kd_files/figure-gfm/2_missing_points_Kd-1.png" style="display: block; margin: auto;" />
-
 Data filtering by fit quality
 -----------------------------
 
@@ -578,7 +568,7 @@ estimates
     #save pdf
     invisible(dev.print(pdf, paste(config$Titeseq_Kds_dir,"/violin-plot_log10Ka-by-target.pdf",sep="")))
 
-We have generated binding measurements for 81.6% of the barcodes in our
+We have generated binding measurements for 75.83% of the barcodes in our
 libraries.
 
 Data Output
