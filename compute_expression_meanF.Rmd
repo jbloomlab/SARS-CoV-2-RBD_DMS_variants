@@ -159,6 +159,13 @@ hist(log10(dt[library=="pool2" & !is.na(expression),expr_count]+0.1),xlab="cell 
 
 ```
 
+```
+Filter out expression measurements determined from <10 estimated cells
+
+```{r filter_min_cfu}
+min_count <- 10
+dt[expr_count<min_count, c("expression","ML_sdF","expr_count") := NA]
+```
 
 Do as violin plots, faceted by each target. In next notebook, we'll evaluate count depth and possibly apply further filtering to remove low-count expression estimates
 

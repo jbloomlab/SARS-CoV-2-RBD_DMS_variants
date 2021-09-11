@@ -40,7 +40,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -235,6 +235,13 @@ hist(log10(dt[library=="pool2" & !is.na(expression),expr_count]+0.1),xlab="cell 
 
 <img src="compute_expression_meanF_files/figure-gfm/cell_count_coverage-1.png" style="display: block; margin: auto;" />
 
+    Filter out expression measurements determined from <10 estimated cells
+
+
+    ```r
+    min_count <- 10
+    dt[expr_count<min_count, c("expression","ML_sdF","expr_count") := NA]
+
 Do as violin plots, faceted by each target. In next notebook, we’ll
 evaluate count depth and possibly apply further filtering to remove
 low-count expression estimates
@@ -255,7 +262,7 @@ grid.arrange(p1,ncol=1)
 invisible(dev.print(pdf, paste(config$expression_sortseq_dir,"/violin-plot_meanF-by-target.pdf",sep="")))
 ```
 
-We have generated expression measurements for 96.91% of the barcodes in
+We have generated expression measurements for 89.26% of the barcodes in
 our libraries.
 
 ## Data Output
