@@ -371,18 +371,6 @@ plot.titration(which(dt$library=="pool2" & dt$TiteSeq_min_cell_filtered == 2 & !
 plot.titration(which(dt$library=="pool2" & dt$TiteSeq_min_cell_filtered == 2 & !is.na(dt$Kd_ACE2))[2])
 ```
 
-And curves with avgcount < 3 (~600 accepted fits in this regime). These don't look too bad.
-
-```{r 3_avgcount, fig.width=8, fig.height=8, fig.align="center",dpi=300, warning=FALSE, results=FALSE,dev="png"}
-par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$TiteSeq_avgcount < 3 & !is.na(dt$Kd_ACE2))[1])
-plot.titration(which(dt$library=="pool1" & dt$TiteSeq_avgcount < 3 & !is.na(dt$Kd_ACE2))[2])
-plot.titration(which(dt$library=="pool2" & dt$TiteSeq_avgcount < 3 & !is.na(dt$Kd_ACE2))[1])
-plot.titration(which(dt$library=="pool2" & dt$TiteSeq_avgcount < 3 & !is.na(dt$Kd_ACE2))[2])
-```
-
-
-
 ## Data filtering by fit quality
 
 Next, let's filter out poor fits using the value we previously computed, the *normalized* mean square residual (nMSR). This metric computes the residual between the observed response variable and that predicted from the titration fit, normalizes this residual by the response range of the titration fit (which is allowed to vary between 1.5 and 3 per the titration fits above), and computes the mean-square of these normalized residuals.
