@@ -152,7 +152,7 @@ We will use nonlinear least squares regression to fit curves to each barcode's t
 
 ```{r fit_titrations}
 #For QC and filtering, output columns giving the average number of cells that were sampled for a barcode across the 9 sample concentrations, and a value for the number of meanbin estimates that were removed for being below the # of cells cutoff
-cutoff <- 5
+cutoff <- 3
 dt[,TiteSeq_avgcount := mean(c(TiteSeq_01_totalcount,TiteSeq_02_totalcount,TiteSeq_03_totalcount,TiteSeq_04_totalcount,
                                 TiteSeq_05_totalcount,TiteSeq_06_totalcount,TiteSeq_07_totalcount,TiteSeq_08_totalcount,
                                 TiteSeq_09_totalcount),na.rm=T),by=c("library","barcode")]

@@ -36,7 +36,7 @@ Session info for reproducing environment:
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -269,7 +269,7 @@ be used in the titration fit, and a minimum number of concentrations
 with determined meanbin that is required for a titration to be reported.
 
     #For QC and filtering, output columns giving the average number of cells that were sampled for a barcode across the 9 sample concentrations, and a value for the number of meanbin estimates that were removed for being below the # of cells cutoff
-    cutoff <- 5
+    cutoff <- 3
     dt[,TiteSeq_avgcount := mean(c(TiteSeq_01_totalcount,TiteSeq_02_totalcount,TiteSeq_03_totalcount,TiteSeq_04_totalcount,
                                     TiteSeq_05_totalcount,TiteSeq_06_totalcount,TiteSeq_07_totalcount,TiteSeq_08_totalcount,
                                     TiteSeq_09_totalcount),na.rm=T),by=c("library","barcode")]
@@ -327,13 +327,13 @@ our library barcodes. We will also spot check titration curves from
 across our measurement range, and spot check curves whose fit parameters
 hit the different boundary conditions of the fit variables.
 
-We successfully generated *K*<sub>D</sub> estimates for 136408 of our
-pool1 barcodes (78.03%) and 115150 of our lib2 barcodes (74.33%).
+We successfully generated *K*<sub>D</sub> estimates for 143918 of our
+pool1 barcodes (82.33%) and 121806 of our lib2 barcodes (78.63%).
 
 Why were estimates not returned for some barcodes? The histograms below
 show that many barcodes with unsuccessful titration fits have lower
 average cell counts and more concentrations with fewer than the minimum
-cutoff number of cells (cutoff=5) than those that were fit. Therefore,
+cutoff number of cells (cutoff=3) than those that were fit. Therefore,
 we can see the the majority of unfit barcodes come from our minimum read
 cutoffs, meaning there weren’t too many curves that failed to be fit for
 issues such as nls convergence.
@@ -568,7 +568,7 @@ estimates
     #save pdf
     invisible(dev.print(pdf, paste(config$Titeseq_Kds_dir,"/violin-plot_log10Ka-by-target.pdf",sep="")))
 
-We have generated binding measurements for 75.83% of the barcodes in our
+We have generated binding measurements for 80.01% of the barcodes in our
 libraries.
 
 Data Output
