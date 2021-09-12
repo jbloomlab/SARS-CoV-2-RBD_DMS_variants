@@ -67,23 +67,22 @@ sessionInfo()
     ## other attached packages:
     ##  [1] egg_0.4.5         gridExtra_2.3     forcats_0.4.0     stringr_1.4.0    
     ##  [5] dplyr_0.8.3       purrr_0.3.3       readr_1.3.1       tidyr_1.0.0      
-    ##  [9] tibble_3.0.1      ggplot2_3.3.0     tidyverse_1.3.0   data.table_1.12.8
+    ##  [9] tibble_3.0.2      ggplot2_3.3.0     tidyverse_1.3.0   data.table_1.12.8
     ## [13] yaml_2.2.0        knitr_1.26       
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_0.2.5 xfun_0.11        haven_2.2.0      lattice_0.20-38 
-    ##  [5] colorspace_1.4-1 vctrs_0.2.4      generics_0.0.2   htmltools_0.4.0 
-    ##  [9] rlang_0.4.5      pillar_1.4.3     glue_1.3.1       withr_2.1.2     
-    ## [13] DBI_1.1.0        dbplyr_1.4.2     modelr_0.1.5     readxl_1.3.1    
-    ## [17] lifecycle_0.2.0  munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0
-    ## [21] rvest_0.3.5      evaluate_0.14    fansi_0.4.0      broom_0.5.6     
-    ## [25] Rcpp_1.0.3       scales_1.1.0     backports_1.1.5  jsonlite_1.6    
-    ## [29] fs_1.3.1         hms_0.5.2        digest_0.6.23    stringi_1.4.3   
-    ## [33] grid_3.6.2       cli_2.0.0        tools_3.6.2      magrittr_1.5    
-    ## [37] crayon_1.3.4     pkgconfig_2.0.3  ellipsis_0.3.0   xml2_1.2.2      
-    ## [41] reprex_0.3.0     lubridate_1.7.4  assertthat_0.2.1 rmarkdown_2.0   
-    ## [45] httr_1.4.1       rstudioapi_0.10  R6_2.4.1         nlme_3.1-143    
-    ## [49] compiler_3.6.2
+    ##  [1] tidyselect_1.1.0 xfun_0.11        haven_2.2.0      colorspace_1.4-1
+    ##  [5] vctrs_0.3.1      generics_0.0.2   htmltools_0.4.0  rlang_0.4.7     
+    ##  [9] pillar_1.4.5     glue_1.3.1       withr_2.1.2      DBI_1.1.0       
+    ## [13] dbplyr_1.4.2     modelr_0.1.5     readxl_1.3.1     lifecycle_0.2.0 
+    ## [17] munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0 rvest_0.3.5     
+    ## [21] evaluate_0.14    fansi_0.4.0      broom_0.7.0      Rcpp_1.0.3      
+    ## [25] scales_1.1.0     backports_1.1.5  jsonlite_1.6     fs_1.3.1        
+    ## [29] hms_0.5.2        digest_0.6.23    stringi_1.4.3    grid_3.6.2      
+    ## [33] cli_2.0.0        tools_3.6.2      magrittr_1.5     crayon_1.3.4    
+    ## [37] pkgconfig_2.0.3  ellipsis_0.3.0   xml2_1.2.2       reprex_0.3.0    
+    ## [41] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_2.0    httr_1.4.1      
+    ## [45] rstudioapi_0.10  R6_2.4.1         compiler_3.6.2
 
 ## Setup
 
@@ -99,7 +98,7 @@ dt <- merge(dt_bind,dt_expr)
 
 ## Calculate per-variant mean scores within replicates
 
-Calculate the median binding and expression score collapsed by genotype.
+Calculate the mean binding and expression score collapsed by genotype.
 Also output the number of barcodes across which a variant score was
 determined in each library.
 
@@ -107,12 +106,12 @@ determined in each library.
 dt[is.na(log10Ka),TiteSeq_avgcount:=NA]
 dt[is.na(expression),expr_count:=NA]
 
-dt[,mean_bind:=median(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt[,mean_bind:=mean(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,sd_bind:=sd(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,n_bc_bind:=sum(!is.na(log10Ka)),by=c("library","target","variant_class","aa_substitutions")]
 dt[,avg_count_bind:=mean(TiteSeq_avgcount,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 
-dt[,mean_expr:=median(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt[,mean_expr:=mean(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,sd_expr:=sd(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,n_bc_expr:=sum(!is.na(expression)),by=c("library","target","variant_class","aa_substitutions")]
 dt[,avg_count_expr:=mean(expr_count,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
@@ -141,10 +140,7 @@ invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/histogram_n_bc_
 ```
 
 What about how SEM tracks with number of barcodes collapsed? This could
-help for choosing a minimum number of barcodes to use. (Though I’m using
-median not mean, so I wonder if there’s a good equivlanet to ‘standard
-error on the median’ that could be used/kept in the table for
-downstream)
+help for choosing a minimum number of barcodes to use.
 
 ``` r
 par(mfrow=c(2,2))
@@ -275,6 +271,17 @@ setnames(dt_final,"expr_tot","expr")
 setnames(dt_final,"delta_expr_tot","delta_expr")
 setnames(dt_final,"n_bc_expr_tot","n_bc_expr")
 setnames(dt_final,"n_libs_expr_tot","n_libs_expr")
+```
+
+Censor any measurements that are from \<3 bc or only sampled in a single
+replicate? Don’t do this for now.
+
+``` r
+# min_bc <- 2
+# min_lib <- 2
+# 
+# dt_final[n_bc_bind < min_bc & n_libs_bind < min_lib, c("bind","delta_bind","n_bc_bind","n_libs_bind") := list(NA,NA,NA,NA)]
+# dt_final[n_bc_expr < min_bc & n_libs_expr < min_lib, c("expr","delta_expr","n_bc_expr","n_libs_expr") := list(NA,NA,NA,NA)]
 ```
 
 Coverage stats on n_barcodes for different measurements in the final

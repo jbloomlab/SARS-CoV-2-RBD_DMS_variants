@@ -52,18 +52,18 @@ dt <- merge(dt_bind,dt_expr)
 
 ## Calculate per-variant mean scores within replicates
 
-Calculate the median binding and expression score collapsed by genotype. Also output the number of barcodes across which a variant score was determined in each library.
+Calculate the mean binding and expression score collapsed by genotype. Also output the number of barcodes across which a variant score was determined in each library.
 
-```{r calculate_median_scores}
+```{r calculate_mean_scores}
 dt[is.na(log10Ka),TiteSeq_avgcount:=NA]
 dt[is.na(expression),expr_count:=NA]
 
-dt[,mean_bind:=median(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt[,mean_bind:=mean(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,sd_bind:=sd(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,n_bc_bind:=sum(!is.na(log10Ka)),by=c("library","target","variant_class","aa_substitutions")]
 dt[,avg_count_bind:=mean(TiteSeq_avgcount,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 
-dt[,mean_expr:=median(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt[,mean_expr:=mean(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,sd_expr:=sd(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 dt[,n_bc_expr:=sum(!is.na(expression)),by=c("library","target","variant_class","aa_substitutions")]
 dt[,avg_count_expr:=mean(expr_count,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
@@ -84,7 +84,7 @@ invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/histogram_n_bc_
 
 ```
 
-What about how SEM tracks with number of barcodes collapsed? This could help for choosing a minimum number of barcodes to use. (Though I'm using median not mean, so I wonder if there's a good equivlanet to 'standard error on the median' that could be used/kept in the table for downstream)
+What about how SEM tracks with number of barcodes collapsed? This could help for choosing a minimum number of barcodes to use.
 
 ```{r sem_v_n-bc, fig.width=8, fig.height=8, fig.align="center", dpi=300,dev="png"}
 par(mfrow=c(2,2))
@@ -200,6 +200,16 @@ setnames(dt_final,"n_bc_expr_tot","n_bc_expr")
 setnames(dt_final,"n_libs_expr_tot","n_libs_expr")
 
 ```
+
+Censor any measurements that are from <3 bc or only sampled in a single replicate? Don't do this for now.
+```{r censor_n_barcodes_libs, echo=T, fig.width=8, fig.height=4, fig.align="center", dpi=300,dev="png"}
+# min_bc <- 2
+# min_lib <- 2
+# 
+# dt_final[n_bc_bind < min_bc & n_libs_bind < min_lib, c("bind","delta_bind","n_bc_bind","n_libs_bind") := list(NA,NA,NA,NA)]
+# dt_final[n_bc_expr < min_bc & n_libs_expr < min_lib, c("expr","delta_expr","n_bc_expr","n_libs_expr") := list(NA,NA,NA,NA)]
+```
+
 
 Coverage stats on n_barcodes for different measurements in the final pooled measurements.
 
