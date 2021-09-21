@@ -189,6 +189,23 @@ dt_final[,mutation:=paste(wildtype,position,mutant,sep=""),by=c("wildtype","posi
 
 dt_final <- unique(dt_final[,.(target,wildtype,position,mutant,mutation,bind_tot,delta_bind_tot,n_bc_bind_tot,n_libs_bind_tot,expr_tot,delta_expr_tot,n_bc_expr_tot,n_libs_expr_tot)])
 
+#add the rep1 and rep2 bind and expr averages
+dt_final[,bind_rep1 := dt_mutant[library=="pool1", mean_bind]]
+dt_final[,bind_rep2 := dt_mutant[library=="pool2", mean_bind]]
+dt_final[,expr_rep1 := dt_mutant[library=="pool1", mean_expr]]
+dt_final[,expr_rep2 := dt_mutant[library=="pool2", mean_expr]]
+
+
+#add delta bind and expr measures
+for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
+  for(lib in c("pool1","pool2")){
+    ref_bind <- dt[library==lib & target==bg & variant_class=="wildtype",mean_bind]
+    ref_expr <- dt[library==lib & target==bg & variant_class=="wildtype",mean_expr]
+    dt_mutant[library==lib & target==bg,delta_bind := mean_bind - ref_bind]
+    dt_mutant[library==lib & target==bg,delta_expr := mean_expr - ref_expr]
+  }
+}
+
 #rename some of the columns
 setnames(dt_final,"bind_tot","bind")
 setnames(dt_final,"delta_bind_tot","delta_bind")
@@ -341,7 +358,7 @@ That's the data! Other analyses in additional notebooks
 Save output files.
 
 ```{r outputs}
-dt_final[,.(target,wildtype,position,mutant,mutation,bind,delta_bind,n_bc_bind,n_libs_bind,expr,delta_expr,n_bc_expr,n_libs_expr)] %>%
+dt_final[,.(target,wildtype,position,mutant,mutation,bind,delta_bind,n_bc_bind,n_libs_bind,bind_rep1,bind_rep2,expr,delta_expr,n_bc_expr,n_libs_expr,expr_rep1,expr_rep2)] %>%
   mutate_if(is.numeric, round, digits=5) %>%
   write.csv(file=config$final_variant_scores_mut_file, row.names=F,quote=F)
 ```
