@@ -246,7 +246,7 @@ For the library 2 titration sorts, the fluorescence boundaries for bins
 
 ``` r
 #function that returns mean bin and sum of counts for four bins cell counts. Includes cutoffs for bimodal sample splits to filter out
-calc.meanbin <- function(vec, split13filter=0.4, split24filter=0.4, split14filter=0.2){
+calc.meanbin <- function(vec, split13filter=0.4, split24filter=0.4, split14filter=0.4){
   total <- sum(vec)
   if(is.na(total) | (vec[1] > split13filter*total & vec[3] > split13filter*total) | (vec[2] > split24filter*total & vec[4] > split24filter*total) | (vec[1] > split14filter*total & vec[4] > split14filter*total)){
     return(list(NA,NA))
@@ -337,8 +337,8 @@ our library barcodes. We will also spot check titration curves from
 across our measurement range, and spot check curves whose fit parameters
 hit the different boundary conditions of the fit variables.
 
-We successfully generated *K*<sub>D</sub> estimates for 147967 of our
-pool1 barcodes (84.65%) and 125253 of our lib2 barcodes (80.85%).
+We successfully generated *K*<sub>D</sub> estimates for 150551 of our
+pool1 barcodes (86.13%) and 126439 of our lib2 barcodes (81.62%).
 
 Why were estimates not returned for some barcodes? The histograms below
 show that many barcodes with unsuccessful titration fits have lower
@@ -562,7 +562,7 @@ each background). Filter to NA fits with nMSR above this cutoff
 
 ``` r
 median.nMSR <- median(dt$nMSR_ACE2,na.rm=T)
-threshold <- 20
+threshold <- 40
 par(mfrow=c(2,2))
 for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
   plot(log10(dt[target==bg,TiteSeq_avgcount]),dt[target==bg,nMSR_ACE2],main=bg,pch=19,col="#00000010",xlab="average cell count (log10)",ylab="nMSR",xlim=c(0,6),ylim=c(0,0.5))
@@ -611,7 +611,7 @@ grid.arrange(p1,ncol=1)
 invisible(dev.print(pdf, paste(config$Titeseq_Kds_dir,"/violin-plot_log10Ka-by-target.pdf",sep="")))
 ```
 
-We have generated binding measurements for 82.23% of the barcodes in our
+We have generated binding measurements for 83.74% of the barcodes in our
 libraries.
 
 ## Data Output
