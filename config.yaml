@@ -61,6 +61,10 @@ Titeseq_Kds_dir: results/binding_Kd
 Titeseq_Kds_file: results/binding_Kd/bc_binding.csv
 final_variant_scores_dir: results/final_variant_scores
 final_variant_scores_mut_file: results/final_variant_scores/final_variant_scores.csv
+epistatic_shifts_dir: results/epistatic_shifts
+UShER_dir: results/UShER_SARS-CoV-2
+UShER_tree: results/UShER_SARS-CoV-2/public-latest.all.masked.pb
+UShER_ref: results/NC_045512.2.gb
 
 # parameters for running PacBio `ccs` program
 min_ccs_accuracy: 0.999
