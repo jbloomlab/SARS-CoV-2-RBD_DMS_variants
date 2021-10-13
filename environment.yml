@@ -5,6 +5,7 @@ channels:
   - defaults
 dependencies:
   - altair=4.1
+  - entrez-direct=13.9
   - git-lfs
   - jupyter
   - jupyter_contrib_nbextensions
@@ -18,6 +19,7 @@ dependencies:
   - seaborn=0.11.1
   - snakemake=6.2.1
   - sra-tools=2.10.9
+  - usher=0.3.5
   - pip:
     - alignparse==0.2.4
     - dms-variants==0.8.9

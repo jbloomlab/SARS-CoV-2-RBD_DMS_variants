@@ -28,7 +28,7 @@ Ensure you have `conda` installed; if not install it via Miniconda as described 
 The environment is specified in [environment.yml](environment.yml).
 If you have not previously built the conda environment, then build the environment specified in [environment.yml](environment.yml) to `./env` with:
 
-    conda env create -f environment.yml -p ./env
+    mamba env create -f environment.yml -p ./env
 
 Then activate it with:
 
