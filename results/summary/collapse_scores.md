@@ -8,6 +8,8 @@ Tyler Starr
     replicates](#calculate-per-variant-mean-scores-within-replicates)
 -   [Calculate per-mutant score across
     libraries](#calculate-per-mutant-score-across-libraries)
+-   [Correlations among backgrounds and to prior Wuhan-Hu-1 DMS
+    data](#correlations-among-backgrounds-and-to-prior-wuhan-hu-1-dms-data)
 -   [Heatmaps!](#heatmaps)
 
 This notebook reads in the per-barcode titration Kds and expression
@@ -48,7 +50,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -215,9 +217,6 @@ for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
 ```
 
 We have duplicates for each measurement. Let’s look at correlations!
-Later on, can look at how correlation degrades when subsetting on lower
-and lower n_bcs, and use that to determine if I need to filter for a
-minimum number of collapsed bcs
 
 ``` r
 par(mfrow=c(1,2))
@@ -306,7 +305,7 @@ pooled measurements.
 
 ``` r
 par(mfrow=c(1,2))
-hist(dt_final[wildtype!=mutant, n_bc_bind],col="gray50",main=paste("mutant bind score,\nmedian ",median(dt_final[wildtype!=mutant, n_bc_bind],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant, n_bc_bind]),xlab="")
+hist(dt_final[wildtype!=mutant, n_bc_bind],col="gray50",main=paste("mutant bind score,\nmedian ",median(dt_final[wildtype!=mutant, n_bc_bind],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant, n_bc_bind]),xlab="number barcodes")
 hist(dt_final[wildtype!=mutant, n_bc_expr],col="gray50",main=paste("mutant expr score,\nmedian ",median(dt_final[wildtype!=mutant, n_bc_expr],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant, n_bc_expr]),xlab="")
 ```
 
@@ -314,6 +313,99 @@ hist(dt_final[wildtype!=mutant, n_bc_expr],col="gray50",main=paste("mutant expr 
 
 ``` r
 invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/histogram_n_bc_per_geno_pooled-libs.pdf",sep="")))
+```
+
+## Correlations among backgrounds and to prior Wuhan-Hu-1 DMS data
+
+Look at correlations in mutation effects between each background, for
+bind phenotype
+
+``` r
+par(mfrow=c(3,3))
+
+x <- dt_final[target=="N501Y",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="E484K",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="E484K",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+```
+
+<img src="collapse_scores_files/figure-gfm/plot_correlations_by_bg_bind-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/background_correlations_bind.pdf",sep=""),useDingbats=F))
+```
+
+Look at correlations in mutation effects between each background, for
+expr phenotype
+
+``` r
+par(mfrow=c(3,3))
+
+x <- dt_final[target=="N501Y",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="E484K",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="E484K",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+```
+
+<img src="collapse_scores_files/figure-gfm/plot_correlations_by_bg_expr-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/background_correlations_expr.pdf",sep=""),useDingbats=F))
+```
+
+And, look at relationship between the Wuhan-Hu-1 background, monomer
+ACE2 measurements versus our previously published measurements for
+binding to dimeric ACE2
+
+``` r
+dt_og <- data.table(read.csv(file=config$mut_bind_expr,stringsAsFactors = F))
+
+dt_og$bind_new <- as.numeric(NA)
+dt_og$expr_new <- as.numeric(NA)
+
+for(i in 1:nrow(dt_og)){
+  if(dt_og[i,mutant]!="*"){
+    dt_og[i,"bind_new"] <- dt_final[target=="Wuhan_Hu_1" & position==dt_og[i,site_SARS2] & mutant==dt_og[i,mutant],delta_bind]
+    dt_og[i,"expr_new"] <- dt_final[target=="Wuhan_Hu_1" & position==dt_og[i,site_SARS2] & mutant==dt_og[i,mutant],delta_expr]
+  }
+}
+
+par(mfrow=c(1,2))
+x <- dt_og[,expr_avg]; y <- dt_og[,expr_new]; plot(x,y,pch=19,col="#00000020",xlab="original DMS",ylab="new DMS",main="expression");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_og[,bind_avg]; y <- dt_og[,bind_new]; plot(x,y,pch=19,col="#00000020",xlab="original DMS (ACE2 dimer)",ylab="new DMS (ACE2 monomer)",main="binding affinity");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+```
+
+<img src="collapse_scores_files/figure-gfm/plot_correlations_v_og_DMS-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/correlations_Wuhan-Hu-1_OG-v-new-dms.pdf",sep=""),useDingbats=F))
 ```
 
 ## Heatmaps!

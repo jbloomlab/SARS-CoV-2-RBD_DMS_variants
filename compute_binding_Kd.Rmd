@@ -125,7 +125,7 @@ For the library 2 titration sorts, the fluorescence boundaries for bins 1-4 are 
 
 ```{r calculate_mean_bin}
 #function that returns mean bin and sum of counts for four bins cell counts. Includes cutoffs for bimodal sample splits to filter out
-calc.meanbin <- function(vec, split13filter=0.4, split24filter=0.4, split14filter=0.2){
+calc.meanbin <- function(vec, split13filter=0.4, split24filter=0.4, split14filter=0.4){
   total <- sum(vec)
   if(is.na(total) | (vec[1] > split13filter*total & vec[3] > split13filter*total) | (vec[2] > split24filter*total & vec[4] > split24filter*total) | (vec[1] > split14filter*total & vec[4] > split14filter*total)){
     return(list(NA,NA))
@@ -370,7 +370,7 @@ Look at nMSR metric versus avgcoutn value, and layer on value of nMSR filtering 
 
 ```{r nMSR_v_cell_count, fig.width=8, fig.height=8, fig.align="center",dpi=300,dev="png"}
 median.nMSR <- median(dt$nMSR_ACE2,na.rm=T)
-threshold <- 20
+threshold <- 40
 par(mfrow=c(2,2))
 for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
   plot(log10(dt[target==bg,TiteSeq_avgcount]),dt[target==bg,nMSR_ACE2],main=bg,pch=19,col="#00000010",xlab="average cell count (log10)",ylab="nMSR",xlim=c(0,6),ylim=c(0,0.5))

@@ -75,6 +75,8 @@ rule make_summary:
         variant_expression_file=config['expression_sortseq_file'],
         collapse_scores='results/summary/collapse_scores.md',
         mut_phenos_file=config['final_variant_scores_mut_file'],
+        UShER_tree=config['UShER_tree'],
+        refseq=config['UShER_ref']
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -123,6 +125,53 @@ rule make_dag:
         os.path.join(config['summary_dir'], 'dag.svg')
     shell:
         "snakemake --forceall --dag | dot -Tsvg > {output}"
+
+
+rule get_UShER_tree:
+    """Get UShER SARS-CoV-2 tree: https://github.com/yatisht/usher."""
+    output:
+        directory=directory(config['UShER_dir']),
+        mat=config['UShER_tree'],
+    shell:
+        """
+        wget \
+            -r \
+            -l 1 \
+            -np \
+            -nH \
+            -R "index.html*" \
+            -P {output.directory} \
+            http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/UShER_SARS-CoV-2/
+        mv {output.directory}/goldenPath/wuhCor1/UShER_SARS-CoV-2/* {output.directory}
+        rm -r {output.directory}/goldenPath
+        """
+
+rule get_UShER_refseq:
+    """Get UShER reference sequence."""
+    output: refseq=config['UShER_ref']
+    shell:
+        """
+        efetch \
+            -format gb \
+            -db nuccore \
+            -id NC_045512.2 \
+            > {output.refseq}
+        """
+
+rule genomic_mutcounts:
+    """Get counts of each genomic amino acid mutation."""
+    input:
+    	mat=config['UShER_tree']
+    output:
+    	genomic_mutcounts='results/genomic_mutcounts.csv'
+    shell:
+        # https://usher-wiki.readthedocs.io/en/latest/matUtils.html#summary
+        """
+        matUtils summary \
+            -T 4 \
+            -i {input.mat} \
+            -m {output.genomic_mutcounts}
+        """
 
 rule collapse_scores:
     input:
