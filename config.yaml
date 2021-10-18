@@ -65,6 +65,7 @@ epistatic_shifts_dir: results/epistatic_shifts
 UShER_dir: results/UShER_SARS-CoV-2
 UShER_tree: results/UShER_SARS-CoV-2/public-latest.all.masked.pb
 UShER_ref: results/NC_045512.2.gb
+UShER_gtf: results/ncbiGenes.gtf
 
 # parameters for running PacBio `ccs` program
 min_ccs_accuracy: 0.999

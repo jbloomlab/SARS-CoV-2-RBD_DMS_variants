@@ -76,7 +76,8 @@ rule make_summary:
         collapse_scores='results/summary/collapse_scores.md',
         mut_phenos_file=config['final_variant_scores_mut_file'],
         UShER_tree=config['UShER_tree'],
-        refseq=config['UShER_ref']
+        refseq=config['UShER_ref'],
+        gtf=config['UShER_gtf'],
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -146,9 +147,11 @@ rule get_UShER_tree:
         rm -r {output.directory}/goldenPath
         """
 
-rule get_UShER_refseq:
-    """Get UShER reference sequence."""
-    output: refseq=config['UShER_ref']
+rule get_UShER_ref_files:
+    """Get UShER reference sequence and gene annotations."""
+    output:
+    	refseq=config['UShER_ref'],
+    	gtf=config['UShER_gtf']
     shell:
         """
         efetch \
@@ -156,7 +159,11 @@ rule get_UShER_refseq:
             -db nuccore \
             -id NC_045512.2 \
             > {output.refseq}
+        wget http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/bigZips/genes/ncbiGenes.gtf.gz
+        gunzip ncbiGenes.gtf.gz
+        mv ./ncbiGenes.gtf {output.gtf}
         """
+
 
 rule genomic_mutcounts:
     """Get counts of each genomic amino acid mutation."""
