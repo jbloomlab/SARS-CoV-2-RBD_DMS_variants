@@ -59,6 +59,7 @@ rule make_summary:
     input:
         dag=os.path.join(config['summary_dir'], 'dag.svg'),
         get_mut_bind_expr=config['mut_bind_expr'],
+        get_delta_mut_bind_expr=config['delta_mut_bind_expr'],
         process_ccs_Wuhan_Hu_1=nb_markdown('process_ccs_Wuhan_Hu_1.ipynb'),
         process_ccs_E484K=nb_markdown('process_ccs_E484K.ipynb'),
         process_ccs_N501Y=nb_markdown('process_ccs_N501Y.ipynb'),
@@ -76,7 +77,8 @@ rule make_summary:
         collapse_scores='results/summary/collapse_scores.md',
         mut_phenos_file=config['final_variant_scores_mut_file'],
         UShER_tree=config['UShER_tree'],
-        refseq=config['UShER_ref']
+        refseq=config['UShER_ref'],
+        gtf=config['UShER_gtf'],
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -98,7 +100,7 @@ rule make_summary:
             Here is the Markdown output of each Jupyter notebook in the
             workflow:
 
-            1. Get prior Wuhan-1 RBD DMS mutation-level [binding and expression data]({path(input.get_mut_bind_expr)}). 
+            1. Get prior Wuhan-1 RBD DMS mutation-level [binding and expression data]({path(input.get_mut_bind_expr)}) and Delta VOC RBD DMS mutation-level [binding and expression data]{path(input.get_delta_mut_bind_expr)}.
             
             2. Process PacBio CCSs for each background: [Wuhan_Hu_1]({path(input.process_ccs_Wuhan_Hu_1)}), [E484K]({path(input.process_ccs_E484K)}), [N501Y]({path(input.process_ccs_N501Y)}), [B.1.351]({path(input.process_ccs_B1351)}). Creates barcode-variant lookup tables for each background: [Wuhan_Hu_1]({path(input.barcode_variant_table_Wuhan_Hu_1)}), [E484K]({path(input.barcode_variant_table_E484K)}), [N501Y]({path(input.barcode_variant_table_N501Y)}), [B.1.351]({path(input.barcode_variant_table_B1351)}).
             
@@ -146,9 +148,11 @@ rule get_UShER_tree:
         rm -r {output.directory}/goldenPath
         """
 
-rule get_UShER_refseq:
-    """Get UShER reference sequence."""
-    output: refseq=config['UShER_ref']
+rule get_UShER_ref_files:
+    """Get UShER reference sequence and gene annotations."""
+    output:
+    	refseq=config['UShER_ref'],
+    	gtf=config['UShER_gtf']
     shell:
         """
         efetch \
@@ -156,7 +160,11 @@ rule get_UShER_refseq:
             -db nuccore \
             -id NC_045512.2 \
             > {output.refseq}
+        wget http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/bigZips/genes/ncbiGenes.gtf.gz
+        gunzip ncbiGenes.gtf.gz
+        mv ./ncbiGenes.gtf {output.gtf}
         """
+
 
 rule genomic_mutcounts:
     """Get counts of each genomic amino acid mutation."""
@@ -176,7 +184,8 @@ rule genomic_mutcounts:
 rule collapse_scores:
     input:
         config['Titeseq_Kds_file'],
-        config['expression_sortseq_file']
+        config['expression_sortseq_file'],
+        config['delta_mut_bind_expr']
     output:
         config['final_variant_scores_mut_file'],
         md='results/summary/collapse_scores.md',
@@ -264,8 +273,14 @@ rule get_mut_bind_expr:
         file=config['mut_bind_expr']
     run:
         urllib.request.urlretrieve(config['mut_bind_expr_url'], output.file)
-        
 
+rule get_delta_mut_bind_expr:
+    """Download SARS-CoV-2 Delta VOC mutation-level ACE2-binding and expression data."""
+    output:
+        file=config['delta_mut_bind_expr']
+    run:
+        urllib.request.urlretrieve(config['delta_mut_bind_expr_url'], output.file)
+        
 rule process_ccs_Wuhan_Hu_1:
     """Process the PacBio CCSs for Wuhan_Hu_1 background and build variant table."""
     input:

@@ -289,6 +289,15 @@ setnames(dt_final,"n_bc_expr_tot","n_bc_expr")
 setnames(dt_final,"n_libs_expr_tot","n_libs_expr")
 ```
 
+Merge in the Delta-bg DMS measurements, obtained from Delta repo
+
+``` r
+dt_delta <- data.table(read.csv(file=config$delta_mut_bind_expr,stringsAsFactors = F))
+
+dt_final <- merge(dt_final, dt_delta, all.x=T, all.y=T)
+setkey(dt_final,target,position,mutant)
+```
+
 Censor any measurements that are from \<3 bc or only sampled in a single
 replicate? Don’t do this for now.
 
@@ -301,12 +310,12 @@ replicate? Don’t do this for now.
 ```
 
 Coverage stats on n_barcodes for different measurements in the final
-pooled measurements.
+pooled measurements. (Exclude delta)
 
 ``` r
 par(mfrow=c(1,2))
-hist(dt_final[wildtype!=mutant, n_bc_bind],col="gray50",main=paste("mutant bind score,\nmedian ",median(dt_final[wildtype!=mutant, n_bc_bind],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant, n_bc_bind]),xlab="number barcodes")
-hist(dt_final[wildtype!=mutant, n_bc_expr],col="gray50",main=paste("mutant expr score,\nmedian ",median(dt_final[wildtype!=mutant, n_bc_expr],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant, n_bc_expr]),xlab="")
+hist(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind],col="gray50",main=paste("mutant bind score,\nmedian ",median(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind]),xlab="number barcodes")
+hist(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr],col="gray50",main=paste("mutant expr score,\nmedian ",median(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr]),xlab="")
 ```
 
 <img src="collapse_scores_files/figure-gfm/n_barcode_plots-1.png" style="display: block; margin: auto;" />
@@ -321,7 +330,17 @@ Look at correlations in mutation effects between each background, for
 bind phenotype
 
 ``` r
-par(mfrow=c(3,3))
+par(mfrow=c(4,4))
+
+x <- dt_final[target=="B1351",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="B1351",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="N501Y",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
 
 x <- dt_final[target=="N501Y",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
@@ -331,9 +350,13 @@ x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="B1351",bind]; p
 
 plot(0,type='n',axes=FALSE,ann=F)
 
+plot(0,type='n',axes=FALSE,ann=F)
+
 x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
 x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
 
 plot(0,type='n',axes=FALSE,ann=F)
 
@@ -352,7 +375,17 @@ Look at correlations in mutation effects between each background, for
 expr phenotype
 
 ``` r
-par(mfrow=c(3,3))
+par(mfrow=c(4,4))
+
+x <- dt_final[target=="B1351",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="B1351",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="N501Y",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
 
 x <- dt_final[target=="N501Y",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
@@ -362,9 +395,13 @@ x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="B1351",expr]; p
 
 plot(0,type='n',axes=FALSE,ann=F)
 
+plot(0,type='n',axes=FALSE,ann=F)
+
 x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
 x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+plot(0,type='n',axes=FALSE,ann=F)
 
 plot(0,type='n',axes=FALSE,ann=F)
 
@@ -414,7 +451,7 @@ Order factor variables for plotting
 
 ``` r
 #order target by order given in config
-dt_final$target <- factor(dt_final$target,levels=c("Wuhan_Hu_1","E484K","N501Y","B1351"))
+dt_final$target <- factor(dt_final$target,levels=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta"))
 #order mutant as a factor for grouping by rough biochemical grouping
 dt_final$mutant <- factor(dt_final$mutant, levels=c("C","P","G","V","M","L","I","A","F","W","Y","T","S","N","Q","E","D","H","K","R"))
 #add character vector indicating wildtype to use as plotting symbols for wt
@@ -449,7 +486,7 @@ p1 <- ggplot(temp[measurement=="bind",],aes(position,mutant))+geom_tile(aes(fill
   scale_x_continuous(expand=c(0,0),breaks=c(331,seq(335,530,by=5)))+
   labs(x="",y="")+theme_classic(base_size=9)+
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
-  facet_wrap(~target,nrow=4)+
+  facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
   geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
 
@@ -470,7 +507,7 @@ p1 <- ggplot(temp[measurement=="delta_bind",],aes(position,mutant))+geom_tile(ae
   scale_x_continuous(expand=c(0,0),breaks=c(331,seq(335,530,by=5)))+
   labs(x="",y="")+theme_classic(base_size=9)+
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
-  facet_wrap(~target,nrow=4)+
+  facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
   geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
 
@@ -493,7 +530,7 @@ p1 <- ggplot(temp[measurement=="expr",],aes(position,mutant))+geom_tile(aes(fill
   scale_x_continuous(expand=c(0,0),breaks=c(331,seq(335,530,by=5)))+
   labs(x="",y="")+theme_classic(base_size=9)+
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
-  facet_wrap(~target,nrow=4)+
+  facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
   geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
 
@@ -514,7 +551,7 @@ p1 <- ggplot(temp[measurement=="delta_expr",],aes(position,mutant))+geom_tile(ae
   scale_x_continuous(expand=c(0,0),breaks=c(331,seq(335,530,by=5)))+
   labs(x="",y="")+theme_classic(base_size=9)+
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
-  facet_wrap(~target,nrow=4)+
+  facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
   geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
 
