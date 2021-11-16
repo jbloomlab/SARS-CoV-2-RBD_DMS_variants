@@ -48,13 +48,13 @@ dt <- data.table(read.csv(file=config$final_variant_scores_mut_file,stringsAsFac
 
 ```
 
-## Calculate site-wise mean absolute error
+## Calculate site-wise mean absolute error, slope from correlation in mutation effects
 
 For each pair of backgrounds, at each site I want to compute the mean absolute error in affinities across the 20 amino acids measured (wildtype and 19 mutants).
 
 Collapse any value <=7 to boundary of 7 -- otherwise, noise in the 5-7 range can dominate the MAE estimate. Maybe later on I can think of a better way to over-emphasize differences in MAE
 
-To ensure I'm not being misled by low n_bc outliers, I'll later repeat analysis only including mutations with e.g. >5 or >10 total barcodes
+To ensure I'm not being misled by low n_bc outliers, could later repeat analysis only including mutations with e.g. >5 or >10 total barcodes?
 
 ```{r setup_table}
 dt[,bind_cens := bind]
@@ -63,20 +63,22 @@ dt[!is.na(bind) & bind<7,bind_cens:=7]
 #first, for bind measurements
 #data table for storign difference in correlation in profiles between bg pairs at each site
 #generate table with all combinations of bg_1 and bg_2 for each site
-diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1","E484K","N501Y","B1351"),bg_1=c("Wuhan_Hu_1","E484K","N501Y","B1351")))
+diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta"),bg_1=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta")))
 
 #remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
 diffs_bind <- diffs_bind[bg_1 != bg_2,]
-diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351")) | (bg_1=="N501Y" & bg_2=="B1351")]
+diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2==c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
 
-#loop through and compute mean absolute error and correlation coefficient r
+#loop through and compute mean absolute error, correlation coefficients, and regression slope
 diffs_bind$cor <- as.numeric(NA)
+diffs_bind$slope <- as.numeric(NA)
 diffs_bind$rho <- as.numeric(NA)
 diffs_bind$MAE <- as.numeric(NA)
 for(i in 1:nrow(diffs_bind)){
   x <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind_cens]
   y <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind_cens]
   diffs_bind[i,cor:=cor(x,y,use="complete.obs",method="pearson")]
+  diffs_bind[i,slope:=lm(y~x)$coefficients["x"]]
   diffs_bind[i,rho:=cor(x,y,use="complete.obs",method="spearman")]
   diffs_bind[i,MAE:=mean(abs(lm(y~x)$residuals),na.rm=T)]
 }
@@ -84,20 +86,22 @@ for(i in 1:nrow(diffs_bind)){
 #repeat for expr measurements
 #data table for storign difference in correlation in profiles between bg pairs at each site
 #generate table with all combinations of bg_1 and bg_2 for each site
-diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1","E484K","N501Y","B1351"),bg_1=c("Wuhan_Hu_1","E484K","N501Y","B1351")))
+diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta"),bg_1=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta")))
 
 #remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
 diffs_expr <- diffs_expr[bg_1 != bg_2,]
-diffs_expr <- diffs_expr[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351")) | (bg_1=="N501Y" & bg_2=="B1351")]
+diffs_expr <- diffs_expr[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2==c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
 
 #loop through and compute mean absolute error and correlation coefficient r
 diffs_expr$cor <- as.numeric(NA)
+diffs_expr$slope <- as.numeric(NA)
 diffs_expr$rho <- as.numeric(NA)
 diffs_expr$MAE <- as.numeric(NA)
 for(i in 1:nrow(diffs_expr)){
   x <- dt[target==diffs_expr[i,bg_1] & position==diffs_expr[i,site],expr]
   y <- dt[target==diffs_expr[i,bg_2] & position==diffs_expr[i,site],expr]
   diffs_expr[i,cor:=cor(x,y,use="complete.obs",method="pearson")]
+  diffs_expr[i,slope:=lm(y~x)$coefficients["x"]]
   diffs_expr[i,rho:=cor(x,y,use="complete.obs",method="spearman")]
   diffs_expr[i,MAE:=mean(abs(lm(y~x)$residuals),na.rm=T)]
 }
@@ -109,7 +113,7 @@ Plotting/visualizing:
 Utility function: plot scatterplot showing affinity of each of the 20 amino acids in a pair of sites
 
 ```{r scatterplot_function}
-plot_scatter <- function(site, bg1, bg2, MAE=T, rho=F, cor=F,phenotype="bind_cens"){
+plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=T, rho=F, cor=F,phenotype="bind_cens"){
   x <- dt[target==bg1 & position==site,get(phenotype)]
   x_ref <- dt[target==bg1 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
   y <- dt[target==bg2 & position==site,get(phenotype)]
@@ -118,7 +122,11 @@ plot_scatter <- function(site, bg1, bg2, MAE=T, rho=F, cor=F,phenotype="bind_cen
   plot(x,y, xlim=c(6.5,11.5),ylim=c(6.5,11.5),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),main=paste("site",site))
   abline(v=x_ref,lty=2,col="red")
   abline(h=y_ref,lty=2,col="red")
-  if(MAE==T){
+  if(MAE_slope==T){
+    val1 <- mean(abs(lm(y~x)$residuals),na.rm=T)
+    val2 <- lm(y~x)$coefficients["x"]
+    legend("topleft",bty="n",cex=1,legend=paste("MAE:",format(val1,digits=3),"\nslope:",format(val2,digits=2)))
+  }else if(MAE==T){
     val <- mean(abs(lm(y~x)$residuals),na.rm=T)
     legend("topleft",bty="n",cex=1,legend=paste("MAE:",format(val,digits=3)))
   }else if(rho==T){
@@ -158,10 +166,13 @@ plot_scatter(site=452,"E484K","B1351")
 
 ```
 
-Utility funciton: plot heatmap showing mutant effects profiles of the four backgrounds
+TODO: Utility funciton: plot heatmap showing mutant effects profiles of the five backgrounds on a site-by-site basis
 
-Map MAE (or mean MAE across all comparisons) to pdbs?
+TODO: Map MAE (or mean MAE across all comparisons) to pdbs?
 
+TODO: line plots of MAE of focal bg versus other sacross sites
+
+## Nonspecific compensation
 
 Additivity of 417/484/501 muts? Build out cycle of mutants from the different places where each mutant is measured (e.g. WH1 is also measured in E484K as the K484E mut)
 
@@ -254,6 +265,68 @@ plot(cycle_expr$nmut,cycle_expr$expr,pch=19,xlab="number mutations",ylab="expres
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/B1351_epistasis_cycle_expr.pdf",sep=""),useDingbats=F))
 ```
+
+## Comparison of mutant accumulation on N501 versus Y501 backgrounds
+
+Does affinity enhancement of N501Y enable more robustness to affinity-decreasing mutations on Y501 backgrounds?
+
+Working with preliminary output generated by Will to enumerate phylogenetic substitution occurrence (so, not simply sequence counts) of mutations on N501 versus Y501 backgrounds. We can later integrate this as a script into the analysis pipeline
+
+Read in counts, add affinity change information, generate vectors of mutant counts in each background, plot violin plots of distributions
+
+```{r substitution_accrual_N501Y, echo=T, fig.width=5, fig.height=6, fig.align="center", dpi=300,dev="png"}
+subs <- data.table(read.csv(file="data/background_count.csv"),stringsAsFactors = F)
+
+#keep just RBD changes
+subs <- subs[POS %in% seq(331,531),]
+
+#remove rows with single counts? (also, check with Will that muts to tips are not being counted?)
+subs <- subs[Count>1,]
+
+#sort by bg and position for convenience
+subs <- subs[order(subs$Background,subs$POS)]
+
+subs$delta_bind <- as.numeric(NA)
+
+#maybe only record subs from the "wildtype" state (WH1)?
+for(i in 1:nrow(subs)){
+  if(subs[i,WT] != "*" & subs[i,MUT] != "*"){
+    if(subs[i,Background=="N501N"]){
+      ref_bind <- dt[target=="Wuhan_Hu_1" & position==subs[i,POS] & mutant==as.character(subs[i,WT]),bind]
+      mut_bind <- dt[target=="Wuhan_Hu_1" & position==subs[i,POS] & mutant==as.character(subs[i,MUT]),bind]
+      subs[i,"delta_bind"] <- mut_bind - ref_bind
+    }else if(subs[i,Background=="N501Y"]){
+      ref_bind <- dt[target=="N501Y" & position==subs[i,POS] & mutant==as.character(subs[i,WT]),bind]
+      mut_bind <- dt[target=="N501Y" & position==subs[i,POS] & mutant==as.character(subs[i,MUT]),bind]
+      subs[i,"delta_bind"] <- mut_bind - ref_bind
+    }
+  }
+}
+
+
+
+
+#remove site 501 changes from these counts for now?
+subs[POS == 501, delta_bind:=NA]
+
+#build up vectors that include sub counts
+delta_bind_N501 <- vector()
+delta_bind_Y501 <- vector()
+
+for(i in 1:nrow(subs)){
+  if(subs[i,Background=="N501N"]){
+    delta_bind_N501 <- c(delta_bind_N501,rep(subs[i,delta_bind],subs[i,Count]))
+  }else if(subs[i,Background=="N501Y"]){
+    delta_bind_Y501 <- c(delta_bind_Y501,rep(subs[i,delta_bind],subs[i,Count]))
+  }
+}
+
+par(mfrow=c(2,1))
+hist(delta_bind_N501, breaks=40, xlab="",main="N501",xlim=range(c(delta_bind_N501,delta_bind_Y501),na.rm=T))
+hist(delta_bind_Y501, breaks=40, xlab="substitution effect on ACE2 affinity",main="Y501",xlim=range(c(delta_bind_N501,delta_bind_Y501),na.rm=T))
+
+```
+
 
 
 
