@@ -39,6 +39,16 @@ Session info for reproducing environment:
 sessionInfo()
 ```
 
+Define colorblind-friendly palette
+```{r define_color_palette}
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+               "#0072B2", "#D55E00", "#CC79A7")
+# The palette with black
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7")
+```
+
 ## Setup
 
 Read in tables of mutant measurements.
@@ -52,9 +62,7 @@ dt <- data.table(read.csv(file=config$final_variant_scores_mut_file,stringsAsFac
 
 For each pair of backgrounds, at each site I want to compute the mean absolute error in affinities across the 20 amino acids measured (wildtype and 19 mutants).
 
-Collapse any value <=7 to boundary of 7 -- otherwise, noise in the 5-7 range can dominate the MAE estimate. Maybe later on I can think of a better way to over-emphasize differences in MAE
-
-To ensure I'm not being misled by low n_bc outliers, could later repeat analysis only including mutations with e.g. >5 or >10 total barcodes?
+Collapse any value <=7 to boundary of 7 -- otherwise, noise in the 5-7 range can dominate the MAE estimate. Also do MAE_cens which doesn't include values that are censored to 7 in both bgs
 
 ```{r setup_table}
 dt[,bind_cens := bind]
@@ -67,20 +75,24 @@ diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1
 
 #remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
 diffs_bind <- diffs_bind[bg_1 != bg_2,]
-diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2==c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
+diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
 
 #loop through and compute mean absolute error, correlation coefficients, and regression slope
 diffs_bind$cor <- as.numeric(NA)
 diffs_bind$slope <- as.numeric(NA)
 diffs_bind$rho <- as.numeric(NA)
 diffs_bind$MAE <- as.numeric(NA)
+diffs_bind$MAE_cens <- as.numeric(NA)
 for(i in 1:nrow(diffs_bind)){
   x <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind_cens]
   y <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind_cens]
+  x_cens <- x[(x>7 | y>7)]
+  y_cens <- y[(x>7 | y>7)]
   diffs_bind[i,cor:=cor(x,y,use="complete.obs",method="pearson")]
   diffs_bind[i,slope:=lm(y~x)$coefficients["x"]]
   diffs_bind[i,rho:=cor(x,y,use="complete.obs",method="spearman")]
   diffs_bind[i,MAE:=mean(abs(lm(y~x)$residuals),na.rm=T)]
+  diffs_bind[i,MAE_cens:=mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)]
 }
 
 #repeat for expr measurements
@@ -90,7 +102,7 @@ diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1
 
 #remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
 diffs_expr <- diffs_expr[bg_1 != bg_2,]
-diffs_expr <- diffs_expr[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2==c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
+diffs_expr <- diffs_expr[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
 
 #loop through and compute mean absolute error and correlation coefficient r
 diffs_expr$cor <- as.numeric(NA)
@@ -113,13 +125,16 @@ Plotting/visualizing:
 Utility function: plot scatterplot showing affinity of each of the 20 amino acids in a pair of sites
 
 ```{r scatterplot_function}
-plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=T, rho=F, cor=F,phenotype="bind_cens"){
+plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=T, rho=F, cor=F,cutoff=7,phenotype="bind_cens"){
   x <- dt[target==bg1 & position==site,get(phenotype)]
   x_ref <- dt[target==bg1 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
   y <- dt[target==bg2 & position==site,get(phenotype)]
   y_ref <- dt[target==bg2 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
+  x_cens <- x[(x>7 | y>7)]
+  y_cens <- y[(x>7 | y>7)]
   chars <- dt[target==bg1 & position==site,mutant]
-  plot(x,y, xlim=c(6.5,11.5),ylim=c(6.5,11.5),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),main=paste("site",site))
+  cols <- rep("black",20); cols[which(x <= cutoff & y <= cutoff)] <- "orange"
+  plot(x,y, xlim=c(6.5,12),ylim=c(6.5,12),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
   abline(v=x_ref,lty=2,col="red")
   abline(h=y_ref,lty=2,col="red")
   if(MAE_slope==T){
@@ -129,6 +144,9 @@ plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=T, rho=F, cor=F,phenot
   }else if(MAE==T){
     val <- mean(abs(lm(y~x)$residuals),na.rm=T)
     legend("topleft",bty="n",cex=1,legend=paste("MAE:",format(val,digits=3)))
+  }else if(MAE_cens==T){
+    val <- mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)
+    legend("topleft",bty="n",cex=1,legend=paste("MAE (cens):",format(val,digits=3)))
   }else if(rho==T){
     val <- cor(x,y,use="complete.obs",method="spearman")
     legend("topleft",bty="n",cex=1,legend=paste("rho:",format(val,digits=3)))
@@ -170,7 +188,29 @@ TODO: Utility funciton: plot heatmap showing mutant effects profiles of the five
 
 TODO: Map MAE (or mean MAE across all comparisons) to pdbs?
 
-TODO: line plots of MAE of focal bg versus other sacross sites
+TODO: line plots of MAE of focal bg versus other across sites
+```{r line_plots_MAE-cens_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+bg <- "Wuhan_Hu_1"
+temp <- diffs_bind[bg_1==bg | bg_2 == bg]
+temp$target <- as.character(NA)
+for(i in 1:nrow(temp)){
+  if(temp[i,bg_1]!=bg){
+    temp[i,target:=temp[i,bg_1]]
+  }else if(temp[i,bg_2]!=bg){
+    temp[i,target:=temp[i,bg_2]]
+  }
+}
+
+group.colors <- c("Wuhan_Hu_1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "B1351"=cbPalette[6], "Delta"=cbPalette[7])
+
+ggplot(data=temp, aes(x=site, y=MAE_cens, group=target, color=target))+
+  geom_line(size=0.5)+
+  scale_color_manual(values=group.colors)+
+  theme_bw()
+
+
+```
+
 
 ## Nonspecific compensation
 
