@@ -66,8 +66,9 @@ final_variant_scores_mut_file: results/final_variant_scores/final_variant_scores
 epistatic_shifts_dir: results/epistatic_shifts
 UShER_dir: results/UShER_SARS-CoV-2
 UShER_tree: results/UShER_SARS-CoV-2/public-latest.all.masked.pb
-UShER_ref: results/NC_045512.2.gb
-UShER_gtf: results/ncbiGenes.gtf
+UShER_ref: results/UShER_SARS-CoV-2/NC_045512.2.fa
+UShER_gtf: results/UShER_SARS-CoV-2/ncbiGenes.gtf
+UShER_annotated_subs: results/UShER_SARS-CoV-2/annotated_subs.tsv
 
 # parameters for running PacBio `ccs` program
 min_ccs_accuracy: 0.999

@@ -9,7 +9,6 @@ The analysis relies heavily on the Bloom lab's [dms_variants](https://jbloomlab.
 
 
 ```python
-import glob
 import itertools
 import multiprocessing
 import multiprocessing.pool
@@ -249,14 +248,10 @@ Read data frame with list of all barcode runs.
 
 
 ```python
-# barcode runs with R1 files expanded by glob
-barcode_runs = (
-    pd.read_csv(config['barcode_runs'])
-    .assign(R1=lambda x: x['R1'].str.split('; ').map(
-                    lambda y: list(itertools.chain(*map(glob.glob, y)))),
-            n_R1=lambda x: x['R1'].map(len),
-            )
-    )
+# barcode runs with R1 files by semicolon string split
+barcode_runs = (pd.read_csv(config['barcode_runs'])
+                .assign(R1=lambda x: x['R1'].str.split('; '))
+                )
 
 display(HTML(barcode_runs.to_html(index=False)))
 ```
@@ -266,1400 +261,1302 @@ display(HTML(barcode_runs.to_html(index=False)))
   <thead>
     <tr style="text-align: right;">
       <th>library</th>
+      <th>replicate</th>
       <th>sample</th>
       <th>sample_type</th>
       <th>sort_bin</th>
       <th>concentration</th>
       <th>date</th>
       <th>number_cells</th>
-      <th>R1_prefix</th>
-      <th>R1_prefix_2</th>
-      <th>R1_samplename</th>
-      <th>R1_postfix</th>
-      <th>R1_1</th>
-      <th>R1_2</th>
       <th>R1</th>
-      <th>n_R1</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>1.0</td>
       <td>210816</td>
       <td>1410589</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s01-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b1_S1_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b1_S1_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>1.0</td>
       <td>210816</td>
       <td>533374</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s01-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b2_S2_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b2_S2_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>1.0</td>
       <td>210816</td>
       <td>1697538</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s01-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b3_S3_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b3_S3_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>1.0</td>
       <td>210816</td>
       <td>6497928</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s01-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s01-b4_S4_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s01-b4_S4_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_02_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>2.0</td>
       <td>210816</td>
       <td>1587111</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s02-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b1_S5_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b1_S5_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_02_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>2.0</td>
       <td>210816</td>
       <td>882688</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s02-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b2_S6_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b2_S6_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_02_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>2.0</td>
       <td>210816</td>
       <td>2168488</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s02-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b3_S7_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b3_S7_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_02_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>2.0</td>
       <td>210816</td>
       <td>5908495</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s02-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s02-b4_S8_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s02-b4_S8_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_03_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>3.0</td>
       <td>210816</td>
       <td>2236680</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s03-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b1_S9_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b1_S9_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_03_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>3.0</td>
       <td>210816</td>
       <td>1125722</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s03-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b2_S10_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b2_S10_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_03_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>3.0</td>
       <td>210816</td>
       <td>3404113</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s03-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b3_S11_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b3_S11_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_03_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>3.0</td>
       <td>210816</td>
       <td>3354021</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s03-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s03-b4_S12_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s03-b4_S12_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_04_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>4.0</td>
       <td>210816</td>
       <td>3228357</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s04-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b1_S13_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b1_S13_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_04_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>4.0</td>
       <td>210816</td>
       <td>3777633</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s04-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b2_S14_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b2_S14_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_04_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>4.0</td>
       <td>210816</td>
       <td>2507212</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s04-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b3_S15_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b3_S15_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_04_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>4.0</td>
       <td>210816</td>
       <td>522258</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s04-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s04-b4_S16_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s04-b4_S16_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_05_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>5.0</td>
       <td>210816</td>
       <td>5380520</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s05-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b1_S17_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b1_S17_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_05_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>5.0</td>
       <td>210816</td>
       <td>4516641</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s05-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b2_S18_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b2_S18_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_05_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>5.0</td>
       <td>210816</td>
       <td>458022</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s05-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b3_S19_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b3_S19_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_05_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>5.0</td>
       <td>210816</td>
       <td>2412</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s05-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s05-b4_S20_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s05-b4_S20_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_06_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>6.0</td>
       <td>210816</td>
       <td>6953452</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s06-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b1_S21_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b1_S21_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_06_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>6.0</td>
       <td>210816</td>
       <td>3350686</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s06-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b2_S22_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b2_S22_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_06_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>6.0</td>
       <td>210816</td>
       <td>4212</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s06-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b3_S23_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b3_S23_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_06_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>6.0</td>
       <td>210816</td>
       <td>304</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s06-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s06-b4_S24_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s06-b4_S24_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_07_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>7.0</td>
       <td>210816</td>
       <td>8037439</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s07-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b1_S25_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b1_S25_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_07_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>7.0</td>
       <td>210816</td>
       <td>2440419</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s07-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b2_S26_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b2_S26_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_07_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>7.0</td>
       <td>210816</td>
       <td>1587</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s07-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b3_S27_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b3_S27_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_07_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>7.0</td>
       <td>210816</td>
       <td>470</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s07-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s07-b4_S28_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s07-b4_S28_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_08_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>8.0</td>
       <td>210816</td>
       <td>8013743</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s08-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b1_S29_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b1_S29_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_08_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>8.0</td>
       <td>210816</td>
       <td>2313562</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s08-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b2_S30_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b2_S30_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_08_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>8.0</td>
       <td>210816</td>
       <td>1458</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s08-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b3_S31_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b3_S31_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_08_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>8.0</td>
       <td>210816</td>
       <td>276</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s08-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s08-b4_S32_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s08-b4_S32_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_09_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>9.0</td>
       <td>210816</td>
       <td>8191465</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s09-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b1_S33_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b1_S33_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_09_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>9.0</td>
       <td>210816</td>
       <td>2003725</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s09-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b2_S34_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b2_S34_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_09_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>9.0</td>
       <td>210816</td>
       <td>882</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s09-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b3_S35_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b3_S35_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_09_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>9.0</td>
       <td>210816</td>
       <td>275</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s09-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s09-b4_S36_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s09-b4_S36_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>1.0</td>
       <td>210816</td>
       <td>747246</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s10-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b1_S37_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b1_S37_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_01_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>1.0</td>
       <td>210816</td>
       <td>632407</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s10-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b2_S38_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b2_S38_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_01_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>1.0</td>
       <td>210816</td>
       <td>1569589</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s10-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b3_S39_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b3_S39_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_01_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>1.0</td>
       <td>210816</td>
       <td>7076796</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s10-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s10-b4_S40_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s10-b4_S40_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_02_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>2.0</td>
       <td>210816</td>
       <td>508269</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s11-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b1_S41_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b1_S41_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_02_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>2.0</td>
       <td>210816</td>
       <td>1360633</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s11-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b2_S42_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b2_S42_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_02_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>2.0</td>
       <td>210816</td>
       <td>2122153</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s11-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b3_S43_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b3_S43_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_02_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>2.0</td>
       <td>210816</td>
       <td>6133995</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s11-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s11-b4_S44_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s11-b4_S44_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_03_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>3.0</td>
       <td>210816</td>
       <td>1471208</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s12-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b1_S45_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b1_S45_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_03_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>3.0</td>
       <td>210816</td>
       <td>1351829</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s12-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b2_S46_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b2_S46_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_03_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>3.0</td>
       <td>210816</td>
       <td>3465388</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s12-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b3_S47_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b3_S47_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_03_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>3.0</td>
       <td>210816</td>
       <td>3785496</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s12-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s12-b4_S48_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s12-b4_S48_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_04_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>4.0</td>
       <td>210816</td>
       <td>2711471</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s13-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b1_S49_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b1_S49_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_04_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>4.0</td>
       <td>210816</td>
       <td>3855154</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s13-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b2_S50_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b2_S50_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_04_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>4.0</td>
       <td>210816</td>
       <td>3017813</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s13-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b3_S51_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b3_S51_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_04_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>4.0</td>
       <td>210816</td>
       <td>564315</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s13-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s13-b4_S52_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s13-b4_S52_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_05_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>5.0</td>
       <td>210816</td>
       <td>6181987</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s14-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b1_S53_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b1_S53_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_05_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>5.0</td>
       <td>210816</td>
       <td>3991649</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s14-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b2_S54_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b2_S54_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_05_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>5.0</td>
       <td>210816</td>
       <td>438596</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s14-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b3_S55_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b3_S55_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_05_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>5.0</td>
       <td>210816</td>
       <td>1844</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s14-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s14-b4_S56_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s14-b4_S56_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_06_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>6.0</td>
       <td>210816</td>
       <td>8575711</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s15-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b1_S57_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b1_S57_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_06_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>6.0</td>
       <td>210816</td>
       <td>1572345</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s15-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b2_S58_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b2_S58_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_06_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>6.0</td>
       <td>210816</td>
       <td>2862</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s15-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b3_S59_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b3_S59_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_06_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>6.0</td>
       <td>210816</td>
       <td>190</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s15-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s15-b4_S60_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s15-b4_S60_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_07_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>7.0</td>
       <td>210816</td>
       <td>9233079</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s16-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b1_S61_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b1_S61_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_07_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>7.0</td>
       <td>210816</td>
       <td>870320</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s16-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b2_S62_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b2_S62_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_07_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>7.0</td>
       <td>210816</td>
       <td>617</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s16-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b3_S63_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b3_S63_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_07_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>7.0</td>
       <td>210816</td>
       <td>129</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s16-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s16-b4_S64_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s16-b4_S64_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_08_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>8.0</td>
       <td>210816</td>
       <td>9320303</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s17-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b1_S65_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b1_S65_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_08_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>8.0</td>
       <td>210816</td>
       <td>772536</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s17-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b2_S66_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b2_S66_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_08_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>8.0</td>
       <td>210816</td>
       <td>571</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s17-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b3_S67_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b3_S67_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_08_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>8.0</td>
       <td>210816</td>
       <td>141</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s17-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s17-b4_S68_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s17-b4_S68_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_09_bin1</td>
       <td>TiteSeq</td>
       <td>1</td>
       <td>9.0</td>
       <td>210816</td>
       <td>9320303</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s18-b1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b1*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b1_S69_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b1_S69_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_09_bin2</td>
       <td>TiteSeq</td>
       <td>2</td>
       <td>9.0</td>
       <td>210816</td>
       <td>772536</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s18-b2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b2*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b2_S70_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b2_S70_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_09_bin3</td>
       <td>TiteSeq</td>
       <td>3</td>
       <td>9.0</td>
       <td>210816</td>
       <td>571</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s18-b3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b3*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b3_S71_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b3_S71_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>TiteSeq_09_bin4</td>
       <td>TiteSeq</td>
       <td>4</td>
       <td>9.0</td>
       <td>210816</td>
       <td>141</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210816_s18-b4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b4*R1*.fastq.gz</td>
       <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210816_s18-b4_S72_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210816_s18-b4_S72_R1_001.fastq.gz]</td>
-      <td>2</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>SortSeq_bin1</td>
       <td>SortSeq</td>
       <td>1</td>
       <td>NaN</td>
       <td>210811</td>
       <td>1480000</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib1_bin1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin1*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_2_S74_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_1_S73_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_3_S75_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin1_2_S74_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin1_1_S73_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin1_3_S75_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_1_S73_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin1_1_S73_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_2_S74_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin1_2_S74_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin1_3_S75_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin1_3_S75_R1_001.fastq.gz]</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>SortSeq_bin2</td>
       <td>SortSeq</td>
       <td>2</td>
       <td>NaN</td>
       <td>210811</td>
       <td>3840000</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib1_bin2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin2*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_1_S76_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_2_S77_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_3_S78_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin2_1_S76_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin2_2_S77_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin2_3_S78_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_1_S76_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin2_1_S76_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_2_S77_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin2_2_S77_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin2_3_S78_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin2_3_S78_R1_001.fastq.gz]</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>SortSeq_bin3</td>
       <td>SortSeq</td>
       <td>3</td>
       <td>NaN</td>
       <td>210811</td>
       <td>3272500</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib1_bin3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin3*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_2_S80_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_1_S79_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_3_S81_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin3_2_S80_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin3_1_S79_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin3_3_S81_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_1_S79_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin3_1_S79_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_2_S80_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin3_2_S80_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin3_3_S81_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin3_3_S81_R1_001.fastq.gz]</td>
     </tr>
     <tr>
       <td>pool1</td>
+      <td>A</td>
       <td>SortSeq_bin4</td>
       <td>SortSeq</td>
       <td>4</td>
       <td>NaN</td>
       <td>210811</td>
       <td>3336000</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib1_bin4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin4*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_3_S84_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_1_S82_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_2_S83_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin4_3_S84_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin4_1_S82_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin4_2_S83_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_1_S82_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin4_1_S82_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_2_S83_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin4_2_S83_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib1_bin4_3_S84_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib1_bin4_3_S84_R1_001.fastq.gz]</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>SortSeq_bin1</td>
       <td>SortSeq</td>
       <td>1</td>
       <td>NaN</td>
       <td>210811</td>
       <td>1280000</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib2_bin1</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin1*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_2_S86_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_1_S85_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_3_S87_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin1_2_S86_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin1_1_S85_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin1_3_S87_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_1_S85_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin1_1_S85_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_2_S86_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin1_2_S86_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin1_3_S87_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin1_3_S87_R1_001.fastq.gz]</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>SortSeq_bin2</td>
       <td>SortSeq</td>
       <td>2</td>
       <td>NaN</td>
       <td>210811</td>
       <td>3120000</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib2_bin2</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin2*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_3_S90_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_1_S88_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_2_S89_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin2_3_S90_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin2_1_S88_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin2_2_S89_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_1_S88_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin2_1_S88_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_2_S89_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin2_2_S89_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin2_3_S90_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin2_3_S90_R1_001.fastq.gz]</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>SortSeq_bin3</td>
       <td>SortSeq</td>
       <td>3</td>
       <td>NaN</td>
       <td>210811</td>
       <td>3025000</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib2_bin3</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin3*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_2_S92_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_1_S91_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_3_S93_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin3_2_S92_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin3_1_S91_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin3_3_S93_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_1_S91_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin3_1_S91_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_2_S92_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin3_2_S92_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin3_3_S93_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin3_3_S93_R1_001.fastq.gz]</td>
     </tr>
     <tr>
       <td>pool2</td>
+      <td>A</td>
       <td>SortSeq_bin4</td>
       <td>SortSeq</td>
       <td>4</td>
       <td>NaN</td>
       <td>210811</td>
       <td>3360000</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/</td>
-      <td>210811_lib2_bin4</td>
-      <td>*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4*R1*.fastq.gz</td>
-      <td>/shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin4*R1*.fastq.gz</td>
-      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_2_S95_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_1_S94_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_3_S96_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin4_2_S95_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin4_1_S94_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin4_3_S96_R1_001.fastq.gz]</td>
-      <td>6</td>
+      <td>[/shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_1_S94_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin4_1_S94_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_2_S95_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin4_2_S95_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210903_D00300_1313_AHMJJTBCX3/Unaligned/Project_tstarr/210811_lib2_bin4_3_S96_R1_001.fastq.gz, /shared/ngs/illumina/tstarr/210907_D00300_1314_BHMJK5BCX3/Unaligned/Project_tstarr/210811_lib2_bin4_3_S96_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_01_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>1.0</td>
+      <td>211103</td>
+      <td>982488</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s1-b1_S37_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_01_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>1.0</td>
+      <td>211103</td>
+      <td>810921</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s1-b2_S38_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_01_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>1.0</td>
+      <td>211103</td>
+      <td>1995010</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s1-b3_S39_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_01_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>1.0</td>
+      <td>211103</td>
+      <td>9115053</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s1-b4_S40_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_02_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>2.0</td>
+      <td>211103</td>
+      <td>825640</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s2-b1_S41_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_02_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>2.0</td>
+      <td>211103</td>
+      <td>1598308</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s2-b2_S42_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_02_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>2.0</td>
+      <td>211103</td>
+      <td>2610353</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s2-b3_S43_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_02_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>2.0</td>
+      <td>211103</td>
+      <td>7681074</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s2-b4_S44_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_03_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>3.0</td>
+      <td>211103</td>
+      <td>2060732</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s3-b1_S45_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_03_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>211103</td>
+      <td>1550344</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s3-b2_S46_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_03_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>3.0</td>
+      <td>211103</td>
+      <td>4185244</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s3-b3_S47_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_03_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>3.0</td>
+      <td>211103</td>
+      <td>4948664</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s3-b4_S48_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_04_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>4.0</td>
+      <td>211103</td>
+      <td>3675600</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s4-b1_S49_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_04_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>4.0</td>
+      <td>211103</td>
+      <td>4792998</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s4-b2_S50_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_04_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>4.0</td>
+      <td>211103</td>
+      <td>3570540</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s4-b3_S51_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_04_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>4.0</td>
+      <td>211103</td>
+      <td>761817</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s4-b4_S52_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_05_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>5.0</td>
+      <td>211103</td>
+      <td>7475340</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s5-b1_S53_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_05_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>5.0</td>
+      <td>211103</td>
+      <td>4610970</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s5-b2_S54_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_05_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>5.0</td>
+      <td>211103</td>
+      <td>665621</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s5-b3_S55_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_05_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>5.0</td>
+      <td>211103</td>
+      <td>3074</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s5-b4_S56_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_06_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>6.0</td>
+      <td>211103</td>
+      <td>10495964</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s6-b1_S57_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_06_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>6.0</td>
+      <td>211103</td>
+      <td>2207037</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s6-b2_S58_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_06_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>6.0</td>
+      <td>211103</td>
+      <td>5443</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s6-b3_S59_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_06_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>6.0</td>
+      <td>211103</td>
+      <td>369</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s6-b4_S60_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_07_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>7.0</td>
+      <td>211103</td>
+      <td>11334929</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s7-b1_S61_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_07_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>7.0</td>
+      <td>211103</td>
+      <td>1223668</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s7-b2_S62_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_07_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>7.0</td>
+      <td>211103</td>
+      <td>1952</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s7-b3_S63_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_07_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>7.0</td>
+      <td>211103</td>
+      <td>428</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s7-b4_S64_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_08_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>8.0</td>
+      <td>211103</td>
+      <td>11499427</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s8-b1_S65_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_08_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>8.0</td>
+      <td>211103</td>
+      <td>1139350</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s8-b2_S66_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_08_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>8.0</td>
+      <td>211103</td>
+      <td>1837</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s8-b3_S67_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_08_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>8.0</td>
+      <td>211103</td>
+      <td>391</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s8-b4_S68_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_09_bin1</td>
+      <td>TiteSeq</td>
+      <td>1</td>
+      <td>9.0</td>
+      <td>211103</td>
+      <td>12353378</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s9-b1_S69_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_09_bin2</td>
+      <td>TiteSeq</td>
+      <td>2</td>
+      <td>9.0</td>
+      <td>211103</td>
+      <td>292258</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s9-b2_S70_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_09_bin3</td>
+      <td>TiteSeq</td>
+      <td>3</td>
+      <td>9.0</td>
+      <td>211103</td>
+      <td>1555</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s9-b3_S71_R1_001.fastq.gz]</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>B</td>
+      <td>TiteSeq_09_bin4</td>
+      <td>TiteSeq</td>
+      <td>4</td>
+      <td>9.0</td>
+      <td>211103</td>
+      <td>577</td>
+      <td>[/shared/ngs/illumina/tstarr/211116_D00300_1369_AHNH57BCX3/Unaligned/Project_tstarr/211103_s9-b4_S72_R1_001.fastq.gz]</td>
     </tr>
   </tbody>
 </table>
 
 
-Make sure all samples have at least one R1 file
-
-
-```python
-if any(barcode_runs['n_R1'] < 1):
-    raise ValueError(f"no R1 for {barcode_runs.query('n_R1 < 1')}")
-```
-
 Make sure library / sample combinations are unique:
 
 
 ```python
-assert len(barcode_runs) == len(barcode_runs.groupby(['library', 'sample']))
+assert len(barcode_runs) == len(barcode_runs.groupby(['library', 'replicate', 'sample']))
 ```
 
 Make sure the the libraries for which we have barcode runs are all in our variant table:
@@ -1767,12 +1664,12 @@ display(HTML(
   </thead>
   <tbody>
     <tr>
-      <td>pool2</td>
-      <td>154919</td>
-    </tr>
-    <tr>
       <td>pool1</td>
       <td>174804</td>
+    </tr>
+    <tr>
+      <td>pool2</td>
+      <td>154919</td>
     </tr>
   </tbody>
 </table>
@@ -1798,15 +1695,15 @@ Parse the barcodes in parallel via a [multiprocessing.Pool](https://docs.python.
 
 
 ```python
-def process_func(parser, r1files, library, sample):
+def process_func(parser, r1files, library, replicate, sample):
     """Convenience function to be starmapped to multiprocessing pool."""
-    return parser.parse(r1files, add_cols={'library': library, 'sample': sample})
+    return parser.parse(r1files, add_cols={'library': library, 'replicate': replicate, 'sample': sample})
 
 # parallel computation of list of data frames
 with multiprocessing.pool.Pool(processes=ncpus) as pool:
     bclist = pool.starmap(
                 process_func,
-                [(parsers[run.library], run.R1, run.library, run.sample)
+                [(parsers[run.library], run.R1, run.library, run.replicate, run.sample)
                   for run in barcode_runs.itertuples()],
                 )
 ```
@@ -1840,6 +1737,7 @@ display(HTML(fates.head().to_html(index=False)))
       <th>barcode</th>
       <th>count</th>
       <th>library</th>
+      <th>replicate</th>
       <th>sample</th>
     </tr>
   </thead>
@@ -1848,30 +1746,35 @@ display(HTML(fates.head().to_html(index=False)))
       <td>ATACTTATGTATAGAC</td>
       <td>1047</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>TCAGCACTACGGAAAC</td>
       <td>1041</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>CGTCCTTGCTGTCGAG</td>
       <td>996</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>AAGGAAGTAGCCCCTT</td>
       <td>978</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>CTACTCTATATTCAAA</td>
       <td>925</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
   </tbody>
@@ -1888,6 +1791,7 @@ display(HTML(fates.head().to_html(index=False)))
       <th>fate</th>
       <th>count</th>
       <th>library</th>
+      <th>replicate</th>
       <th>sample</th>
     </tr>
   </thead>
@@ -1896,30 +1800,35 @@ display(HTML(fates.head().to_html(index=False)))
       <td>valid barcode</td>
       <td>2888894</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>invalid barcode</td>
       <td>644687</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>low quality barcode</td>
       <td>149315</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>failed chastity filter</td>
       <td>67733</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
     <tr>
       <td>unparseable barcode</td>
       <td>54890</td>
       <td>pool1</td>
+      <td>A</td>
       <td>TiteSeq_01_bin1</td>
     </tr>
   </tbody>
@@ -1954,7 +1863,7 @@ Next, we tabulate the barcode fates in wide format:
 display(HTML(fates
              .pivot_table(columns='fate',
                           values='count',
-                          index=['library', 'sample'])
+                          index=['library', 'replicate', 'sample'])
              .to_html()
              ))
 ```
@@ -1963,6 +1872,7 @@ display(HTML(fates
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
+      <th></th>
       <th></th>
       <th>fate</th>
       <th>failed chastity filter</th>
@@ -1973,6 +1883,7 @@ display(HTML(fates
     </tr>
     <tr>
       <th>library</th>
+      <th>replicate</th>
       <th>sample</th>
       <th></th>
       <th></th>
@@ -1983,7 +1894,8 @@ display(HTML(fates
   </thead>
   <tbody>
     <tr>
-      <th rowspan="40" valign="top">pool1</th>
+      <th rowspan="76" valign="top">pool1</th>
+      <th rowspan="40" valign="top">A</th>
       <th>SortSeq_bin1</th>
       <td>61930</td>
       <td>898353</td>
@@ -2304,7 +2216,297 @@ display(HTML(fates
       <td>984</td>
     </tr>
     <tr>
+      <th rowspan="36" valign="top">B</th>
+      <th>TiteSeq_01_bin1</th>
+      <td>39238</td>
+      <td>174899</td>
+      <td>55963</td>
+      <td>17508</td>
+      <td>679128</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_01_bin2</th>
+      <td>32802</td>
+      <td>138592</td>
+      <td>46846</td>
+      <td>12489</td>
+      <td>563763</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_01_bin3</th>
+      <td>83953</td>
+      <td>385655</td>
+      <td>122838</td>
+      <td>38262</td>
+      <td>1441832</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_01_bin4</th>
+      <td>396323</td>
+      <td>1887397</td>
+      <td>574596</td>
+      <td>150215</td>
+      <td>6867156</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_02_bin1</th>
+      <td>33427</td>
+      <td>159300</td>
+      <td>46322</td>
+      <td>18984</td>
+      <td>535461</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_02_bin2</th>
+      <td>72105</td>
+      <td>319016</td>
+      <td>104949</td>
+      <td>27205</td>
+      <td>1249740</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_02_bin3</th>
+      <td>108795</td>
+      <td>515151</td>
+      <td>157510</td>
+      <td>44769</td>
+      <td>1830400</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_02_bin4</th>
+      <td>382313</td>
+      <td>1738961</td>
+      <td>536885</td>
+      <td>144272</td>
+      <td>6374300</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_03_bin1</th>
+      <td>86747</td>
+      <td>391983</td>
+      <td>127645</td>
+      <td>31246</td>
+      <td>1486039</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_03_bin2</th>
+      <td>56263</td>
+      <td>268146</td>
+      <td>82447</td>
+      <td>21284</td>
+      <td>959682</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_03_bin3</th>
+      <td>178276</td>
+      <td>912352</td>
+      <td>254530</td>
+      <td>71065</td>
+      <td>2929358</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_03_bin4</th>
+      <td>270298</td>
+      <td>1153324</td>
+      <td>374728</td>
+      <td>92818</td>
+      <td>4512702</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_04_bin1</th>
+      <td>146512</td>
+      <td>711002</td>
+      <td>213187</td>
+      <td>51407</td>
+      <td>2519128</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_04_bin2</th>
+      <td>206245</td>
+      <td>1057330</td>
+      <td>294721</td>
+      <td>78122</td>
+      <td>3293853</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_04_bin3</th>
+      <td>154317</td>
+      <td>647855</td>
+      <td>224748</td>
+      <td>56123</td>
+      <td>2742113</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_04_bin4</th>
+      <td>28048</td>
+      <td>108937</td>
+      <td>39091</td>
+      <td>12102</td>
+      <td>481025</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_05_bin1</th>
+      <td>290746</td>
+      <td>1507109</td>
+      <td>436218</td>
+      <td>102573</td>
+      <td>4996092</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_05_bin2</th>
+      <td>215712</td>
+      <td>942466</td>
+      <td>311989</td>
+      <td>77124</td>
+      <td>3700648</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_05_bin3</th>
+      <td>27589</td>
+      <td>108024</td>
+      <td>39629</td>
+      <td>11335</td>
+      <td>491630</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_05_bin4</th>
+      <td>305</td>
+      <td>264</td>
+      <td>98</td>
+      <td>1686</td>
+      <td>1404</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_06_bin1</th>
+      <td>456367</td>
+      <td>2232747</td>
+      <td>660988</td>
+      <td>163597</td>
+      <td>7814184</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_06_bin2</th>
+      <td>90428</td>
+      <td>395014</td>
+      <td>133206</td>
+      <td>32305</td>
+      <td>1608073</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_06_bin3</th>
+      <td>347</td>
+      <td>968</td>
+      <td>345</td>
+      <td>1380</td>
+      <td>4151</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_06_bin4</th>
+      <td>572</td>
+      <td>436</td>
+      <td>73</td>
+      <td>3188</td>
+      <td>394</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_07_bin1</th>
+      <td>470850</td>
+      <td>2246799</td>
+      <td>694871</td>
+      <td>186535</td>
+      <td>8153178</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_07_bin2</th>
+      <td>51246</td>
+      <td>211929</td>
+      <td>70562</td>
+      <td>23844</td>
+      <td>829329</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_07_bin3</th>
+      <td>180</td>
+      <td>419</td>
+      <td>150</td>
+      <td>1416</td>
+      <td>1457</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_07_bin4</th>
+      <td>217</td>
+      <td>307</td>
+      <td>56</td>
+      <td>2681</td>
+      <td>476</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_08_bin1</th>
+      <td>620274</td>
+      <td>2736020</td>
+      <td>850268</td>
+      <td>261970</td>
+      <td>9952131</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_08_bin2</th>
+      <td>50061</td>
+      <td>219899</td>
+      <td>72810</td>
+      <td>17434</td>
+      <td>857764</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_08_bin3</th>
+      <td>152</td>
+      <td>157</td>
+      <td>35</td>
+      <td>2174</td>
+      <td>470</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_08_bin4</th>
+      <td>203</td>
+      <td>99</td>
+      <td>24</td>
+      <td>2410</td>
+      <td>290</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_09_bin1</th>
+      <td>527871</td>
+      <td>2451491</td>
+      <td>769657</td>
+      <td>190830</td>
+      <td>9083936</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_09_bin2</th>
+      <td>9817</td>
+      <td>43041</td>
+      <td>14056</td>
+      <td>7044</td>
+      <td>163144</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_09_bin3</th>
+      <td>753</td>
+      <td>508</td>
+      <td>74</td>
+      <td>15442</td>
+      <td>720</td>
+    </tr>
+    <tr>
+      <th>TiteSeq_09_bin4</th>
+      <td>256</td>
+      <td>184</td>
+      <td>44</td>
+      <td>2838</td>
+      <td>423</td>
+    </tr>
+    <tr>
       <th rowspan="40" valign="top">pool2</th>
+      <th rowspan="40" valign="top">A</th>
       <th>SortSeq_bin1</th>
       <td>52794</td>
       <td>855339</td>
@@ -2646,10 +2848,10 @@ barcode_fate_plot = (
                 ), 
         aes('fate', 'count', fill='is_valid')) +
     geom_bar(stat='identity') +
-    facet_grid('sample ~ library') +
-    facet_grid('sample ~ library') +
+    facet_grid('sample ~ library + replicate') +
+    facet_grid('sample ~ library + replicate') +
     scale_fill_manual(CBPALETTE, guide=False) +
-    theme(figure_size=(1.4 * (1 + fates['library'].nunique()),
+    theme(figure_size=(1.4 * (1 + fates['library'].nunique() + fates['replicate'].nunique()),
                        1.7 * (1.2 + fates['sample'].nunique())),
           axis_text_x=element_text(angle=90),
           panel_grid_major_x=element_blank()
@@ -2663,7 +2865,7 @@ _ = barcode_fate_plot.draw()
 
 
     
-![png](count_variants_files/count_variants_44_0.png)
+![png](count_variants_files/count_variants_42_0.png)
     
 
 

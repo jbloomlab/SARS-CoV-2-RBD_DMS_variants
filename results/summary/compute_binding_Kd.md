@@ -40,7 +40,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.4 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -84,9 +84,9 @@ barcode-variant lookup tables, and merge these tables together.
 
 ``` r
 #read dataframe with list of barcode runs
-barcode_runs <- read.csv(file=config$barcode_runs,stringsAsFactors=F); barcode_runs <- subset(barcode_runs, select=-c(R1,R1_prefix,R1_samplename,R1_postfix))
+barcode_runs <- read.csv(file=config$barcode_runs,stringsAsFactors=F); barcode_runs <- subset(barcode_runs, select=-c(R1))
 
-#eliminate rows from barcode_runs that are not from an expression sort-seq experiment
+#eliminate rows from barcode_runs that are not from an tite-seq experiment
 barcode_runs <- barcode_runs[barcode_runs$sample_type == "TiteSeq",]
 
 #read file giving count of each barcode in each sort partition
@@ -112,6 +112,8 @@ dt <- dt[duplicate==FALSE,]; dt[,duplicate:=NULL]
 
 dt <- merge(counts, dt, by=c("library","barcode")); rm(dt_B1351);rm(dt_Wh1);rm(dt_E484K);rm(dt_N501Y);rm(counts); rm(duplicates)
 
+#append replicate identifier to the library name
+dt[,library:=paste(library,replicate,sep=""),by=c("library","replicate")];dt[,replicate:=NULL]
 
 #make tables giving names of Titeseq samples and the corresponding ACE2 incubation concentrations
 samples_TiteSeq <- data.frame(sample=unique(paste(barcode_runs[barcode_runs$sample_type=="TiteSeq","sample_type"],formatC(barcode_runs[barcode_runs$sample_type=="TiteSeq","concentration"], width=2,flag="0"),sep="_")),conc=c(10^-6, 10^-7, 10^-8, 10^-9, 10^-10, 10^-11, 10^-12, 10^-13,0))
@@ -124,7 +126,7 @@ our data frame.
 ``` r
 #for each bin, normalize the read counts to the observed ratio of cell recovery among bins
 for(i in 1:nrow(barcode_runs)){
-  lib <- as.character(barcode_runs$library[i])
+  lib <- paste(as.character(barcode_runs$library[i]), as.character(barcode_runs$replicate[i]), sep="")
   bin <- as.character(barcode_runs$sample[i])
   ratio <- sum(dt[library==lib & sample==bin,"count"])/barcode_runs$number_cells[i]
   if(ratio<1){ #if there are fewer reads from a FACS bin than cells sorted
@@ -137,78 +139,114 @@ for(i in 1:nrow(barcode_runs)){
 }
 ```
 
-    ## [1] "read:cell ratio for pool1 TiteSeq_01_bin1 is 2.0480054785625"
-    ## [1] "read:cell ratio for pool1 TiteSeq_01_bin2 is 1.63229553746527"
-    ## [1] "read:cell ratio for pool1 TiteSeq_01_bin3 is 1.8628272238972"
-    ## [1] "read:cell ratio for pool1 TiteSeq_01_bin4 is 1.85347606190773"
-    ## [1] "read:cell ratio for pool1 TiteSeq_02_bin1 is 1.7472123877914"
-    ## [1] "read:cell ratio for pool1 TiteSeq_02_bin2 is 2.21798302457947"
-    ## [1] "read:cell ratio for pool1 TiteSeq_02_bin3 is 1.61700133918196"
-    ## [1] "read:cell ratio for pool1 TiteSeq_02_bin4 is 1.82001220276906"
-    ## [1] "read:cell ratio for pool1 TiteSeq_03_bin1 is 1.76555877461237"
-    ## [1] "read:cell ratio for pool1 TiteSeq_03_bin2 is 1.88927728160239"
-    ## [1] "read:cell ratio for pool1 TiteSeq_03_bin3 is 1.74942547441874"
-    ## [1] "read:cell ratio for pool1 TiteSeq_03_bin4 is 1.85285691413381"
-    ## [1] "read:cell ratio for pool1 TiteSeq_04_bin1 is 1.68539074210194"
-    ## [1] "read:cell ratio for pool1 TiteSeq_04_bin2 is 1.67779188714203"
-    ## [1] "read:cell ratio for pool1 TiteSeq_04_bin3 is 1.72596892484561"
-    ## [1] "read:cell ratio for pool1 TiteSeq_04_bin4 is 3.53310432774606"
-    ## [1] "read:cell ratio for pool1 TiteSeq_05_bin1 is 1.70063636971891"
-    ## [1] "read:cell ratio for pool1 TiteSeq_05_bin2 is 1.73673267368383"
-    ## [1] "read:cell ratio for pool1 TiteSeq_05_bin3 is 1.94473191244089"
-    ## [1] "read:cell ratio for pool1 TiteSeq_05_bin4 is 7.17951907131012"
-    ## [1] "read:cell ratio for pool1 TiteSeq_06_bin1 is 1.99930883250506"
-    ## [1] "read:cell ratio for pool1 TiteSeq_06_bin2 is 1.86924408912085"
-    ## [1] "read:cell ratio for pool1 TiteSeq_06_bin3 is 5.55674264007597"
-    ## [1] "read:cell ratio for pool1 TiteSeq_06_bin4 is 48.2763157894737"
-    ## [1] "read:cell ratio for pool1 TiteSeq_07_bin1 is 1.95087689001434"
-    ## [1] "read:cell ratio for pool1 TiteSeq_07_bin2 is 1.80632547115885"
-    ## [1] "read:cell ratio for pool1 TiteSeq_07_bin3 is 2.26780088216761"
-    ## [1] "read:cell ratio for pool1 TiteSeq_07_bin4 is 18.8574468085106"
-    ## [1] "read:cell ratio for pool1 TiteSeq_08_bin1 is 1.84191382229253"
-    ## [1] "read:cell ratio for pool1 TiteSeq_08_bin2 is 1.98943749940568"
-    ## [1] "read:cell ratio for pool1 TiteSeq_08_bin3 is 1.92318244170096"
-    ## [1] "read:cell ratio for pool1 TiteSeq_08_bin4 is 1.86594202898551"
-    ## [1] "read:cell ratio for pool1 TiteSeq_09_bin1 is 1.98889087605209"
-    ## [1] "read:cell ratio for pool1 TiteSeq_09_bin2 is 1.66627955433006"
-    ## [1] "read:cell ratio for pool1 TiteSeq_09_bin3 is 4.14739229024943"
-    ## [1] "read:cell ratio for pool1 TiteSeq_09_bin4 is 3.57818181818182"
-    ## [1] "read:cell ratio for pool2 TiteSeq_01_bin1 is 1.21333402922197"
-    ## [1] "read:cell ratio for pool2 TiteSeq_01_bin2 is 1.3610617845786"
-    ## [1] "read:cell ratio for pool2 TiteSeq_01_bin3 is 1.66528689994642"
-    ## [1] "read:cell ratio for pool2 TiteSeq_01_bin4 is 1.72947362054806"
-    ## [1] "read:cell ratio for pool2 TiteSeq_02_bin1 is 1.40011489978732"
-    ## [1] "read:cell ratio for pool2 TiteSeq_02_bin2 is 1.81764663946854"
-    ## [1] "read:cell ratio for pool2 TiteSeq_02_bin3 is 1.70356849859553"
-    ## [1] "read:cell ratio for pool2 TiteSeq_02_bin4 is 1.75703289617941"
-    ## [1] "read:cell ratio for pool2 TiteSeq_03_bin1 is 2.01242176497137"
-    ## [1] "read:cell ratio for pool2 TiteSeq_03_bin2 is 1.49919035617671"
-    ## [1] "read:cell ratio for pool2 TiteSeq_03_bin3 is 1.65386040466464"
-    ## [1] "read:cell ratio for pool2 TiteSeq_03_bin4 is 1.57973063503435"
-    ## [1] "read:cell ratio for pool2 TiteSeq_04_bin1 is 1.45705338541331"
-    ## [1] "read:cell ratio for pool2 TiteSeq_04_bin2 is 1.71227582607595"
-    ## [1] "read:cell ratio for pool2 TiteSeq_04_bin3 is 1.47278674987483"
-    ## [1] "read:cell ratio for pool2 TiteSeq_04_bin4 is 1.78419854159468"
-    ## [1] "read:cell ratio for pool2 TiteSeq_05_bin1 is 1.08704224062587"
-    ## [1] "read:cell ratio for pool2 TiteSeq_05_bin2 is 1.72173104398708"
-    ## [1] "read:cell ratio for pool2 TiteSeq_05_bin3 is 1.57188392050999"
-    ## [1] "read:cell ratio for pool2 TiteSeq_05_bin4 is 4.46908893709328"
-    ## [1] "read:cell ratio for pool2 TiteSeq_06_bin1 is 1.7488670035639"
-    ## [1] "read:cell ratio for pool2 TiteSeq_06_bin2 is 1.60590582855544"
-    ## [1] "reads < cells for pool2 TiteSeq_06_bin3 , un-normalized (ratio 0.483927323549965 )"
-    ## [1] "read:cell ratio for pool2 TiteSeq_06_bin4 is 1.64736842105263"
-    ## [1] "read:cell ratio for pool2 TiteSeq_07_bin1 is 1.83508394112083"
-    ## [1] "read:cell ratio for pool2 TiteSeq_07_bin2 is 1.92463346814965"
-    ## [1] "read:cell ratio for pool2 TiteSeq_07_bin3 is 6.83468395461913"
-    ## [1] "read:cell ratio for pool2 TiteSeq_07_bin4 is 1.93798449612403"
-    ## [1] "read:cell ratio for pool2 TiteSeq_08_bin1 is 1.56358672030298"
-    ## [1] "read:cell ratio for pool2 TiteSeq_08_bin2 is 1.69525433118974"
-    ## [1] "read:cell ratio for pool2 TiteSeq_08_bin3 is 3.35901926444834"
-    ## [1] "reads < cells for pool2 TiteSeq_08_bin4 , un-normalized (ratio 0.602836879432624 )"
-    ## [1] "read:cell ratio for pool2 TiteSeq_09_bin1 is 1.62889693607601"
-    ## [1] "read:cell ratio for pool2 TiteSeq_09_bin2 is 1.61784564085039"
-    ## [1] "read:cell ratio for pool2 TiteSeq_09_bin3 is 9.84413309982487"
-    ## [1] "read:cell ratio for pool2 TiteSeq_09_bin4 is 1.21276595744681"
+    ## [1] "read:cell ratio for pool1A TiteSeq_01_bin1 is 2.0480054785625"
+    ## [1] "read:cell ratio for pool1A TiteSeq_01_bin2 is 1.63229553746527"
+    ## [1] "read:cell ratio for pool1A TiteSeq_01_bin3 is 1.8628272238972"
+    ## [1] "read:cell ratio for pool1A TiteSeq_01_bin4 is 1.85347606190773"
+    ## [1] "read:cell ratio for pool1A TiteSeq_02_bin1 is 1.7472123877914"
+    ## [1] "read:cell ratio for pool1A TiteSeq_02_bin2 is 2.21798302457947"
+    ## [1] "read:cell ratio for pool1A TiteSeq_02_bin3 is 1.61700133918196"
+    ## [1] "read:cell ratio for pool1A TiteSeq_02_bin4 is 1.82001220276906"
+    ## [1] "read:cell ratio for pool1A TiteSeq_03_bin1 is 1.76555877461237"
+    ## [1] "read:cell ratio for pool1A TiteSeq_03_bin2 is 1.88927728160239"
+    ## [1] "read:cell ratio for pool1A TiteSeq_03_bin3 is 1.74942547441874"
+    ## [1] "read:cell ratio for pool1A TiteSeq_03_bin4 is 1.85285691413381"
+    ## [1] "read:cell ratio for pool1A TiteSeq_04_bin1 is 1.68539074210194"
+    ## [1] "read:cell ratio for pool1A TiteSeq_04_bin2 is 1.67779188714203"
+    ## [1] "read:cell ratio for pool1A TiteSeq_04_bin3 is 1.72596892484561"
+    ## [1] "read:cell ratio for pool1A TiteSeq_04_bin4 is 3.53310432774606"
+    ## [1] "read:cell ratio for pool1A TiteSeq_05_bin1 is 1.70063636971891"
+    ## [1] "read:cell ratio for pool1A TiteSeq_05_bin2 is 1.73673267368383"
+    ## [1] "read:cell ratio for pool1A TiteSeq_05_bin3 is 1.94473191244089"
+    ## [1] "read:cell ratio for pool1A TiteSeq_05_bin4 is 7.17951907131012"
+    ## [1] "read:cell ratio for pool1A TiteSeq_06_bin1 is 1.99930883250506"
+    ## [1] "read:cell ratio for pool1A TiteSeq_06_bin2 is 1.86924408912085"
+    ## [1] "read:cell ratio for pool1A TiteSeq_06_bin3 is 5.55674264007597"
+    ## [1] "read:cell ratio for pool1A TiteSeq_06_bin4 is 48.2763157894737"
+    ## [1] "read:cell ratio for pool1A TiteSeq_07_bin1 is 1.95087689001434"
+    ## [1] "read:cell ratio for pool1A TiteSeq_07_bin2 is 1.80632547115885"
+    ## [1] "read:cell ratio for pool1A TiteSeq_07_bin3 is 2.26780088216761"
+    ## [1] "read:cell ratio for pool1A TiteSeq_07_bin4 is 18.8574468085106"
+    ## [1] "read:cell ratio for pool1A TiteSeq_08_bin1 is 1.84191382229253"
+    ## [1] "read:cell ratio for pool1A TiteSeq_08_bin2 is 1.98943749940568"
+    ## [1] "read:cell ratio for pool1A TiteSeq_08_bin3 is 1.92318244170096"
+    ## [1] "read:cell ratio for pool1A TiteSeq_08_bin4 is 1.86594202898551"
+    ## [1] "read:cell ratio for pool1A TiteSeq_09_bin1 is 1.98889087605209"
+    ## [1] "read:cell ratio for pool1A TiteSeq_09_bin2 is 1.66627955433006"
+    ## [1] "read:cell ratio for pool1A TiteSeq_09_bin3 is 4.14739229024943"
+    ## [1] "read:cell ratio for pool1A TiteSeq_09_bin4 is 3.57818181818182"
+    ## [1] "read:cell ratio for pool2A TiteSeq_01_bin1 is 1.21333402922197"
+    ## [1] "read:cell ratio for pool2A TiteSeq_01_bin2 is 1.3610617845786"
+    ## [1] "read:cell ratio for pool2A TiteSeq_01_bin3 is 1.66528689994642"
+    ## [1] "read:cell ratio for pool2A TiteSeq_01_bin4 is 1.72947362054806"
+    ## [1] "read:cell ratio for pool2A TiteSeq_02_bin1 is 1.40011489978732"
+    ## [1] "read:cell ratio for pool2A TiteSeq_02_bin2 is 1.81764663946854"
+    ## [1] "read:cell ratio for pool2A TiteSeq_02_bin3 is 1.70356849859553"
+    ## [1] "read:cell ratio for pool2A TiteSeq_02_bin4 is 1.75703289617941"
+    ## [1] "read:cell ratio for pool2A TiteSeq_03_bin1 is 2.01242176497137"
+    ## [1] "read:cell ratio for pool2A TiteSeq_03_bin2 is 1.49919035617671"
+    ## [1] "read:cell ratio for pool2A TiteSeq_03_bin3 is 1.65386040466464"
+    ## [1] "read:cell ratio for pool2A TiteSeq_03_bin4 is 1.57973063503435"
+    ## [1] "read:cell ratio for pool2A TiteSeq_04_bin1 is 1.45705338541331"
+    ## [1] "read:cell ratio for pool2A TiteSeq_04_bin2 is 1.71227582607595"
+    ## [1] "read:cell ratio for pool2A TiteSeq_04_bin3 is 1.47278674987483"
+    ## [1] "read:cell ratio for pool2A TiteSeq_04_bin4 is 1.78419854159468"
+    ## [1] "read:cell ratio for pool2A TiteSeq_05_bin1 is 1.08704224062587"
+    ## [1] "read:cell ratio for pool2A TiteSeq_05_bin2 is 1.72173104398708"
+    ## [1] "read:cell ratio for pool2A TiteSeq_05_bin3 is 1.57188392050999"
+    ## [1] "read:cell ratio for pool2A TiteSeq_05_bin4 is 4.46908893709328"
+    ## [1] "read:cell ratio for pool2A TiteSeq_06_bin1 is 1.7488670035639"
+    ## [1] "read:cell ratio for pool2A TiteSeq_06_bin2 is 1.60590582855544"
+    ## [1] "reads < cells for pool2A TiteSeq_06_bin3 , un-normalized (ratio 0.483927323549965 )"
+    ## [1] "read:cell ratio for pool2A TiteSeq_06_bin4 is 1.64736842105263"
+    ## [1] "read:cell ratio for pool2A TiteSeq_07_bin1 is 1.83508394112083"
+    ## [1] "read:cell ratio for pool2A TiteSeq_07_bin2 is 1.92463346814965"
+    ## [1] "read:cell ratio for pool2A TiteSeq_07_bin3 is 6.83468395461913"
+    ## [1] "read:cell ratio for pool2A TiteSeq_07_bin4 is 1.93798449612403"
+    ## [1] "read:cell ratio for pool2A TiteSeq_08_bin1 is 1.56358672030298"
+    ## [1] "read:cell ratio for pool2A TiteSeq_08_bin2 is 1.69525433118974"
+    ## [1] "read:cell ratio for pool2A TiteSeq_08_bin3 is 3.35901926444834"
+    ## [1] "reads < cells for pool2A TiteSeq_08_bin4 , un-normalized (ratio 0.602836879432624 )"
+    ## [1] "read:cell ratio for pool2A TiteSeq_09_bin1 is 1.62889693607601"
+    ## [1] "read:cell ratio for pool2A TiteSeq_09_bin2 is 1.61784564085039"
+    ## [1] "read:cell ratio for pool2A TiteSeq_09_bin3 is 9.84413309982487"
+    ## [1] "read:cell ratio for pool2A TiteSeq_09_bin4 is 1.21276595744681"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin1 , un-normalized (ratio 0.691232870019787 )"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin2 , un-normalized (ratio 0.695213220523331 )"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin3 , un-normalized (ratio 0.722719184364991 )"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin4 , un-normalized (ratio 0.753386294078597 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin1 , un-normalized (ratio 0.6485405261373 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin2 , un-normalized (ratio 0.781914374450982 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin3 , un-normalized (ratio 0.70120784430305 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin4 , un-normalized (ratio 0.829870926904232 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin1 , un-normalized (ratio 0.721121912019612 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin2 , un-normalized (ratio 0.619012296625781 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin3 , un-normalized (ratio 0.699925261227302 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin4 , un-normalized (ratio 0.91190309142023 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin1 , un-normalized (ratio 0.685365110458157 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin2 , un-normalized (ratio 0.687221859888112 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin3 , un-normalized (ratio 0.767982714099268 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin4 , un-normalized (ratio 0.631418043965939 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin1 , un-normalized (ratio 0.668343112152758 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin2 , un-normalized (ratio 0.802574729395333 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin3 , un-normalized (ratio 0.738603499589106 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin4 , un-normalized (ratio 0.456733897202342 )"
+    ## [1] "reads < cells for pool1B TiteSeq_06_bin1 , un-normalized (ratio 0.744494169377867 )"
+    ## [1] "reads < cells for pool1B TiteSeq_06_bin2 , un-normalized (ratio 0.728611708820468 )"
+    ## [1] "reads < cells for pool1B TiteSeq_06_bin3 , un-normalized (ratio 0.762630902076061 )"
+    ## [1] "read:cell ratio for pool1B TiteSeq_06_bin4 is 1.06775067750678"
+    ## [1] "reads < cells for pool1B TiteSeq_07_bin1 , un-normalized (ratio 0.719296786067209 )"
+    ## [1] "reads < cells for pool1B TiteSeq_07_bin2 , un-normalized (ratio 0.677740204042273 )"
+    ## [1] "reads < cells for pool1B TiteSeq_07_bin3 , un-normalized (ratio 0.746413934426229 )"
+    ## [1] "read:cell ratio for pool1B TiteSeq_07_bin4 is 1.11214953271028"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin1 , un-normalized (ratio 0.865445817430729 )"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin2 , un-normalized (ratio 0.752853820160618 )"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin3 , un-normalized (ratio 0.255851932498639 )"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin4 , un-normalized (ratio 0.741687979539642 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin1 , un-normalized (ratio 0.735340244587351 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin2 , un-normalized (ratio 0.558219107774637 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin3 , un-normalized (ratio 0.463022508038585 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin4 , un-normalized (ratio 0.733102253032929 )"
 
 ``` r
 #annotate each barcode as to whether it's a homolog variant, SARS-CoV-2 wildtype, synonymous muts only, stop, nonsynonymous, >1 nonsynonymous mutations
@@ -338,7 +376,8 @@ across our measurement range, and spot check curves whose fit parameters
 hit the different boundary conditions of the fit variables.
 
 We successfully generated *K*<sub>D</sub> estimates for 150551 of our
-pool1 barcodes (86.13%) and 126439 of our lib2 barcodes (81.62%).
+pool1A barcodes (86.13%), 148246 of our pool1B barcodes (84.81%), and
+126439 of our pool2A barcodes (81.62%).
 
 Why were estimates not returned for some barcodes? The histograms below
 show that many barcodes with unsuccessful titration fits have lower
@@ -349,18 +388,25 @@ cutoffs, meaning there weren’t too many curves that failed to be fit for
 issues such as nls convergence.
 
 ``` r
-par(mfrow=c(2,2))
-hist(log10(dt[library=="pool1" & !is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,xlim=c(0,5),main="pool1",col="gray50",xlab="average cell count across concentration samples")
-hist(log10(dt[library=="pool1" & is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,add=T,col="red")
+par(mfrow=c(2,3))
+hist(log10(dt[library=="pool1A" & !is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,xlim=c(0,5),main="pool1A",col="gray50",xlab="average cell count across concentration samples")
+hist(log10(dt[library=="pool1A" & is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,add=T,col="red")
 
-hist(log10(dt[library=="pool2" & !is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,xlim=c(0,5),main="pool2",col="gray50",xlab="average cell count across concentration samples")
-hist(log10(dt[library=="pool2" & is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,add=T,col="red")
+hist(log10(dt[library=="pool1B" & !is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,xlim=c(0,5),main="pool1B",col="gray50",xlab="average cell count across concentration samples")
+hist(log10(dt[library=="pool1B" & is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,add=T,col="red")
 
-hist(dt[library=="pool1" & !is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=5,main="pool1",col="gray50",xlab="number of sample concentrations below cutoff cell number",xlim=c(0,10))
-hist(dt[library=="pool1" & is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=16,add=T,col="red")
 
-hist(dt[library=="pool2" & !is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=5,main="pool2",col="gray50",xlab="number of sample concentrations below cutoff cell number",xlim=c(0,10))
-hist(dt[library=="pool2" & is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=16,add=T,col="red")
+hist(log10(dt[library=="pool2A" & !is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,xlim=c(0,5),main="pool2A",col="gray50",xlab="average cell count across concentration samples")
+hist(log10(dt[library=="pool2A" & is.na(Kd_ACE2),TiteSeq_avgcount]+0.5),breaks=20,add=T,col="red")
+
+hist(dt[library=="pool1A" & !is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=5,main="pool1A",col="gray50",xlab="number of sample concentrations below cutoff cell number",xlim=c(0,10))
+hist(dt[library=="pool1A" & is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=16,add=T,col="red")
+
+hist(dt[library=="pool1B" & !is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=5,main="pool1B",col="gray50",xlab="number of sample concentrations below cutoff cell number",xlim=c(0,10))
+hist(dt[library=="pool1B" & is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=16,add=T,col="red")
+
+hist(dt[library=="pool2A" & !is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=5,main="pool2A",col="gray50",xlab="number of sample concentrations below cutoff cell number",xlim=c(0,10))
+hist(dt[library=="pool2A" & is.na(Kd_ACE2),TiteSeq_min_cell_filtered],breaks=16,add=T,col="red")
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/avgcount-1.png" style="display: block; margin: auto;" />
@@ -440,10 +486,6 @@ hist(log10(dt[target=="B1351" & variant_class %in% (c("synonymous","wildtype")),
 invisible(dev.print(pdf, paste(config$Titeseq_Kds_dir,"/hist_Kd-per-barcode.pdf",sep="")))
 ```
 
-Remove stops; make curve examples spanning the titraiton range; look at
-curves at different average count depths and # missing values. nMSRs.
-Then cutoff by nMSR, output final values
-
 Some stop variants eked through our RBD+ selection, either perhaps
 because of stop codon readthrough, improper PacBio sequence annotation,
 or other weirdness. Either way, the vast majority of nonsense mutants
@@ -463,10 +505,10 @@ maximum. We can see these are all flat-lined curves with no response.
 
 ``` r
 par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 9e-6)[1])
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 9e-6)[2])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 9e-6)[1])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 9e-6)[2])
+plot.titration(which(dt$library=="pool1A" & dt$Kd_ACE2 > 9e-6)[1])
+plot.titration(which(dt$library=="pool1B" & dt$Kd_ACE2 > 9e-6)[2])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 9e-6)[1])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 9e-6)[2])
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-5_Kd-1.png" style="display: block; margin: auto;" />
@@ -475,10 +517,10 @@ Next, with *K*<sub>D,app</sub> around 10<sup>-6</sup>
 
 ``` r
 par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[1])
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[2])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[1])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[2])
+plot.titration(which(dt$library=="pool1A" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[1])
+plot.titration(which(dt$library=="pool1B" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[2])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[1])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-6 & dt$Kd_ACE2 < 1.2e-6)[2])
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-6_Kd-1.png" style="display: block; margin: auto;" />
@@ -488,10 +530,10 @@ up more consistent binding signals, though there are some noisy curves.
 
 ``` r
 par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[1])
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[2])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[1])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[2])
+plot.titration(which(dt$library=="pool1A" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[1])
+plot.titration(which(dt$library=="pool1B" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[2])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[1])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-7 & dt$Kd_ACE2 < 1.2e-7)[2])
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-7_Kd-1.png" style="display: block; margin: auto;" />
@@ -501,10 +543,10 @@ some signal, perhaps a bit less noise than the -8 curves
 
 ``` r
 par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[1])
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[2])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[1])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[2])
+plot.titration(which(dt$library=="pool1A" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[1])
+plot.titration(which(dt$library=="pool1B" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[2])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[1])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-8 & dt$Kd_ACE2 < 1.2e-8)[2])
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-8_Kd-1.png" style="display: block; margin: auto;" />
@@ -513,10 +555,10 @@ Same at *K*<sub>D,app</sub> of 10<sup>-9</sup>.
 
 ``` r
 par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[1])
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[2])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[1])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[2])
+plot.titration(which(dt$library=="pool1A" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[1])
+plot.titration(which(dt$library=="pool1B" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[2])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[1])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e-9)[2])
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-9_Kd-1.png" style="display: block; margin: auto;" />
@@ -525,10 +567,10 @@ plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-9 & dt$Kd_ACE2 < 1.2e
 
 ``` r
 par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[1])
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[2])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[1])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[2])
+plot.titration(which(dt$library=="pool1A" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[1])
+plot.titration(which(dt$library=="pool1B" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[2])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[1])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-10 & dt$Kd_ACE2 < 1.2e-10)[2])
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-10_Kd-1.png" style="display: block; margin: auto;" />
@@ -538,10 +580,10 @@ the main bulk of curves.
 
 ``` r
 par(mfrow=c(2,2))
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[1])
-plot.titration(which(dt$library=="pool1" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[2])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[1])
-plot.titration(which(dt$library=="pool2" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[2])
+plot.titration(which(dt$library=="pool1A" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[1])
+plot.titration(which(dt$library=="pool1B" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[2])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[1])
+plot.titration(which(dt$library=="pool2A" & dt$Kd_ACE2 > 1e-11 & dt$Kd_ACE2 < 2e-11)[2])
 ```
 
 <img src="compute_binding_Kd_files/figure-gfm/1e-11_Kd-1.png" style="display: block; margin: auto;" />
@@ -611,7 +653,7 @@ grid.arrange(p1,ncol=1)
 invisible(dev.print(pdf, paste(config$Titeseq_Kds_dir,"/violin-plot_log10Ka-by-target.pdf",sep="")))
 ```
 
-We have generated binding measurements for 83.74% of the barcodes in our
+We have generated binding measurements for 84.01% of the barcodes in our
 libraries.
 
 ## Data Output

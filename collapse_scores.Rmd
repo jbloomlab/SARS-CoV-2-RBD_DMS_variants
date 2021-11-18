@@ -46,8 +46,6 @@ Read in tables of per-barcode expression and binding Kd measurements and combine
 ```{r input_data}
 dt_bind <- data.table(read.csv(config$Titeseq_Kds_file),stringsAsFactors=F)
 dt_expr <- data.table(read.csv(config$expression_sortseq_file),stringsAsFactors=F)
-
-dt <- merge(dt_bind,dt_expr)
 ```
 
 ## Calculate per-variant mean scores within replicates
@@ -55,30 +53,34 @@ dt <- merge(dt_bind,dt_expr)
 Calculate the mean binding and expression score collapsed by genotype. Also output the number of barcodes across which a variant score was determined in each library.
 
 ```{r calculate_mean_scores}
-dt[is.na(log10Ka),TiteSeq_avgcount:=NA]
-dt[is.na(expression),expr_count:=NA]
+dt_bind[is.na(log10Ka),TiteSeq_avgcount:=NA]
+dt_expr[is.na(expression),expr_count:=NA]
 
-dt[,mean_bind:=mean(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
-dt[,sd_bind:=sd(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
-dt[,n_bc_bind:=sum(!is.na(log10Ka)),by=c("library","target","variant_class","aa_substitutions")]
-dt[,avg_count_bind:=mean(TiteSeq_avgcount,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt_bind[,mean_bind:=mean(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt_bind[,sd_bind:=sd(log10Ka,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt_bind[,n_bc_bind:=sum(!is.na(log10Ka)),by=c("library","target","variant_class","aa_substitutions")]
+dt_bind[,avg_count_bind:=mean(TiteSeq_avgcount,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
 
-dt[,mean_expr:=mean(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
-dt[,sd_expr:=sd(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
-dt[,n_bc_expr:=sum(!is.na(expression)),by=c("library","target","variant_class","aa_substitutions")]
-dt[,avg_count_expr:=mean(expr_count,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt_bind <- unique(dt_bind[,.(library,target,variant_class,aa_substitutions,n_aa_substitutions,mean_bind,sd_bind,n_bc_bind,avg_count_bind)])
 
-dt <- unique(dt[,.(library,target,variant_class,aa_substitutions,n_aa_substitutions,mean_bind,sd_bind,n_bc_bind,avg_count_bind,mean_expr,sd_expr,n_bc_expr,avg_count_expr)])
+dt_expr[,mean_expr:=mean(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt_expr[,sd_expr:=sd(expression,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+dt_expr[,n_bc_expr:=sum(!is.na(expression)),by=c("library","target","variant_class","aa_substitutions")]
+dt_expr[,avg_count_expr:=mean(expr_count,na.rm=T),by=c("library","target","variant_class","aa_substitutions")]
+
+dt_expr <- unique(dt_expr[,.(library,target,variant_class,aa_substitutions,n_aa_substitutions,mean_expr,sd_expr,n_bc_expr,avg_count_expr)])
 ```
 
 Some QC plots. First, look at distribution of number barcodes for binding and expression measurements for single mutant detemrinations. These are 'left-justified' histograms, so the leftmost bar represents the number of genotypes for which no barcodes were collapsed to final measurement in a pool.
 
-```{r hist_n_bc_per_mutant, fig.width=6, fig.height=6, fig.align="center", dpi=300,dev="png"}
-par(mfrow=c(2,2))
-hist(dt[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_bind],main="pool1, bind",right=F,breaks=max(dt[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_bind],na.rm=T),xlab="")
-hist(dt[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_bind],main="pool2, bind",right=F,breaks=max(dt[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_bind],na.rm=T),xlab="")
-hist(dt[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_expr],main="pool1, expr",right=F,breaks=max(dt[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_expr],na.rm=T),xlab="number barcodes collapsed")
-hist(dt[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_expr],main="pool2, expr",right=F,breaks=max(dt[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_expr],na.rm=T),xlab="number barcodes collapsed")
+```{r hist_n_bc_per_mutant, fig.width=9, fig.height=6, fig.align="center", dpi=300,dev="png"}
+par(mfrow=c(2,3))
+hist(dt_bind[library=="pool1A" & variant_class=="1 nonsynonymous",n_bc_bind],main="pool1A, bind",right=F,breaks=max(dt_bind[library=="pool1A" & variant_class=="1 nonsynonymous",n_bc_bind],na.rm=T),xlab="")
+hist(dt_bind[library=="pool1B" & variant_class=="1 nonsynonymous",n_bc_bind],main="pool1B, bind",right=F,breaks=max(dt_bind[library=="pool1B" & variant_class=="1 nonsynonymous",n_bc_bind],na.rm=T),xlab="")
+hist(dt_bind[library=="pool2A" & variant_class=="1 nonsynonymous",n_bc_bind],main="pool2A, bind",right=F,breaks=max(dt_bind[library=="pool2A" & variant_class=="1 nonsynonymous",n_bc_bind],na.rm=T),xlab="")
+hist(dt_expr[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_expr],main="pool1, expr",right=F,breaks=max(dt_expr[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_expr],na.rm=T),xlab="number barcodes collapsed")
+plot(0,type='n',axes=FALSE,ann=F)
+hist(dt_expr[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_expr],main="pool2, expr",right=F,breaks=max(dt_expr[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_expr],na.rm=T),xlab="number barcodes collapsed")
 
 invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/histogram_n_bc_per_geno_sep-libs.pdf",sep=""),useDingbats=F))
 
@@ -86,19 +88,23 @@ invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/histogram_n_bc_
 
 What about how SEM tracks with number of barcodes collapsed? This could help for choosing a minimum number of barcodes to use.
 
-```{r sem_v_n-bc, fig.width=8, fig.height=8, fig.align="center", dpi=300,dev="png"}
-par(mfrow=c(2,2))
-plot(dt[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_bind],
-     dt[library=="pool1" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
-     pch=19,col="#00000005",main="pool1, bind",ylab="SEM",xlab="number barcodes collapsed")
-plot(dt[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_bind],
-     dt[library=="pool2" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
-     pch=19,col="#00000005",main="pool2, bind",ylab="SEM",xlab="number barcodes collapsed")
-plot(dt[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_expr],
-     dt[library=="pool1" & variant_class=="1 nonsynonymous",sd_expr/sqrt(n_bc_expr)],
+```{r sem_v_n-bc, fig.width=9, fig.height=6, fig.align="center", dpi=300,dev="png"}
+par(mfrow=c(2,3))
+plot(dt_bind[library=="pool1A" & variant_class=="1 nonsynonymous",n_bc_bind],
+     dt_bind[library=="pool1A" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
+     pch=19,col="#00000005",main="pool1A, bind",ylab="SEM",xlab="number barcodes collapsed")
+plot(dt_bind[library=="pool1B" & variant_class=="1 nonsynonymous",n_bc_bind],
+     dt_bind[library=="pool1B" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
+     pch=19,col="#00000005",main="pool1B, bind",ylab="SEM",xlab="number barcodes collapsed")
+plot(dt_bind[library=="pool2A" & variant_class=="1 nonsynonymous",n_bc_bind],
+     dt_bind[library=="pool2A" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
+     pch=19,col="#00000005",main="pool2A, bind",ylab="SEM",xlab="number barcodes collapsed")
+plot(dt_expr[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_expr],
+     dt_expr[library=="pool1" & variant_class=="1 nonsynonymous",sd_expr/sqrt(n_bc_expr)],
      pch=19,col="#00000005",main="pool1, expr",ylab="SEM",xlab="number barcodes collapsed")
-plot(dt[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_expr],
-     dt[library=="pool2" & variant_class=="1 nonsynonymous",sd_expr/sqrt(n_bc_expr)],
+plot(0,type='n',axes=FALSE,ann=F)
+plot(dt_expr[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_expr],
+     dt_expr[library=="pool2" & variant_class=="1 nonsynonymous",sd_expr/sqrt(n_bc_expr)],
      pch=19,col="#00000005",main="pool2, expr",ylab="SEM",xlab="number barcodes collapsed")
 
 invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/sem_v_n-bc.pdf",sep=""),useDingbats=F))
@@ -107,8 +113,8 @@ invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/sem_v_n-bc.pdf"
 
 Format into a 'mutation lookup table', where we focus just on the single mutants (and wildtype), breakup the string of mutations, and fill in the table to also include any missing mutants.
 
-```{r format_mutant_table}
-dt_mutant <- dt[variant_class %in% "1 nonsynonymous",]
+```{r format_mutant_tables}
+dt_mutant_bind <- dt_bind[variant_class %in% "1 nonsynonymous",]
 
 #split mutation string
 #define function to apply
@@ -116,95 +122,147 @@ split_mut <- function(x){
   split <- strsplit(x,split="")[[1]]
   return(list(split[1],as.numeric(paste(split[2:(length(split)-1)],collapse="")),split[length(split)]))
 }
-dt_mutant[,c("wildtype","position","mutant"):=split_mut(as.character(aa_substitutions)),by=aa_substitutions]
+dt_mutant_bind[,c("wildtype","position","mutant"):=split_mut(as.character(aa_substitutions)),by=aa_substitutions]
 
-dt_mutant <- dt_mutant[,.(library,target,wildtype,position,mutant,mean_bind,sd_bind,n_bc_bind,avg_count_bind,mean_expr,sd_expr,n_bc_expr,avg_count_expr)]
+dt_mutant_bind <- dt_mutant_bind[,.(library,target,wildtype,position,mutant,mean_bind,sd_bind,n_bc_bind,avg_count_bind)]
 
 aas <- c("A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y")
 #fill out missing values in table with a hideous loop, so the table is complete for all mutaitons (including those that are missing). If you are somebody who is reading this code, I apologize.
-for(lib in c("pool1","pool2")){
-  for(bg in as.character(unique(dt_mutant$target))){
-    for(pos in 1:max(dt_mutant$position)){
+for(lib in c("pool1A","pool1B","pool2A")){
+  for(bg in as.character(unique(dt_mutant_bind$target))){
+    for(pos in 1:max(dt_mutant_bind$position)){
       for(aa in aas){
-        if(!(aa %in% as.character(dt_mutant[library==lib & target==bg & position==pos,mutant]))){
-          dt_mutant <- rbind(dt_mutant,list(lib, bg, dt_mutant[library==lib & target==bg & position==pos,wildtype][1],pos,aa),fill=T)
+        if(!(aa %in% as.character(dt_mutant_bind[library==lib & target==bg & position==pos,mutant]))){
+          dt_mutant_bind <- rbind(dt_mutant_bind,list(lib, bg, dt_mutant_bind[library==lib & target==bg & position==pos,wildtype][1],pos,aa),fill=T)
         }
       }
     }
   }
 }
-setkey(dt_mutant,library,target,position,mutant)
+setkey(dt_mutant_bind,library,target,position,mutant)
+
+#fill in wildtype values -- should vectorize in data table but being so stupid so just going to write for loop
+for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
+  for(lib in c("pool1A","pool1B","pool2A")){
+    dt_mutant_bind[library==lib & target==bg & wildtype==mutant, c("mean_bind","sd_bind","n_bc_bind","avg_count_bind"):=dt_bind[library==lib & target==bg & variant_class=="wildtype",.(mean_bind,sd_bind,n_bc_bind,avg_count_bind)]]
+  }
+}
+
+#add delta bind measures
+for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
+  for(lib in c("pool1A","pool1B","pool2A")){
+    ref_bind <- dt_bind[library==lib & target==bg & variant_class=="wildtype",mean_bind]
+    dt_mutant_bind[library==lib & target==bg,delta_bind := mean_bind - ref_bind]
+  }
+}
+
+#repeat for expr
+dt_mutant_expr <- dt_expr[variant_class %in% "1 nonsynonymous",]
+
+#split mutation string
+#define function to apply
+split_mut <- function(x){
+  split <- strsplit(x,split="")[[1]]
+  return(list(split[1],as.numeric(paste(split[2:(length(split)-1)],collapse="")),split[length(split)]))
+}
+dt_mutant_expr[,c("wildtype","position","mutant"):=split_mut(as.character(aa_substitutions)),by=aa_substitutions]
+
+dt_mutant_expr <- dt_mutant_expr[,.(library,target,wildtype,position,mutant,mean_expr,sd_expr,n_bc_expr,avg_count_expr)]
+
+aas <- c("A","C","D","E","F","G","H","I","K","L","M","N","P","Q","R","S","T","V","W","Y")
+#fill out missing values in table with a hideous loop, so the table is complete for all mutaitons (including those that are missing). If you are somebody who is reading this code, I apologize.
+for(lib in c("pool1","pool2")){
+  for(bg in as.character(unique(dt_mutant_expr$target))){
+    for(pos in 1:max(dt_mutant_expr$position)){
+      for(aa in aas){
+        if(!(aa %in% as.character(dt_mutant_expr[library==lib & target==bg & position==pos,mutant]))){
+          dt_mutant_expr <- rbind(dt_mutant_expr,list(lib, bg, dt_mutant_expr[library==lib & target==bg & position==pos,wildtype][1],pos,aa),fill=T)
+        }
+      }
+    }
+  }
+}
+setkey(dt_mutant_expr,library,target,position,mutant)
 
 #fill in wildtype values -- should vectorize in data table but being so stupid so just going to write for loop
 for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
   for(lib in c("pool1","pool2")){
-    dt_mutant[library==lib & target==bg & wildtype==mutant, c("mean_bind","sd_bind","n_bc_bind","avg_count_bind","mean_expr","sd_expr","n_bc_expr","avg_count_expr"):=dt[library==lib & target==bg & variant_class=="wildtype",.(mean_bind,sd_bind,n_bc_bind,avg_count_bind,mean_expr,sd_expr,n_bc_expr,avg_count_expr)]]
+    dt_mutant_expr[library==lib & target==bg & wildtype==mutant, c("mean_expr","sd_expr","n_bc_expr","avg_count_expr"):=dt_expr[library==lib & target==bg & variant_class=="wildtype",.(mean_expr,sd_expr,n_bc_expr,avg_count_expr)]]
   }
 }
 
-#add delta bind and expr measures
+#add delta expr measures
 for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
   for(lib in c("pool1","pool2")){
-    ref_bind <- dt[library==lib & target==bg & variant_class=="wildtype",mean_bind]
-    ref_expr <- dt[library==lib & target==bg & variant_class=="wildtype",mean_expr]
-    dt_mutant[library==lib & target==bg,delta_bind := mean_bind - ref_bind]
-    dt_mutant[library==lib & target==bg,delta_expr := mean_expr - ref_expr]
+    ref_expr <- dt_expr[library==lib & target==bg & variant_class=="wildtype",mean_expr]
+    dt_mutant_expr[library==lib & target==bg,delta_expr := mean_expr - ref_expr]
   }
 }
+
 ```
 
-We have duplicates for each measurement. Let's look at correlations!
+We have duplicates or triplicates for each measurement. Let's look at correlations!
 
-```{r plot_correlations, echo=T, fig.width=10, fig.height=5, fig.align="center", dpi=300,dev="png"}
-par(mfrow=c(1,2))
-x <- dt_mutant[library=="pool1" & wildtype!=mutant,mean_expr]; y <- dt_mutant[library=="pool2" & wildtype!=mutant,mean_expr]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1",ylab="replicate 2",main="expression");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+```{r plot_correlations, echo=T, fig.width=12, fig.height=8, fig.align="center", dpi=300,dev="png"}
+par(mfrow=c(2,3))
+x <- dt_mutant_expr[library=="pool1" & wildtype!=mutant,mean_expr]; y <- dt_mutant_expr[library=="pool2" & wildtype!=mutant,mean_expr]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1",ylab="replicate 2",main="expression");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+plot(0,type='n',axes=FALSE,ann=F)
+plot(0,type='n',axes=FALSE,ann=F)
+x <- dt_mutant_bind[library=="pool1A" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool2A" & wildtype!=mutant,mean_bind]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1A",ylab="replicate 2",main="binding affinity");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_mutant_bind[library=="pool1B" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool2A" & wildtype!=mutant,mean_bind]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1B",ylab="replicate 2",main="binding affinity");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_mutant_bind[library=="pool1A" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool1B" & wildtype!=mutant,mean_bind]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1A",ylab="replicate 1B",main="binding affinity");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_mutant[library=="pool1" & wildtype!=mutant,mean_bind]; y <- dt_mutant[library=="pool2" & wildtype!=mutant,mean_bind]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1",ylab="replicate 2",main="binding affinity");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
 invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/replicate_correlations.pdf",sep=""),useDingbats=F))
 ```
 
 ## Calculate per-mutant score across libraries
 
-Collapse down to mean from both replicates, and total n barcodes between the two replicates. Also record the number of the replicates the variant was quantified within. Note, we are currently keeping a value even if it's determined from a single bc fit in a single pool. Later on, we'll want to require some combination of minimum number of bcs within or between libraries for retention.
+Collapse down to mean from both replicates, and total n barcodes between the two/three replicates. Also record the number of the replicates the variant was quantified within. Note, we are currently keeping a value even if it's determined from a single bc fit in a single pool. Later on, we may want to require some combination of minimum number of bcs within or between libraries for retention.
 
 ```{r final_means}
-dt_final <- copy(dt_mutant)
+dt_final_bind <- copy(dt_mutant_bind)
 
-dt_final[ ,bind_tot:=mean(mean_bind,na.rm=T),by=c("target","position","mutant")]
-dt_final[ ,delta_bind_tot:=mean(delta_bind,na.rm=T),by=c("target","position","mutant")]
-dt_final[ ,n_bc_bind_tot:=sum(n_bc_bind,na.rm=T),by=c("target","position","mutant")]
-dt_final[ ,n_libs_bind_tot:=sum(!is.na(mean_bind)),by=c("target","position","mutant")]
-
-dt_final[ ,expr_tot:=mean(mean_expr,na.rm=T),by=c("target","position","mutant")]
-dt_final[ ,delta_expr_tot:=mean(delta_expr,na.rm=T),by=c("target","position","mutant")]
-dt_final[ ,n_bc_expr_tot:=sum(n_bc_expr,na.rm=T),by=c("target","position","mutant")]
-dt_final[ ,n_libs_expr_tot:=sum(!is.na(mean_expr)),by=c("target","position","mutant")]
+dt_final_bind[ ,bind_tot:=mean(mean_bind,na.rm=T),by=c("target","position","mutant")]
+dt_final_bind[ ,delta_bind_tot:=mean(delta_bind,na.rm=T),by=c("target","position","mutant")]
+dt_final_bind[ ,n_bc_bind_tot:=sum(n_bc_bind,na.rm=T),by=c("target","position","mutant")]
+dt_final_bind[ ,n_libs_bind_tot:=sum(!is.na(mean_bind)),by=c("target","position","mutant")]
 
 #switch to spike indexing of postitions
-dt_final$position <- dt_final$position + config$site_number_offset
+dt_final_bind$position <- dt_final_bind$position + config$site_number_offset
 
 #add single mutation string
-dt_final[,mutation:=paste(wildtype,position,mutant,sep=""),by=c("wildtype","position","mutant")]
+dt_final_bind[,mutation:=paste(wildtype,position,mutant,sep=""),by=c("wildtype","position","mutant")]
 
-dt_final <- unique(dt_final[,.(target,wildtype,position,mutant,mutation,bind_tot,delta_bind_tot,n_bc_bind_tot,n_libs_bind_tot,expr_tot,delta_expr_tot,n_bc_expr_tot,n_libs_expr_tot)])
+dt_final_bind <- unique(dt_final_bind[,.(target,wildtype,position,mutant,mutation,bind_tot,delta_bind_tot,n_bc_bind_tot,n_libs_bind_tot)])
+
+#repeat expr
+dt_final_expr <- copy(dt_mutant_expr)
+
+dt_final_expr[ ,expr_tot:=mean(mean_expr,na.rm=T),by=c("target","position","mutant")]
+dt_final_expr[ ,delta_expr_tot:=mean(delta_expr,na.rm=T),by=c("target","position","mutant")]
+dt_final_expr[ ,n_bc_expr_tot:=sum(n_bc_expr,na.rm=T),by=c("target","position","mutant")]
+dt_final_expr[ ,n_libs_expr_tot:=sum(!is.na(mean_expr)),by=c("target","position","mutant")]
+
+#switch to spike indexing of postitions
+dt_final_expr$position <- dt_final_expr$position + config$site_number_offset
+
+#add single mutation string
+dt_final_expr[,mutation:=paste(wildtype,position,mutant,sep=""),by=c("wildtype","position","mutant")]
+
+dt_final_expr <- unique(dt_final_expr[,.(target,wildtype,position,mutant,mutation,expr_tot,delta_expr_tot,n_bc_expr_tot,n_libs_expr_tot)])
+
+#merge together
+dt_final <- merge(dt_final_bind, dt_final_expr)
+setkey(dt_final,target,position,mutant)
 
 #add the rep1 and rep2 bind and expr averages
-dt_final[,bind_rep1 := dt_mutant[library=="pool1", mean_bind]]
-dt_final[,bind_rep2 := dt_mutant[library=="pool2", mean_bind]]
-dt_final[,expr_rep1 := dt_mutant[library=="pool1", mean_expr]]
-dt_final[,expr_rep2 := dt_mutant[library=="pool2", mean_expr]]
+dt_final[,bind_rep1 := dt_mutant_bind[library=="pool1A", mean_bind]]
+dt_final[,bind_rep2 := dt_mutant_bind[library=="pool2A", mean_bind]]
+dt_final[,bind_rep3 := dt_mutant_bind[library=="pool1B", mean_bind]]
+dt_final[,expr_rep1 := dt_mutant_expr[library=="pool1", mean_expr]]
+dt_final[,expr_rep2 := dt_mutant_expr[library=="pool2", mean_expr]]
 
-
-#add delta bind and expr measures
-for(bg in c("Wuhan_Hu_1","E484K","N501Y","B1351")){
-  for(lib in c("pool1","pool2")){
-    ref_bind <- dt[library==lib & target==bg & variant_class=="wildtype",mean_bind]
-    ref_expr <- dt[library==lib & target==bg & variant_class=="wildtype",mean_expr]
-    dt_mutant[library==lib & target==bg,delta_bind := mean_bind - ref_bind]
-    dt_mutant[library==lib & target==bg,delta_expr := mean_expr - ref_expr]
-  }
-}
 
 #rename some of the columns
 setnames(dt_final,"bind_tot","bind")
@@ -223,7 +281,7 @@ Merge in the Delta-bg DMS measurements, obtained from Delta repo
 ```{r merge_in_delta, echo=T, fig.width=8, fig.height=4, fig.align="center", dpi=300,dev="png"}
 dt_delta <- data.table(read.csv(file=config$delta_mut_bind_expr,stringsAsFactors = F))
 
-dt_final <- merge(dt_final, dt_delta, all.x=T, all.y=T)
+dt_final <- rbind(dt_final, dt_delta, fill=T)
 setkey(dt_final,target,position,mutant)
 
 ```
@@ -457,25 +515,11 @@ invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/heatmap_SSM_del
 
 That's the data! Other analyses in additional notebooks
 
-```{r exploratory_epistasis, fig.width=5,fig.height=5,fig.align="center", dpi=500,dev="png",echo=T}
-#playing around to look at interactions...
-#dt_Wuhan_Hu_1 <- dt_final[target=="Wuhan_Hu_1",]
-#dt_E484K <- dt_final[target=="E484K",]
-#dt_N501Y <- dt_final[target=="N501Y",]
-#dt_B1351 <- dt_final[target=="B1351",]
-
-#plot(dt_Wuhan_Hu_1[,delta_bind],dt_N501Y[,delta_bind],pch=19,col="#00000030",xlab="mutant effect, Wuhan_Hu_1",ylab="mutant effect, N501Y")
-#dt_Wuhan_Hu_1[which(dt_Wuhan_Hu_1$delta_bind > -0.5 & dt_N501Y$delta_bind < -1),]
-
-
-#plot(dt_Wuhan_Hu_1[,delta_bind],dt_B1351[,delta_bind],pch=19,col="#00000030",xlab="mutant effect, Wuhan_Hu_1",ylab="mutant effect, B1351")
-```
-
 
 Save output files.
 
 ```{r outputs}
-dt_final[,.(target,wildtype,position,mutant,mutation,bind,delta_bind,n_bc_bind,n_libs_bind,bind_rep1,bind_rep2,expr,delta_expr,n_bc_expr,n_libs_expr,expr_rep1,expr_rep2)] %>%
+dt_final[,.(target,wildtype,position,mutant,mutation,bind,delta_bind,n_bc_bind,n_libs_bind,bind_rep1,bind_rep2,bind_rep3,expr,delta_expr,n_bc_expr,n_libs_expr,expr_rep1,expr_rep2)] %>%
   mutate_if(is.numeric, round, digits=5) %>%
   write.csv(file=config$final_variant_scores_mut_file, row.names=F,quote=F)
 ```

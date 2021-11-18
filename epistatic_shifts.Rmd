@@ -60,13 +60,32 @@ dt <- data.table(read.csv(file=config$final_variant_scores_mut_file,stringsAsFac
 
 ## Calculate site-wise mean absolute error, slope from correlation in mutation effects
 
-For each pair of backgrounds, at each site I want to compute the mean absolute error in affinities across the 20 amino acids measured (wildtype and 19 mutants).
+For each pair of backgrounds, at each site I want to compute the mean absolute error in affinities across the 20 amino acids measured (wildtype and 19 mutants). Deal with measurements in the 5-7 range a few different ways, as noted in the # comments in code
 
-Collapse any value <=7 to boundary of 7 -- otherwise, noise in the 5-7 range can dominate the MAE estimate. Also do MAE_cens which doesn't include values that are censored to 7 in both bgs
 
 ```{r setup_table}
+#define a censored bind measurement that collapses anything <7 to 7 (a lot more noise in the 5-7 range due to concentration range)
 dt[,bind_cens := bind]
 dt[!is.na(bind) & bind<7,bind_cens:=7]
+
+#compute pi and pi_cens based on bind and bind_cens, as Boltzmann-weighted probabiligy of observing amino-acid a at site r in homolog h
+dt[,non_norm_pi:=exp(bind)]
+dt[,non_norm_pi_cens:=exp(bind_cens)]
+
+dt[,sum_pi:=sum(non_norm_pi,na.rm=T),by=c("target","position")]
+dt[,sum_pi_cens:=sum(non_norm_pi_cens,na.rm=T),by=c("target","position")]
+
+dt[,pi:=non_norm_pi/sum_pi]
+dt[,pi_cens:=non_norm_pi_cens/sum_pi_cens]
+
+#define a function for computing J-S divergence between two probability vectors
+JS <- function(p,q){
+  p_nan <- p[!is.na(p) & !is.na(q)]
+  q_nan <- q[!is.na(p) & !is.na(q)]
+  n <- 0.5 * (p_nan+q_nan)
+  JS <- 0.5 * (sum(p_nan*log(p_nan/n)) + sum(q_nan*log(q_nan/n)))
+  return(sqrt(JS))
+}
 
 #first, for bind measurements
 #data table for storign difference in correlation in profiles between bg pairs at each site
@@ -81,18 +100,26 @@ diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N5
 diffs_bind$cor <- as.numeric(NA)
 diffs_bind$slope <- as.numeric(NA)
 diffs_bind$rho <- as.numeric(NA)
-diffs_bind$MAE <- as.numeric(NA)
-diffs_bind$MAE_cens <- as.numeric(NA)
+diffs_bind$MAE <- as.numeric(NA) #score of mean average error from bind_cens, including values at boundary condition = 7
+diffs_bind$MAE_cens <- as.numeric(NA) #score of mean average error from bind_cens, excluding amino acids that are at the boudnary condition = 7 *in both bgs*
+diffs_bind$JSD <- as.numeric(NA) #jensen-shannon divergence, from raw bind values (lower limit 5)
+diffs_bind$JSD_cens <- as.numeric(NA) #jensen-shannon divergence, from bind_cens values (lower limit 7)
 for(i in 1:nrow(diffs_bind)){
   x <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind_cens]
   y <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind_cens]
   x_cens <- x[(x>7 | y>7)]
   y_cens <- y[(x>7 | y>7)]
+  x_pi <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],pi]
+  y_pi <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],pi]
+  x_pi_cens <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],pi_cens]
+  y_pi_cens <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],pi_cens]
   diffs_bind[i,cor:=cor(x,y,use="complete.obs",method="pearson")]
   diffs_bind[i,slope:=lm(y~x)$coefficients["x"]]
   diffs_bind[i,rho:=cor(x,y,use="complete.obs",method="spearman")]
   diffs_bind[i,MAE:=mean(abs(lm(y~x)$residuals),na.rm=T)]
   diffs_bind[i,MAE_cens:=mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)]
+  diffs_bind[i,JSD := JS(x_pi,y_pi)]
+  diffs_bind[i,JSD_cens := JS(x_pi_cens,y_pi_cens)]
 }
 
 #repeat for expr measurements
@@ -125,7 +152,7 @@ Plotting/visualizing:
 Utility function: plot scatterplot showing affinity of each of the 20 amino acids in a pair of sites
 
 ```{r scatterplot_function}
-plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=T, rho=F, cor=F,cutoff=7,phenotype="bind_cens"){
+plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=F, JSD=T, rho=F, cor=F,cutoff=5,phenotype="bind"){
   x <- dt[target==bg1 & position==site,get(phenotype)]
   x_ref <- dt[target==bg1 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
   y <- dt[target==bg2 & position==site,get(phenotype)]
@@ -134,7 +161,7 @@ plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=T, rho=F, 
   y_cens <- y[(x>7 | y>7)]
   chars <- dt[target==bg1 & position==site,mutant]
   cols <- rep("black",20); cols[which(x <= cutoff & y <= cutoff)] <- "orange"
-  plot(x,y, xlim=c(6.5,12),ylim=c(6.5,12),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
+  plot(x,y, xlim=c(4.5,12),ylim=c(4.5,12),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
   abline(v=x_ref,lty=2,col="red")
   abline(h=y_ref,lty=2,col="red")
   if(MAE_slope==T){
@@ -147,6 +174,11 @@ plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=T, rho=F, 
   }else if(MAE_cens==T){
     val <- mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)
     legend("topleft",bty="n",cex=1,legend=paste("MAE (cens):",format(val,digits=3)))
+  }else if(JSD==T){
+    x_pi <- dt[target==bg1 & position==site,pi]
+    y_pi <- dt[target==bg2 & position==site,pi]
+    val <- JS(x_pi,y_pi)
+    legend("topleft",bty="n",cex=1,legend=paste("divergence:",format(val,digits=3)))
   }else if(rho==T){
     val <- cor(x,y,use="complete.obs",method="spearman")
     legend("topleft",bty="n",cex=1,legend=paste("rho:",format(val,digits=3)))
@@ -189,7 +221,7 @@ TODO: Utility funciton: plot heatmap showing mutant effects profiles of the five
 TODO: Map MAE (or mean MAE across all comparisons) to pdbs?
 
 TODO: line plots of MAE of focal bg versus other across sites
-```{r line_plots_MAE-cens_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r line_plots_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
 bg <- "Wuhan_Hu_1"
 temp <- diffs_bind[bg_1==bg | bg_2 == bg]
 temp$target <- as.character(NA)
@@ -203,14 +235,42 @@ for(i in 1:nrow(temp)){
 
 group.colors <- c("Wuhan_Hu_1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "B1351"=cbPalette[6], "Delta"=cbPalette[7])
 
-ggplot(data=temp, aes(x=site, y=MAE_cens, group=target, color=target))+
+ggplot(data=temp, aes(x=site, y=JSD, group=target, color=target))+
   geom_line(size=0.5)+
   scale_color_manual(values=group.colors)+
-  theme_bw()
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("JS divergence versus Wuhan-Hu-1")
 
 
 ```
 
+Same but separate facet per bg comparison
+
+```{r line_plots_JSD_v_WH1_faceted, echo=T, fig.width=12, fig.height=12, fig.align="center", dpi=300,dev="png"}
+bg <- "Wuhan_Hu_1"
+temp <- diffs_bind[bg_1==bg | bg_2 == bg]
+temp$target <- as.character(NA)
+for(i in 1:nrow(temp)){
+  if(temp[i,bg_1]!=bg){
+    temp[i,target:=temp[i,bg_1]]
+  }else if(temp[i,bg_2]!=bg){
+    temp[i,target:=temp[i,bg_2]]
+  }
+}
+
+ggplot(data=temp, aes(x=site, y=JSD, color=target))+
+  geom_line(size=0.75)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("JS divergence versus Wuhan-Hu-1")+
+  facet_wrap(~target,ncol=1)
+
+
+```
 
 ## Nonspecific compensation
 
