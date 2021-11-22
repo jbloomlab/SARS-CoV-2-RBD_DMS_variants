@@ -7,3 +7,7 @@ pool1,N501Y,210701_A,/fh/fast/bloom_j/SR/ngs/pacbio_UW/20210701_Greaney_A/bg_poo
 pool2,N501Y,210701_A,/fh/fast/bloom_j/SR/ngs/pacbio_UW/20210701_Greaney_A/bg_pool.AG/CCS_7555/fastx_files/demultiplex.bc1020_BAK8B_OA--bc1020_BAK8B_OA.hifi_reads.fastq.gz
 pool1,B1351,210701_A,/fh/fast/bloom_j/SR/ngs/pacbio_UW/20210701_Greaney_A/bg_pool.AG/CCS_7555/fastx_files/demultiplex.bc1021_BAK8B_OA--bc1021_BAK8B_OA.hifi_reads.fastq.gz
 pool2,B1351,210701_A,/fh/fast/bloom_j/SR/ngs/pacbio_UW/20210701_Greaney_A/bg_pool.AG/CCS_7555/fastx_files/demultiplex.bc1022_BAK8B_OA--bc1022_BAK8B_OA.hifi_reads.fastq.gz
+pool1,Wuhan_Hu_1,211118_A,/fh/fast/bloom_j/SR/ngs/pacbio/211118_TylerStarr/211108_pool_Starr-Cell1/demultiplex.bc1001_BAK8A_OA--bc1001_BAK8A_OA.hifi_reads.fastq.gz
+pool1,Wuhan_Hu_1,211118_B,/fh/fast/bloom_j/SR/ngs/pacbio/211118_TylerStarr/211108_pool_Starr-Cell2/demultiplex.bc1001_BAK8A_OA--bc1001_BAK8A_OA.hifi_reads.fastq.gz
+pool1,N501Y,211118_A,/fh/fast/bloom_j/SR/ngs/pacbio/211118_TylerStarr/211108_pool_Starr-Cell1/demultiplex.bc1002_BAK8A_OA--bc1002_BAK8A_OA.hifi_reads.fastq.gz
+pool1,N501Y,211118_B,/fh/fast/bloom_j/SR/ngs/pacbio/211118_TylerStarr/211108_pool_Starr-Cell2/demultiplex.bc1002_BAK8A_OA--bc1002_BAK8A_OA.hifi_reads.fastq.gz

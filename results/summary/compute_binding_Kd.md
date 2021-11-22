@@ -139,7 +139,7 @@ for(i in 1:nrow(barcode_runs)){
 }
 ```
 
-    ## [1] "read:cell ratio for pool1A TiteSeq_01_bin1 is 2.0480054785625"
+    ## [1] "read:cell ratio for pool1A TiteSeq_01_bin1 is 2.04800618748622"
     ## [1] "read:cell ratio for pool1A TiteSeq_01_bin2 is 1.63229553746527"
     ## [1] "read:cell ratio for pool1A TiteSeq_01_bin3 is 1.8628272238972"
     ## [1] "read:cell ratio for pool1A TiteSeq_01_bin4 is 1.85347606190773"
@@ -156,7 +156,7 @@ for(i in 1:nrow(barcode_runs)){
     ## [1] "read:cell ratio for pool1A TiteSeq_04_bin3 is 1.72596892484561"
     ## [1] "read:cell ratio for pool1A TiteSeq_04_bin4 is 3.53310432774606"
     ## [1] "read:cell ratio for pool1A TiteSeq_05_bin1 is 1.70063636971891"
-    ## [1] "read:cell ratio for pool1A TiteSeq_05_bin2 is 1.73673267368383"
+    ## [1] "read:cell ratio for pool1A TiteSeq_05_bin2 is 1.7367328950873"
     ## [1] "read:cell ratio for pool1A TiteSeq_05_bin3 is 1.94473191244089"
     ## [1] "read:cell ratio for pool1A TiteSeq_05_bin4 is 7.17951907131012"
     ## [1] "read:cell ratio for pool1A TiteSeq_06_bin1 is 1.99930883250506"
@@ -171,7 +171,7 @@ for(i in 1:nrow(barcode_runs)){
     ## [1] "read:cell ratio for pool1A TiteSeq_08_bin2 is 1.98943749940568"
     ## [1] "read:cell ratio for pool1A TiteSeq_08_bin3 is 1.92318244170096"
     ## [1] "read:cell ratio for pool1A TiteSeq_08_bin4 is 1.86594202898551"
-    ## [1] "read:cell ratio for pool1A TiteSeq_09_bin1 is 1.98889087605209"
+    ## [1] "read:cell ratio for pool1A TiteSeq_09_bin1 is 1.98889099813037"
     ## [1] "read:cell ratio for pool1A TiteSeq_09_bin2 is 1.66627955433006"
     ## [1] "read:cell ratio for pool1A TiteSeq_09_bin3 is 4.14739229024943"
     ## [1] "read:cell ratio for pool1A TiteSeq_09_bin4 is 3.57818181818182"
@@ -211,42 +211,42 @@ for(i in 1:nrow(barcode_runs)){
     ## [1] "read:cell ratio for pool2A TiteSeq_09_bin2 is 1.61784564085039"
     ## [1] "read:cell ratio for pool2A TiteSeq_09_bin3 is 9.84413309982487"
     ## [1] "read:cell ratio for pool2A TiteSeq_09_bin4 is 1.21276595744681"
-    ## [1] "reads < cells for pool1B TiteSeq_01_bin1 , un-normalized (ratio 0.691232870019787 )"
-    ## [1] "reads < cells for pool1B TiteSeq_01_bin2 , un-normalized (ratio 0.695213220523331 )"
-    ## [1] "reads < cells for pool1B TiteSeq_01_bin3 , un-normalized (ratio 0.722719184364991 )"
-    ## [1] "reads < cells for pool1B TiteSeq_01_bin4 , un-normalized (ratio 0.753386294078597 )"
-    ## [1] "reads < cells for pool1B TiteSeq_02_bin1 , un-normalized (ratio 0.6485405261373 )"
-    ## [1] "reads < cells for pool1B TiteSeq_02_bin2 , un-normalized (ratio 0.781914374450982 )"
-    ## [1] "reads < cells for pool1B TiteSeq_02_bin3 , un-normalized (ratio 0.70120784430305 )"
-    ## [1] "reads < cells for pool1B TiteSeq_02_bin4 , un-normalized (ratio 0.829870926904232 )"
-    ## [1] "reads < cells for pool1B TiteSeq_03_bin1 , un-normalized (ratio 0.721121912019612 )"
-    ## [1] "reads < cells for pool1B TiteSeq_03_bin2 , un-normalized (ratio 0.619012296625781 )"
-    ## [1] "reads < cells for pool1B TiteSeq_03_bin3 , un-normalized (ratio 0.699925261227302 )"
-    ## [1] "reads < cells for pool1B TiteSeq_03_bin4 , un-normalized (ratio 0.91190309142023 )"
-    ## [1] "reads < cells for pool1B TiteSeq_04_bin1 , un-normalized (ratio 0.685365110458157 )"
-    ## [1] "reads < cells for pool1B TiteSeq_04_bin2 , un-normalized (ratio 0.687221859888112 )"
-    ## [1] "reads < cells for pool1B TiteSeq_04_bin3 , un-normalized (ratio 0.767982714099268 )"
-    ## [1] "reads < cells for pool1B TiteSeq_04_bin4 , un-normalized (ratio 0.631418043965939 )"
-    ## [1] "reads < cells for pool1B TiteSeq_05_bin1 , un-normalized (ratio 0.668343112152758 )"
-    ## [1] "reads < cells for pool1B TiteSeq_05_bin2 , un-normalized (ratio 0.802574729395333 )"
-    ## [1] "reads < cells for pool1B TiteSeq_05_bin3 , un-normalized (ratio 0.738603499589106 )"
-    ## [1] "reads < cells for pool1B TiteSeq_05_bin4 , un-normalized (ratio 0.456733897202342 )"
-    ## [1] "reads < cells for pool1B TiteSeq_06_bin1 , un-normalized (ratio 0.744494169377867 )"
-    ## [1] "reads < cells for pool1B TiteSeq_06_bin2 , un-normalized (ratio 0.728611708820468 )"
-    ## [1] "reads < cells for pool1B TiteSeq_06_bin3 , un-normalized (ratio 0.762630902076061 )"
-    ## [1] "read:cell ratio for pool1B TiteSeq_06_bin4 is 1.06775067750678"
-    ## [1] "reads < cells for pool1B TiteSeq_07_bin1 , un-normalized (ratio 0.719296786067209 )"
-    ## [1] "reads < cells for pool1B TiteSeq_07_bin2 , un-normalized (ratio 0.677740204042273 )"
-    ## [1] "reads < cells for pool1B TiteSeq_07_bin3 , un-normalized (ratio 0.746413934426229 )"
-    ## [1] "read:cell ratio for pool1B TiteSeq_07_bin4 is 1.11214953271028"
-    ## [1] "reads < cells for pool1B TiteSeq_08_bin1 , un-normalized (ratio 0.865445817430729 )"
-    ## [1] "reads < cells for pool1B TiteSeq_08_bin2 , un-normalized (ratio 0.752853820160618 )"
-    ## [1] "reads < cells for pool1B TiteSeq_08_bin3 , un-normalized (ratio 0.255851932498639 )"
-    ## [1] "reads < cells for pool1B TiteSeq_08_bin4 , un-normalized (ratio 0.741687979539642 )"
-    ## [1] "reads < cells for pool1B TiteSeq_09_bin1 , un-normalized (ratio 0.735340244587351 )"
-    ## [1] "reads < cells for pool1B TiteSeq_09_bin2 , un-normalized (ratio 0.558219107774637 )"
-    ## [1] "reads < cells for pool1B TiteSeq_09_bin3 , un-normalized (ratio 0.463022508038585 )"
-    ## [1] "reads < cells for pool1B TiteSeq_09_bin4 , un-normalized (ratio 0.733102253032929 )"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin1 , un-normalized (ratio 0.711955769434334 )"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin2 , un-normalized (ratio 0.714922908643382 )"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin3 , un-normalized (ratio 0.754173162039288 )"
+    ## [1] "reads < cells for pool1B TiteSeq_01_bin4 , un-normalized (ratio 0.790119925797469 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin1 , un-normalized (ratio 0.68700159875975 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin2 , un-normalized (ratio 0.806036758872508 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin3 , un-normalized (ratio 0.736531036223836 )"
+    ## [1] "reads < cells for pool1B TiteSeq_02_bin4 , un-normalized (ratio 0.870625774468518 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin1 , un-normalized (ratio 0.748097278054594 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin2 , un-normalized (ratio 0.64874569772902 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin3 , un-normalized (ratio 0.745147714207344 )"
+    ## [1] "reads < cells for pool1B TiteSeq_03_bin4 , un-normalized (ratio 0.949736939101139 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin1 , un-normalized (ratio 0.718733540102296 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin2 , un-normalized (ratio 0.734598679156553 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin3 , un-normalized (ratio 0.791291793398197 )"
+    ## [1] "reads < cells for pool1B TiteSeq_04_bin4 , un-normalized (ratio 0.653565095029384 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin1 , un-normalized (ratio 0.708791172040335 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin2 , un-normalized (ratio 0.832763605054902 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin3 , un-normalized (ratio 0.761494904758113 )"
+    ## [1] "reads < cells for pool1B TiteSeq_05_bin4 , un-normalized (ratio 0.462589459986988 )"
+    ## [1] "reads < cells for pool1B TiteSeq_06_bin1 , un-normalized (ratio 0.784237445936362 )"
+    ## [1] "reads < cells for pool1B TiteSeq_06_bin2 , un-normalized (ratio 0.753584103936635 )"
+    ## [1] "reads < cells for pool1B TiteSeq_06_bin3 , un-normalized (ratio 0.774021679221018 )"
+    ## [1] "read:cell ratio for pool1B TiteSeq_06_bin4 is 1.0840108401084"
+    ## [1] "reads < cells for pool1B TiteSeq_07_bin1 , un-normalized (ratio 0.754943678959083 )"
+    ## [1] "reads < cells for pool1B TiteSeq_07_bin2 , un-normalized (ratio 0.701483572341517 )"
+    ## [1] "reads < cells for pool1B TiteSeq_07_bin3 , un-normalized (ratio 0.773565573770492 )"
+    ## [1] "read:cell ratio for pool1B TiteSeq_07_bin4 is 1.15420560747664"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin1 , un-normalized (ratio 0.907755925577857 )"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin2 , un-normalized (ratio 0.778998551805854 )"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin3 , un-normalized (ratio 0.269461077844311 )"
+    ## [1] "reads < cells for pool1B TiteSeq_08_bin4 , un-normalized (ratio 0.774936061381074 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin1 , un-normalized (ratio 0.768165840954596 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin2 , un-normalized (ratio 0.581027722081175 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin3 , un-normalized (ratio 0.47588424437299 )"
+    ## [1] "reads < cells for pool1B TiteSeq_09_bin4 , un-normalized (ratio 0.745233968804159 )"
 
 ``` r
 #annotate each barcode as to whether it's a homolog variant, SARS-CoV-2 wildtype, synonymous muts only, stop, nonsynonymous, >1 nonsynonymous mutations
@@ -375,8 +375,8 @@ our library barcodes. We will also spot check titration curves from
 across our measurement range, and spot check curves whose fit parameters
 hit the different boundary conditions of the fit variables.
 
-We successfully generated *K*<sub>D</sub> estimates for 150551 of our
-pool1A barcodes (86.13%), 148246 of our pool1B barcodes (84.81%), and
+We successfully generated *K*<sub>D</sub> estimates for 150549 of our
+pool1A barcodes (82.4%), 155740 of our pool1B barcodes (85.24%), and
 126439 of our pool2A barcodes (81.62%).
 
 Why were estimates not returned for some barcodes? The histograms below
@@ -475,7 +475,7 @@ hist(log10(dt[target=="E484K",Kd_ACE2]),col="gray40",breaks=60,xlab="log10(KD), 
 hist(log10(dt[target=="E484K" & variant_class %in% (c("synonymous","wildtype")),Kd_ACE2]),col="#92278F",add=T,breaks=60)
 hist(log10(dt[target=="N501Y",Kd_ACE2]),col="gray40",breaks=60,xlab="log10(KD), ACE2 (M)",main="N501Y",xlim=c(-13,-5))
 hist(log10(dt[target=="N501Y" & variant_class %in% (c("synonymous","wildtype")),Kd_ACE2]),col="#92278F",add=T,breaks=60)
-hist(log10(dt[target=="B1351",Kd_ACE2]),col="gray40",breaks=60,xlab="log10(KD), ACE2 (M)",main="B1351",xlim=c(-13,-5))
+hist(log10(dt[target=="B1351",Kd_ACE2]),col="gray40",breaks=70,xlab="log10(KD), ACE2 (M)",main="B1351",xlim=c(-13,-5))
 hist(log10(dt[target=="B1351" & variant_class %in% (c("synonymous","wildtype")),Kd_ACE2]),col="#92278F",add=T,breaks=60)
 ```
 
@@ -653,7 +653,7 @@ grid.arrange(p1,ncol=1)
 invisible(dev.print(pdf, paste(config$Titeseq_Kds_dir,"/violin-plot_log10Ka-by-target.pdf",sep="")))
 ```
 
-We have generated binding measurements for 84.01% of the barcodes in our
+We have generated binding measurements for 82.89% of the barcodes in our
 libraries.
 
 ## Data Output

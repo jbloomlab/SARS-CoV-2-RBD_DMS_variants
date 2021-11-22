@@ -138,6 +138,20 @@ display(HTML(pacbio_runs.to_html(index=False)))
       <td>pool2_Wuhan_Hu_1_210701_A</td>
       <td>results/ccs/pool2_Wuhan_Hu_1_210701_A_ccs.fastq.gz</td>
     </tr>
+    <tr>
+      <td>pool1</td>
+      <td>Wuhan_Hu_1</td>
+      <td>211118_A</td>
+      <td>pool1_Wuhan_Hu_1_211118_A</td>
+      <td>results/ccs/pool1_Wuhan_Hu_1_211118_A_ccs.fastq.gz</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>Wuhan_Hu_1</td>
+      <td>211118_B</td>
+      <td>pool1_Wuhan_Hu_1_211118_B</td>
+      <td>results/ccs/pool1_Wuhan_Hu_1_211118_B_ccs.fastq.gz</td>
+    </tr>
   </tbody>
 </table>
 
@@ -568,7 +582,7 @@ print(f"Read {len(processed_ccs)} CCSs from {nlibs} libraries and {ntargets} tar
 display(HTML(processed_ccs.head().to_html(index=False)))
 ```
 
-    Read 316687 CCSs from 2 libraries and 1 targets.
+    Read 344553 CCSs from 2 libraries and 1 targets.
 
 
 
@@ -671,9 +685,9 @@ display(HTML(
     <tr>
       <th rowspan="2" valign="top">Wuhan_Hu_1</th>
       <th>pool1</th>
-      <td>124818</td>
-      <td>46142</td>
-      <td>2.71</td>
+      <td>152684</td>
+      <td>52959</td>
+      <td>2.88</td>
     </tr>
     <tr>
       <th>pool2</th>
@@ -932,9 +946,9 @@ display(HTML(empirical_acc.to_html(index=False)))
   <tbody>
     <tr>
       <td>pool1</td>
-      <td>0.954418</td>
+      <td>0.956149</td>
       <td>retained</td>
-      <td>104196</td>
+      <td>128231</td>
       <td>False</td>
     </tr>
     <tr>
@@ -946,9 +960,9 @@ display(HTML(empirical_acc.to_html(index=False)))
     </tr>
     <tr>
       <td>pool1</td>
-      <td>0.983792</td>
+      <td>0.983268</td>
       <td>retained, no indel</td>
-      <td>100029</td>
+      <td>123389</td>
       <td>True</td>
     </tr>
     <tr>
@@ -960,9 +974,9 @@ display(HTML(empirical_acc.to_html(index=False)))
     </tr>
     <tr>
       <td>pool1</td>
-      <td>0.965013</td>
+      <td>0.965761</td>
       <td>10X accuracy</td>
-      <td>96805</td>
+      <td>119472</td>
       <td>False</td>
     </tr>
     <tr>
@@ -974,9 +988,9 @@ display(HTML(empirical_acc.to_html(index=False)))
     </tr>
     <tr>
       <td>pool1</td>
-      <td>0.984312</td>
+      <td>0.983735</td>
       <td>10X accuracy, no indel</td>
-      <td>93886</td>
+      <td>116042</td>
       <td>False</td>
     </tr>
     <tr>
@@ -1070,6 +1084,13 @@ display(HTML(consensus.head().to_html(index=False)))
   <tbody>
     <tr>
       <td>pool1</td>
+      <td>AAAAAAAAAAAGGAGA</td>
+      <td>Wuhan_Hu_1</td>
+      <td>G496A G497T T498G</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
       <td>AAAAAAAAAAATTTAA</td>
       <td>Wuhan_Hu_1</td>
       <td></td>
@@ -1095,13 +1116,6 @@ display(HTML(consensus.head().to_html(index=False)))
       <td>Wuhan_Hu_1</td>
       <td>C250G G252A</td>
       <td>2</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
-      <td>AAAAAAAAACGGATGA</td>
-      <td>Wuhan_Hu_1</td>
-      <td>C41G</td>
-      <td>1</td>
     </tr>
   </tbody>
 </table>
@@ -1137,6 +1151,15 @@ display(HTML(consensus.head().to_html(index=False)))
   <tbody>
     <tr>
       <td>pool1</td>
+      <td>AAAAAAAAAAAGGAGA</td>
+      <td>Wuhan_Hu_1</td>
+      <td>G496A G497T T498G</td>
+      <td>4</td>
+      <td>G496A G497T T498G</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
       <td>AAAAAAAAAAATTTAA</td>
       <td>Wuhan_Hu_1</td>
       <td></td>
@@ -1169,15 +1192,6 @@ display(HTML(consensus.head().to_html(index=False)))
       <td>C250G G252A</td>
       <td>2</td>
       <td>C250G G252A</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
-      <td>AAAAAAAAACGGATGA</td>
-      <td>Wuhan_Hu_1</td>
-      <td>C41G</td>
-      <td>1</td>
-      <td>C41G</td>
       <td>0</td>
     </tr>
   </tbody>
@@ -1262,7 +1276,7 @@ _ = p.draw()
     <tr>
       <td>pool1</td>
       <td>Wuhan_Hu_1</td>
-      <td>40469</td>
+      <td>46590</td>
     </tr>
     <tr>
       <td>pool2</td>
@@ -1318,6 +1332,13 @@ display(HTML(
     <tr>
       <td>Wuhan_Hu_1</td>
       <td>pool1</td>
+      <td>AAAAAAAAAAAGGAGA</td>
+      <td>G496A G497T T498G</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>Wuhan_Hu_1</td>
+      <td>pool1</td>
       <td>AAAAAAAAAAATTTAA</td>
       <td></td>
       <td>4</td>
@@ -1342,13 +1363,6 @@ display(HTML(
       <td>AAAAAAAAACCGATTA</td>
       <td>C250G G252A</td>
       <td>2</td>
-    </tr>
-    <tr>
-      <td>Wuhan_Hu_1</td>
-      <td>pool1</td>
-      <td>AAAAAAAAACGGATGA</td>
-      <td>C41G</td>
-      <td>1</td>
     </tr>
   </tbody>
 </table>
@@ -1376,6 +1390,20 @@ display(HTML(dropped.head().to_html(index=False)))
   <tbody>
     <tr>
       <td>pool1</td>
+      <td>AAAAAAGCGTAATCAC</td>
+      <td>Wuhan_Hu_1</td>
+      <td>minor subs too frequent</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>AAAAAAGGCCAAAAAA</td>
+      <td>Wuhan_Hu_1</td>
+      <td>subs diff too large</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
       <td>AAAAACGGGGTCAGAC</td>
       <td>Wuhan_Hu_1</td>
       <td>subs diff too large</td>
@@ -1394,20 +1422,6 @@ display(HTML(dropped.head().to_html(index=False)))
       <td>Wuhan_Hu_1</td>
       <td>subs diff too large</td>
       <td>5</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
-      <td>AAAAATCGCACGAAAC</td>
-      <td>Wuhan_Hu_1</td>
-      <td>subs diff too large</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>pool1</td>
-      <td>AAAAATGGTAACTTAA</td>
-      <td>Wuhan_Hu_1</td>
-      <td>subs diff too large</td>
-      <td>3</td>
     </tr>
   </tbody>
 </table>
@@ -1515,9 +1529,9 @@ display(HTML(
   <tbody>
     <tr>
       <th>Wuhan_Hu_1</th>
-      <td>40469</td>
+      <td>46590</td>
       <td>42253</td>
-      <td>82722</td>
+      <td>88843</td>
     </tr>
   </tbody>
 </table>
@@ -1702,15 +1716,15 @@ display(HTML(
       <th rowspan="9" valign="top">False</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>133</td>
+      <td>69</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>211</td>
+      <td>119</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3475</td>
+      <td>3631</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1728,29 +1742,29 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>28</td>
+      <td>11</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>50</td>
+      <td>22</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3741</td>
+      <td>3786</td>
     </tr>
     <tr>
       <th rowspan="9" valign="top">True</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>305</td>
+      <td>239</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>223</td>
+      <td>131</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3492</td>
+      <td>3650</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1768,30 +1782,30 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>191</td>
+      <td>173</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>62</td>
+      <td>33</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3767</td>
+      <td>3814</td>
     </tr>
     <tr>
       <th rowspan="18" valign="top">single</th>
       <th rowspan="9" valign="top">False</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>312</td>
+      <td>169</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>413</td>
+      <td>306</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3094</td>
+      <td>3344</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1809,29 +1823,29 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>97</td>
+      <td>34</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>160</td>
+      <td>94</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3562</td>
+      <td>3691</td>
     </tr>
     <tr>
       <th rowspan="9" valign="top">True</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>496</td>
+      <td>352</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>424</td>
+      <td>317</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3100</td>
+      <td>3351</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1849,15 +1863,15 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>277</td>
+      <td>213</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>171</td>
+      <td>105</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3572</td>
+      <td>3702</td>
     </tr>
   </tbody>
 </table>
@@ -1941,6 +1955,16 @@ display(HTML(
     <tr>
       <td>Wuhan_Hu_1</td>
       <td>pool1</td>
+      <td>AAAAAAAAAAAGGAGA</td>
+      <td>4</td>
+      <td>GGT166ATG</td>
+      <td>G166M</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Wuhan_Hu_1</td>
+      <td>pool1</td>
       <td>AAAAAAAAAAATTTAA</td>
       <td>4</td>
       <td></td>
@@ -1975,16 +1999,6 @@ display(HTML(
       <td>2</td>
       <td>CAG84GAA</td>
       <td>Q84E</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>Wuhan_Hu_1</td>
-      <td>pool1</td>
-      <td>AAAAAAAAACGGATGA</td>
-      <td>1</td>
-      <td>GCT14GGT</td>
-      <td>A14G</td>
       <td>1</td>
       <td>1</td>
     </tr>
