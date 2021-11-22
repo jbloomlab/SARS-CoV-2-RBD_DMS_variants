@@ -64,31 +64,23 @@ For each pair of backgrounds, at each site I want to compute the mean absolute e
 
 
 ```{r setup_table}
-#define a censored bind measurement that collapses anything <7 to 7 (a lot more noise in the 5-7 range due to concentration range)
+#define a censored bind measurement that collapses anything <6 to 76 (a lot more noise in the 5-6 range due to concentration range)
 dt[,bind_cens := bind]
-dt[!is.na(bind) & bind<7,bind_cens:=7]
+dt[!is.na(bind) & bind<6,bind_cens:=6]
 
-#compute pi and pi_cens based on bind and bind_cens, as Boltzmann-weighted probabiligy of observing amino-acid a at site r in homolog h
-dt[,non_norm_pi:=exp(bind)]
-dt[,non_norm_pi_cens:=exp(bind_cens)]
-
-dt[,sum_pi:=sum(non_norm_pi,na.rm=T),by=c("target","position")]
-dt[,sum_pi_cens:=sum(non_norm_pi_cens,na.rm=T),by=c("target","position")]
-
-dt[,pi:=non_norm_pi/sum_pi]
-dt[,pi_cens:=non_norm_pi_cens/sum_pi_cens]
-
-#define a function for computing J-S divergence between two probability vectors
-JS <- function(p,q){
-  p_nan <- p[!is.na(p) & !is.na(q)]
-  q_nan <- q[!is.na(p) & !is.na(q)]
-  n <- 0.5 * (p_nan+q_nan)
-  JS <- 0.5 * (sum(p_nan*log(p_nan/n)) + sum(q_nan*log(q_nan/n)))
+#define a function for computing J-S divergence between two affinity vectors
+JS <- function(vec1,vec2){
+  vec1_pair <- vec1[!is.na(vec1) & !is.na(vec2)]
+  vec2_pair <- vec2[!is.na(vec1) & !is.na(vec2)]
+  pi1 <- exp(vec1_pair)/sum(exp(vec1_pair))
+  pi2 <- exp(vec2_pair)/sum(exp(vec2_pair))
+  n <- 0.5 * (pi1+pi2)
+  JS <- 0.5 * (sum(pi1*log(pi1/n)) + sum(pi2*log(pi2/n)))
   return(sqrt(JS))
 }
 
 #first, for bind measurements
-#data table for storign difference in correlation in profiles between bg pairs at each site
+#data table for storing difference in correlation in profiles between bg pairs at each site
 #generate table with all combinations of bg_1 and bg_2 for each site
 diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta"),bg_1=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta")))
 
@@ -100,26 +92,24 @@ diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N5
 diffs_bind$cor <- as.numeric(NA)
 diffs_bind$slope <- as.numeric(NA)
 diffs_bind$rho <- as.numeric(NA)
-diffs_bind$MAE <- as.numeric(NA) #score of mean average error from bind_cens, including values at boundary condition = 7
-diffs_bind$MAE_cens <- as.numeric(NA) #score of mean average error from bind_cens, excluding amino acids that are at the boudnary condition = 7 *in both bgs*
+diffs_bind$MAE <- as.numeric(NA) #score of mean average error from bind_cens, including values at boundary condition = 6
+diffs_bind$MAE_cens <- as.numeric(NA) #score of mean average error from bind_cens, excluding amino acids that are at the boudnary condition = 6 *in both bgs*
 diffs_bind$JSD <- as.numeric(NA) #jensen-shannon divergence, from raw bind values (lower limit 5)
 diffs_bind$JSD_cens <- as.numeric(NA) #jensen-shannon divergence, from bind_cens values (lower limit 7)
 for(i in 1:nrow(diffs_bind)){
+  x_uncens <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind]
+  y_uncens <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind]
   x <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind_cens]
   y <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind_cens]
-  x_cens <- x[(x>7 | y>7)]
-  y_cens <- y[(x>7 | y>7)]
-  x_pi <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],pi]
-  y_pi <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],pi]
-  x_pi_cens <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],pi_cens]
-  y_pi_cens <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],pi_cens]
+  x_cens <- x[(x>6 | y>6)]
+  y_cens <- y[(x>6 | y>6)]
   diffs_bind[i,cor:=cor(x,y,use="complete.obs",method="pearson")]
   diffs_bind[i,slope:=lm(y~x)$coefficients["x"]]
   diffs_bind[i,rho:=cor(x,y,use="complete.obs",method="spearman")]
   diffs_bind[i,MAE:=mean(abs(lm(y~x)$residuals),na.rm=T)]
   diffs_bind[i,MAE_cens:=mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)]
-  diffs_bind[i,JSD := JS(x_pi,y_pi)]
-  diffs_bind[i,JSD_cens := JS(x_pi_cens,y_pi_cens)]
+  diffs_bind[i,JSD := JS(x_uncens,y_uncens)]
+  diffs_bind[i,JSD_cens := JS(x,y)]
 }
 
 #repeat for expr measurements
@@ -157,8 +147,8 @@ plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=F, JSD=T, 
   x_ref <- dt[target==bg1 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
   y <- dt[target==bg2 & position==site,get(phenotype)]
   y_ref <- dt[target==bg2 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
-  x_cens <- x[(x>7 | y>7)]
-  y_cens <- y[(x>7 | y>7)]
+  x_cens <- x[(x>6 | y>6)]
+  y_cens <- y[(x>6 | y>6)]
   chars <- dt[target==bg1 & position==site,mutant]
   cols <- rep("black",20); cols[which(x <= cutoff & y <= cutoff)] <- "orange"
   plot(x,y, xlim=c(4.5,12),ylim=c(4.5,12),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
@@ -175,9 +165,7 @@ plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=F, JSD=T, 
     val <- mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)
     legend("topleft",bty="n",cex=1,legend=paste("MAE (cens):",format(val,digits=3)))
   }else if(JSD==T){
-    x_pi <- dt[target==bg1 & position==site,pi]
-    y_pi <- dt[target==bg2 & position==site,pi]
-    val <- JS(x_pi,y_pi)
+    val <- JS(x,y)
     legend("topleft",bty="n",cex=1,legend=paste("divergence:",format(val,digits=3)))
   }else if(rho==T){
     val <- cor(x,y,use="complete.obs",method="spearman")
