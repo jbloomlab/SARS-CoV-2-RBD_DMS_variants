@@ -31,6 +31,9 @@ barcode_runs: data/barcode_runs.csv
 wildtype_sequence: data/wildtype_sequence.fasta
 site_number_offset: 330  # add this to sequential sites to get RBD numbering
 
+# pdb for mapping
+pdb_6m0j: data/6m0j.pdb
+
 # URLs from which we download binding & expression of mutants & variants
 mut_bind_expr_url: https://media.githubusercontent.com/media/jbloomlab/SARS-CoV-2-RBD_DMS/master/results/single_mut_effects/single_mut_effects.csv
 delta_mut_bind_expr_url: https://raw.githubusercontent.com/jbloomlab/SARS-CoV-2-RBD_Delta/main/results/final_variant_scores/final_variant_scores.csv?token=ABECTFLN4NIKEVJGSVBAVM3BTRX66
@@ -66,9 +69,13 @@ final_variant_scores_mut_file: results/final_variant_scores/final_variant_scores
 epistatic_shifts_dir: results/epistatic_shifts
 UShER_dir: results/UShER_SARS-CoV-2
 UShER_tree: results/UShER_SARS-CoV-2/public-latest.all.masked.pb
+UShER_tree_nwk_gz: results/UShER_SARS-CoV-2/public-latest.all.nwk.gz
+UShER_tree_nwk: results/UShER_SARS-CoV-2/public-latest.all.nwk
 UShER_ref: results/UShER_SARS-CoV-2/NC_045512.2.fa
 UShER_gtf: results/UShER_SARS-CoV-2/ncbiGenes.gtf
 UShER_annotated_subs: results/UShER_SARS-CoV-2/annotated_subs.tsv
+UShER_parsed_subs_N501Y: results/UShER_SARS-CoV-2/parsed_subs_N501Y.csv
+
 
 # parameters for running PacBio `ccs` program
 min_ccs_accuracy: 0.999

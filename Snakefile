@@ -63,7 +63,8 @@ rule make_summary:
         variant_expression_file=config['expression_sortseq_file'],
         collapse_scores='results/summary/collapse_scores.md',
         mut_phenos_file=config['final_variant_scores_mut_file'],
-        sars2_subs=config['UShER_annotated_subs']
+        sars2_subs=config['UShER_annotated_subs'],
+        parsed_subs_N501Y=config['UShER_parsed_subs_N501Y']
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -118,8 +119,10 @@ rule get_UShER_tree:
     """Get UShER SARS-CoV-2 tree: https://github.com/yatisht/usher."""
     output:
         mat=config['UShER_tree'],
+        nwk=config['UShER_tree_nwk']
     params:
         directory=directory(config['UShER_dir']),
+        nwk_gz=config['UShER_tree_nwk_gz']
     shell:
         """
         mkdir -p {params.directory}
@@ -133,6 +136,7 @@ rule get_UShER_tree:
             http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/UShER_SARS-CoV-2/
         mv {params.directory}/goldenPath/wuhCor1/UShER_SARS-CoV-2/* {params.directory}
         rm -r {params.directory}/goldenPath
+        gunzip {params.nwk_gz}
         """
 
 rule get_UShER_gtf_file:
@@ -167,6 +171,19 @@ rule enumerate_UShER_subs:
         """
         matUtils summary --translate {output.subs} -i {input.mat} -g {input.gtf} -f {input.refseq}
         """
+
+rule parse_UShER_subs_N501Y:
+    """Get counts of substitutions on N501 versus Y501 backgrounds."""
+    input:
+    	nwk=config['UShER_tree_nwk'],
+    	subs=config['UShER_annotated_subs']
+    output:
+    	parsed_subs_N501Y=config['UShER_parsed_subs_N501Y']
+    shell:
+        """
+        python ./scripts/Will_search_mat_211123.py -t {input.nwk} -a {input.subs} -s N501Y -o {output.parsed_subs_N501Y}
+        """
+
 
 rule collapse_scores:
     input:
