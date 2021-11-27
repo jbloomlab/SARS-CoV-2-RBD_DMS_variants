@@ -47,6 +47,7 @@ rule make_summary:
         dag=os.path.join(config['summary_dir'], 'dag.svg'),
         get_mut_bind_expr=config['mut_bind_expr'],
         get_delta_mut_bind_expr=config['delta_mut_bind_expr'],
+        get_mut_antibody_escape=config['mut_antibody_escape'],
         process_ccs_Wuhan_Hu_1=nb_markdown('process_ccs_Wuhan_Hu_1.ipynb'),
         process_ccs_E484K=nb_markdown('process_ccs_E484K.ipynb'),
         process_ccs_N501Y=nb_markdown('process_ccs_N501Y.ipynb'),
@@ -183,7 +184,7 @@ rule parse_UShER_subs_N501Y:
     	parsed_subs_N501Y=config['UShER_parsed_subs_N501Y']
     shell:
         """
-        python ./scripts/Will_search_mat_211123.py -t {input.nwk} -a {input.subs} -s N501Y -o {output.parsed_subs_N501Y}
+        python ./scripts/Will_search_mat_211123.py -t {input.nwk} -a {input.subs} -s N501Y --skip_transitions=False -o {output.parsed_subs_N501Y}
         """
 
 
@@ -286,6 +287,13 @@ rule get_delta_mut_bind_expr:
         file=config['delta_mut_bind_expr']
     run:
         urllib.request.urlretrieve(config['delta_mut_bind_expr_url'], output.file)
+
+rule get_mut_antibody_escape:
+    """Download SARS-CoV-2 mutation antibody-escape data from URL."""
+    output:
+        file=config['mut_antibody_escape']
+    run:
+        urllib.request.urlretrieve(config['mut_antibody_escape_url'], output.file)
         
 rule process_ccs_Wuhan_Hu_1:
     """Process the PacBio CCSs for Wuhan_Hu_1 background and build variant table."""
