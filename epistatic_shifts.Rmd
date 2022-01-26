@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = T)
 knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
 
 #list of packages to install/load
-packages = c("yaml","data.table","tidyverse","gridExtra","egg","bio3d")
+packages = c("yaml","data.table","tidyverse","gridExtra","egg","bio3d","ggridges","ggrepel")
 #install any packages not already installed
 installed_packages <- packages %in% rownames(installed.packages())
 if(any(installed_packages == F)){
@@ -60,7 +60,6 @@ Read in tables of mutant measurements.
 
 ```{r input_data}
 dt <- data.table(read.csv(file=config$final_variant_scores_mut_file,stringsAsFactors=F))
-
 ```
 
 ## Calculate site-wise mean absolute error, slope from correlation in mutation effects
@@ -80,15 +79,23 @@ dt[n_bc_bind < 3, bind_min3bc := NA]
 dt[,bind_min5bc := bind]
 dt[n_bc_bind < 5, bind_min5bc := NA]
 
-#define a function for computing J-S divergence between two affinity vectors
+#define a minbc expr measurement that requires three barcodes be averaged for a final determination, otherwise change to NA
+dt[,expr_min3bc := expr]
+dt[n_bc_expr < 3, expr_min3bc := NA]
+
+dt[,expr_min5bc := expr]
+dt[n_bc_expr < 5, expr_min5bc := NA]
+
+#define a function for computing J-S distance between two affinity vectors (where affinity is given currently as log10-Kd)
 JS <- function(vec1,vec2){
   vec1_pair <- vec1[!is.na(vec1) & !is.na(vec2)]
   vec2_pair <- vec2[!is.na(vec1) & !is.na(vec2)]
-  pi1 <- exp(vec1_pair)/sum(exp(vec1_pair))
-  pi2 <- exp(vec2_pair)/sum(exp(vec2_pair))
+  pi1 <- 10^(vec1_pair)/sum(10^(vec1_pair))
+  pi2 <- 10^(vec2_pair)/sum(10^(vec2_pair))
   n <- 0.5 * (pi1+pi2)
   JS <- 0.5 * (sum(pi1*log(pi1/n)) + sum(pi2*log(pi2/n)))
-  return(sqrt(JS))
+  #return(sqrt(JS)) #if doing divergence
+  return(JS) #if doing distance
 }
 
 #first, for bind measurements
@@ -100,32 +107,20 @@ diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1
 diffs_bind <- diffs_bind[bg_1 != bg_2,]
 diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
 
-#loop through and compute mean absolute error, correlation coefficients, and regression slope
-diffs_bind$cor <- as.numeric(NA)
-diffs_bind$slope <- as.numeric(NA)
-diffs_bind$rho <- as.numeric(NA)
-diffs_bind$MAE <- as.numeric(NA) #score of mean average error from bind_cens, including values at boundary condition = 6
-diffs_bind$MAE_cens <- as.numeric(NA) #score of mean average error from bind_cens, excluding amino acids that are at the boudnary condition = 6 *in both bgs*
-diffs_bind$JSD <- as.numeric(NA) #jensen-shannon divergence, from raw bind values (lower limit 5)
-diffs_bind$JSD_min3bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 3 bcs averaged
-diffs_bind$JSD_min5bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 5 bcs averaged
-diffs_bind$JSD_cens <- as.numeric(NA) #jensen-shannon divergence, from bind_cens values (lower limit 6)
+#loop through and compute JSD for each site for each pair of bgs, for bind metric
+diffs_bind$JSD <- as.numeric(NA) #jensen-shannon distance, from raw bind values (lower limit 5)
+diffs_bind$JSD_min3bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 3 bcs averaged
+diffs_bind$JSD_min5bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 5 bcs averaged
+diffs_bind$JSD_cens <- as.numeric(NA) #jensen-shannon distance, from bind_cens values (lower limit 6)
 for(i in 1:nrow(diffs_bind)){
   x_uncens <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind]
   y_uncens <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind]
   x <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind_cens]
   y <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind_cens]
-  x_cens <- x[(x>6 | y>6)]
-  y_cens <- y[(x>6 | y>6)]
   x_min3bc <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind_min3bc]
   y_min3bc <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind_min3bc]
   x_min5bc <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind_min5bc]
   y_min5bc <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind_min5bc]
-  diffs_bind[i,cor:=cor(x,y,use="complete.obs",method="pearson")]
-  diffs_bind[i,slope:=lm(y~x)$coefficients["x"]]
-  diffs_bind[i,rho:=cor(x,y,use="complete.obs",method="spearman")]
-  diffs_bind[i,MAE:=mean(abs(lm(y~x)$residuals),na.rm=T)]
-  diffs_bind[i,MAE_cens:=mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)]
   diffs_bind[i,JSD := JS(x_uncens,y_uncens)]
   diffs_bind[i,JSD_min3bc := JS(x_min3bc,y_min3bc)]
   diffs_bind[i,JSD_min5bc := JS(x_min3bc,y_min5bc)]
@@ -141,18 +136,20 @@ diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1
 diffs_expr <- diffs_expr[bg_1 != bg_2,]
 diffs_expr <- diffs_expr[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
 
-#loop through and compute mean absolute error and correlation coefficient r
-diffs_expr$cor <- as.numeric(NA)
-diffs_expr$slope <- as.numeric(NA)
-diffs_expr$rho <- as.numeric(NA)
-diffs_expr$MAE <- as.numeric(NA)
+#loop through and compute JSD for each site for each pair of bgs, for expr metric
+diffs_expr$JSD <- as.numeric(NA) #jensen-shannon distance, from raw expr values
+diffs_expr$JSD_min3bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 3 bcs averaged
+diffs_expr$JSD_min5bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 5 bcs averaged
 for(i in 1:nrow(diffs_expr)){
-  x <- dt[target==diffs_expr[i,bg_1] & position==diffs_expr[i,site],expr]
-  y <- dt[target==diffs_expr[i,bg_2] & position==diffs_expr[i,site],expr]
-  diffs_expr[i,cor:=cor(x,y,use="complete.obs",method="pearson")]
-  diffs_expr[i,slope:=lm(y~x)$coefficients["x"]]
-  diffs_expr[i,rho:=cor(x,y,use="complete.obs",method="spearman")]
-  diffs_expr[i,MAE:=mean(abs(lm(y~x)$residuals),na.rm=T)]
+  x_uncens <- dt[target==diffs_expr[i,bg_1] & position==diffs_expr[i,site],expr]
+  y_uncens <- dt[target==diffs_expr[i,bg_2] & position==diffs_expr[i,site],expr]
+  x_min3bc <- dt[target==diffs_expr[i,bg_1] & position==diffs_expr[i,site],expr_min3bc]
+  y_min3bc <- dt[target==diffs_expr[i,bg_2] & position==diffs_expr[i,site],expr_min3bc]
+  x_min5bc <- dt[target==diffs_expr[i,bg_1] & position==diffs_expr[i,site],expr_min5bc]
+  y_min5bc <- dt[target==diffs_expr[i,bg_2] & position==diffs_expr[i,site],expr_min5bc]
+  diffs_expr[i,JSD := JS(x_uncens,y_uncens)]
+  diffs_expr[i,JSD_min3bc := JS(x_min3bc,y_min3bc)]
+  diffs_expr[i,JSD_min5bc := JS(x_min3bc,y_min5bc)]
 }
 
 ```
@@ -162,13 +159,11 @@ Plotting/visualizing:
 Utility function: plot scatterplot showing affinity of each of the 20 amino acids in a pair of sites
 
 ```{r scatterplot_function}
-plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=F, JSD=T, JSD_min3bc=F, JSD_min5bc=F, rho=F, cor=F,cutoff=5,phenotype="bind"){
+plot_scatter <- function(site, bg1, bg2, JSD=T, JSD_min3bc=F, JSD_min5bc=F,cutoff=5,phenotype="bind"){
   x <- dt[target==bg1 & position==site,get(phenotype)]
   x_ref <- dt[target==bg1 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
   y <- dt[target==bg2 & position==site,get(phenotype)]
   y_ref <- dt[target==bg2 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
-  x_cens <- x[(x>6 | y>6)]
-  y_cens <- y[(x>6 | y>6)]
   x_min3bc <- dt[target==bg1 & position==site,bind_min3bc]
   y_min3bc <- dt[target==bg2 & position==site,bind_min3bc]
   x_min5bc <- dt[target==bg1 & position==site,bind_min5bc]
@@ -178,31 +173,15 @@ plot_scatter <- function(site, bg1, bg2, MAE_slope=F, MAE=F, MAE_cens=F, JSD=T, 
   plot(x,y, xlim=c(4.5,12),ylim=c(4.5,12),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
   abline(v=x_ref,lty=2,col="red")
   abline(h=y_ref,lty=2,col="red")
-  if(MAE_slope==T){
-    val1 <- mean(abs(lm(y~x)$residuals),na.rm=T)
-    val2 <- lm(y~x)$coefficients["x"]
-    legend("topleft",bty="n",cex=1,legend=paste("MAE:",format(val1,digits=3),"\nslope:",format(val2,digits=2)))
-  }else if(MAE==T){
-    val <- mean(abs(lm(y~x)$residuals),na.rm=T)
-    legend("topleft",bty="n",cex=1,legend=paste("MAE:",format(val,digits=3)))
-  }else if(MAE_cens==T){
-    val <- mean(abs(lm(y_cens~x_cens)$residuals),na.rm=T)
-    legend("topleft",bty="n",cex=1,legend=paste("MAE (cens):",format(val,digits=3)))
-  }else if(JSD==T){
+  if(JSD==T){
     val <- JS(x,y)
-    legend("topleft",bty="n",cex=1,legend=paste("divergence:",format(val,digits=3)))
+    legend("topleft",bty="n",cex=1,legend=paste("distance:",format(val,digits=3)))
   }else if(JSD_min3bc==T){
     val <- JS(x_min3bc,y_min3bc)
-    legend("topleft",bty="n",cex=1,legend=paste("divergence (min 3bc):",format(val,digits=3)))
+    legend("topleft",bty="n",cex=1,legend=paste("distance (min 3bc):",format(val,digits=3)))
   }else if(JSD_min5bc==T){
     val <- JS(x_min5bc,y_min5bc)
-    legend("topleft",bty="n",cex=1,legend=paste("divergence (min 5bc):",format(val,digits=3)))
-  }else if(rho==T){
-    val <- cor(x,y,use="complete.obs",method="spearman")
-    legend("topleft",bty="n",cex=1,legend=paste("rho:",format(val,digits=3)))
-  }else if(cor==T){
-    val <- cor(x,y,use="complete.obs",method="pearson")
-    legend("topleft",bty="n",cex=1,legend=paste("r:",format(val,digits=3)))
+    legend("topleft",bty="n",cex=1,legend=paste("distance (min 5bc):",format(val,digits=3)))
   }
 }
 
@@ -216,12 +195,12 @@ plot_scatter(site=403,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=498,"Wuhan_Hu_1","N501Y")
 
 ```
-```{r corrs_B1351_WH1_446-loop, echo=T, fig.width=8, fig.height=8, fig.align="center", dpi=300,dev="png"}
+```{r corrs_N501Y_WH1_446-loop, echo=T, fig.width=8, fig.height=8, fig.align="center", dpi=300,dev="png"}
 par(mfrow=c(2,2))
-plot_scatter(site=446,"Wuhan_Hu_1","B1351")
-plot_scatter(site=447,"Wuhan_Hu_1","B1351")
-plot_scatter(site=448,"Wuhan_Hu_1","B1351")
-plot_scatter(site=449,"Wuhan_Hu_1","B1351")
+plot_scatter(site=446,"Wuhan_Hu_1","N501Y")
+plot_scatter(site=447,"Wuhan_Hu_1","N501Y")
+plot_scatter(site=448,"Wuhan_Hu_1","N501Y")
+plot_scatter(site=449,"Wuhan_Hu_1","N501Y")
 
 ```
 
@@ -234,9 +213,31 @@ plot_scatter(site=452,"E484K","B1351")
 
 ```
 
-TODO: Utility funciton: plot heatmap showing mutant effects profiles of the five backgrounds on a site-by-site basis
+## Line plots of JS distance from WH1 across RBD sites
 
-TODO: line plots of JSD of focal bg versus other across sites
+Make lineplots showing JS-D across sites for each variant compared to WH1.
+
+Also add gray shading for sites of escape from antibodies from our large panel of antibodies we've profiled w.r.t. WH1 escape, downloaded from: https://raw.githubusercontent.com/jbloomlab/SARS2_RBD_Ab_escape_maps/main/processed_data/escape_data.csv
+
+First, define sites of substantial antibody escape
+```{r antibody_escape_sites}
+dt_mAb <- data.table(read.csv(file=config$mut_antibody_escape,stringsAsFactors = F))
+dt_mAb <- unique(dt_mAb[condition_type=="antibody",.(condition, condition_type, condition_subtype, site, wildtype, site_total_escape, site_mean_escape, normalized_site_total_escape, normalized_site_mean_escape)])
+
+dt_mAb[,site_average_escape:=mean(normalized_site_total_escape,na.rm=T),by=c("site")]
+
+site_escape <- unique(dt_mAb[,.(wildtype, site, site_average_escape)])
+
+#define sites for labeling as those with an average of 0.05 normalized site-wise escape across all mAbs
+sig_mAb_sites <- site_escape[site_average_escape>0.05, site]
+
+
+#define some epitope classes for adding highlights
+label_df <- data.frame(xmin=sig_mAb_sites-0.5,
+                       xmax=sig_mAb_sites+0.5)
+
+```
+
 ```{r line_plots_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
 #define focal bg for others to compare to
 bg <- "Wuhan_Hu_1"
@@ -253,20 +254,18 @@ for(i in 1:nrow(temp)){
 #define colors for each bg
 group.colors <- c("Wuhan_Hu_1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "B1351"=cbPalette[6], "Delta"=cbPalette[7])
 
-#define some epitope classes for adding highlights
-label_df <- data.frame(xmin=c(382, 482, 454, 442, 416),
-                       xmax=c(387, 487, 457, 451, 418),
-                       antibody_class=c("class 4", "class 2", "class 1", "class 3", "class 1"),
-                       label=c("383-386","483-486","455-456","443-450","417"))
+#define order for plotting of bgs
+temp$target <- factor(temp$target,levels=c("E484K","N501Y","B1351","Delta"))
+
 
 ggplot(data=temp, aes(x=site, y=JSD, color=target))+
-  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T),fill=antibody_class), alpha=0.2)+
-  geom_line(size=0.5)+
+  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
+  geom_line(size=1)+
   scale_color_manual(values=group.colors)+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS divergence versus Wuhan-Hu-1")
+  ylab("JS distance versus Wuhan-Hu-1")
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1.pdf",sep=""),useDingbats=F))
 ```
@@ -274,13 +273,13 @@ invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1.pdf",sep=
 Same but require minimum 3 bc for a measurement
 ```{r line_plots_JSD_v_WH1_min3bc, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
 ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
-  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD_min3bc,na.rm=T),fill=antibody_class), alpha=0.2)+
-  geom_line(size=0.5)+
+  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
+  geom_line(size=1)+
   scale_color_manual(values=group.colors)+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS divergence versus Wuhan-Hu-1")
+  ylab("JS distance versus Wuhan-Hu-1")
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc.pdf",sep=""),useDingbats=F))
 ```
@@ -289,14 +288,15 @@ Separate facet per bg comparison
 
 ```{r line_plots_JSD_v_WH1_faceted, echo=T, fig.width=12, fig.height=12, fig.align="center", dpi=300,dev="png"}
 ggplot(data=temp, aes(x=site, y=JSD, color=target))+
-  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T),fill=antibody_class), alpha=0.2)+
-  geom_line(size=0.75)+
+  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
+  geom_line(size=1)+
   scale_color_manual(values=group.colors)+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS divergence versus Wuhan-Hu-1")+
-  facet_wrap(~target,ncol=1)
+  ylab("JS distance versus Wuhan-Hu-1")+
+  facet_wrap(~target,ncol=1)+
+  theme(strip.text.x = element_text(size = 18))
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_faceted.pdf",sep=""),useDingbats=F))
 ```
@@ -305,23 +305,74 @@ Again requiring min 3 bc
 
 ```{r line_plots_JSD_v_WH1_faceted_min3bc, echo=T, fig.width=12, fig.height=12, fig.align="center", dpi=300,dev="png"}
 ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
-  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD_min3bc,na.rm=T),fill=antibody_class), alpha=0.2)+
-  geom_line(size=0.75)+
+  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
+  geom_line(size=1)+
   scale_color_manual(values=group.colors)+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS divergence versus Wuhan-Hu-1")+
-  facet_wrap(~target,ncol=1)
+  ylab("JS distance versus Wuhan-Hu-1")+
+  facet_wrap(~target,ncol=1)+
+  theme(strip.text.x = element_text(size = 18))
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_faceted_min3bc.pdf",sep=""),useDingbats=F))
 ```
 
-## Map divergence to pdb structure
+Repeat for expression measurements (just do multiple line overlay)
+
+```{r line_plots_JSD_v_WH1_expr, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+#define focal bg for others to compare to
+bg <- "Wuhan_Hu_1"
+temp <- diffs_expr[bg_1==bg | bg_2 == bg]
+temp$target <- as.character(NA)
+for(i in 1:nrow(temp)){
+  if(temp[i,bg_1]!=bg){
+    temp[i,target:=temp[i,bg_1]]
+  }else if(temp[i,bg_2]!=bg){
+    temp[i,target:=temp[i,bg_2]]
+  }
+}
+
+#define colors for each bg
+group.colors <- c("Wuhan_Hu_1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "B1351"=cbPalette[6], "Delta"=cbPalette[7])
+
+#define order for plotting of bgs
+temp$target <- factor(temp$target,levels=c("E484K","N501Y","B1351","Delta"))
+
+
+ggplot(data=temp, aes(x=site, y=JSD, color=target))+
+  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
+  geom_line(size=1)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("JS distance versus Wuhan-Hu-1")
+
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_expr.pdf",sep=""),useDingbats=F))
+```
+
+Same but require minimum 3 bc for a measurement
+```{r line_plots_JSD_v_WH1_min3bc_expr, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
+  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
+  geom_line(size=1)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("JS distance versus Wuhan-Hu-1")
+
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_expr.pdf",sep=""),useDingbats=F))
+```
+
+## Map distance to pdb structure
+
+First, bind
 ```{r map_JSD_to_pdb}
 pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
-#iterate through backgrounds, output a pdb comparing its divergence to WH1 (using min3bc)
+#iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
 for(s in c("E484K","N501Y","B1351","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
   for(i in 1:nrow(pdb_wh1$atom)){
@@ -337,8 +388,26 @@ for(s in c("E484K","N501Y","B1351","Delta")){
 }
 
 ```
+repeat for expression measures
+```{r map_JSD_to_pdb_expr}
+pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
+#iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
+for(s in c("E484K","N501Y","B1351","Delta")){
+  b <- rep(0, length(pdb_wh1$atom$b))
+  for(i in 1:nrow(pdb_wh1$atom)){
+    if(pdb_wh1$atom$chain[i]=="E"){
+      res <- pdb_wh1$atom$resno[i]
+      JSD <- diffs_expr[bg_1=="Wuhan_Hu_1" & bg_2==s & site==res, JSD_min3bc]
+      if(length(JSD)>0){
+        b[i] <- JSD
+      }
+    }
+  }
+  write.pdb(pdb=pdb_wh1, file=paste(config$epistatic_shifts_dir,"/pdbs/",s,"_v_WH1_JSD-min3bc_expr.pdb",sep=""), b=b)
+}
 
+```
 ## Nonspecific compensation
 
 Additivity of 417/484/501 muts? Build out cycle of mutants from the different places where each mutant is measured (e.g. WH1 is also measured in E484K as the K484E mut)
@@ -442,13 +511,13 @@ Working with preliminary output generated by Will to enumerate phylogenetic subs
 Read in counts, add affinity change information, generate vectors of mutant counts in each background, plot violin plots of distributions
 
 ```{r substitution_accrual_N501Y, echo=T, fig.width=5, fig.height=6, fig.align="center", dpi=300,dev="png"}
-subs <- data.table(read.csv(file="data/background_count.csv"),stringsAsFactors = F)
+subs <- data.table(read.csv(file=config$UShER_parsed_subs_N501Y,stringsAsFactors = F))
 
 #keep just RBD changes
 subs <- subs[POS %in% seq(331,531),]
 
-#remove rows with single counts? (also, check with Will that muts to tips are not being counted?)
-subs <- subs[Count>1,]
+#remove rows with single counts?
+#subs <- subs[Count>1,]
 
 #sort by bg and position for convenience
 subs <- subs[order(subs$Background,subs$POS)]
@@ -471,8 +540,6 @@ for(i in 1:nrow(subs)){
 }
 
 
-
-
 #remove site 501 changes from these counts for now?
 subs[POS == 501, delta_bind:=NA]
 
@@ -488,12 +555,98 @@ for(i in 1:nrow(subs)){
   }
 }
 
-par(mfrow=c(2,1))
-hist(delta_bind_N501, breaks=40, xlab="",main="N501",xlim=range(c(delta_bind_N501,delta_bind_Y501),na.rm=T))
-hist(delta_bind_Y501, breaks=40, xlab="substitution effect on ACE2 affinity",main="Y501",xlim=range(c(delta_bind_N501,delta_bind_Y501),na.rm=T))
+#collapse <= -2
+delta_bind_N501[!is.na(delta_bind_N501) & delta_bind_N501 < -2] <- -2
+delta_bind_Y501[!is.na(delta_bind_Y501) & delta_bind_Y501 < -2] <- -2
+
+```
+Show distributions as joyplots (ridge plots)
+```{r substitution_accrual_N501Y_vioplot, echo=T, fig.width=5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+temp2 <- rbind(data.frame(bg=rep("N501",length(delta_bind_N501)),delta_bind=delta_bind_N501),data.frame(bg=rep("Y501",length(delta_bind_Y501)),delta_bind=delta_bind_Y501))
+
+p1 <- ggplot(temp2, aes(y=bg, x=delta_bind, height= ..ndensity..))+
+  geom_density_ridges(stat="density", na.rm=T)+
+  ggtitle("substitutions accrued on N501 vs Y501 backgrounds")+theme_classic()
+
+p1
+
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/N501_v_Y501_sub_affinity-effects_ridgeplot.pdf",sep=""),useDingbats=F))
+```
+
+Look at specific mutation occurrences on each background. Want to know whether sites with strong differences in mutation effect profiles also differ in rates of substitution occurrence. Doing first "WH1" (proxy: N501 backgrounds) versus Y501 backgrounds
+
+```{r sub_occurrence_divergence_versus_DMS_divergence, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
+#make talbe for N501 versus Y501. Note, this is all done very hackily...
+subs_N501Y <- dt[target=="Wuhan_Hu_1",.(wildtype,position,mutant,mutation,delta_bind,n_bc_bind)] 
+setnames(subs_N501Y, "delta_bind", "delta_bind_N501")
+setnames(subs_N501Y, "n_bc_bind", "n_bc_bind_N501")
+
+subs_N501Y <- merge(subs_N501Y, dt[target=="N501Y",.(wildtype,position,mutant,mutation,delta_bind,n_bc_bind)])
+setnames(subs_N501Y, "delta_bind", "delta_bind_Y501")
+setnames(subs_N501Y, "n_bc_bind", "n_bc_bind_Y501")
+setkey(subs_N501Y,position,mutant)
+
+#calc delta-deltaKd as difference in mut effect on N501 minus mut effect on Y501
+subs_N501Y$delta_delta_bind <- subs_N501Y$delta_bind_N501 - subs_N501Y$delta_bind_Y501
+
+#add column given the sitewise JS-distance for that site between WH1 versus N501Y DMS data
+subs_N501Y$site_JSD <- as.numeric(NA)
+for(i in 1:nrow(subs_N501Y)){
+  subs_N501Y[i,site_JSD := diffs_bind[bg_1=="Wuhan_Hu_1" & bg_2=="N501Y" & site==subs_N501Y[i,position], JSD_min3bc]]
+}
+
+#add columns giving counts of each mutation in N501 and Y501 backgrounds on USHER tree
+subs_N501Y$sub_count_N501 <- 0
+subs_N501Y$sub_count_Y501 <- 0
+
+for(i in 1:nrow(subs)){
+  if(subs[i,WT]!=subs[i,MUT] & subs[i,POS] != 501){
+    if(subs[i,Background]=="N501N"){
+      subs_N501Y[position==subs[i,POS] & mutant==subs[i,MUT] & wildtype==subs[i,WT], sub_count_N501 := subs[i,Count]]
+    }else if(subs[i,Background]=="N501Y"){
+      subs_N501Y[position==subs[i,POS] & mutant==subs[i,MUT] & wildtype==subs[i,WT], sub_count_Y501 := subs[i,Count]]
+    }
+  }
+}
+
+#and as sub frequency
+subs_N501Y$sub_freq_N501 <- subs_N501Y$sub_count_N501/sum(subs_N501Y$sub_count_N501)
+subs_N501Y$sub_freq_Y501 <- subs_N501Y$sub_count_Y501/sum(subs_N501Y$sub_count_Y501)
+
+#plot(log2(subs_N501Y$sub_freq_N501+min(subs_N501Y[sub_freq_N501>0,sub_freq_N501])/4),log2(subs_N501Y$sub_freq_Y501+min(subs_N501Y[sub_freq_Y501>0,sub_freq_Y501])/4),pch=19,col="#00000067",xlab="sub frequency on N501 backgrounds",ylab="sub frequency on Y501 backgrounds")
+
+#plot(subs_N501Y$sub_count_N501,subs_N501Y$sub_freq_Y501,pch=19,col="#00000067",xlab="sub count on N501 backgrounds",ylab="sub count on Y501 backgrounds")
+
+ggplot(data=subs_N501Y, aes(x=sub_count_N501, y=sub_count_Y501, color=delta_delta_bind))+
+  geom_point()+
+  theme_classic()+
+  ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
+  scale_color_gradientn(colours=c("#A94E35","#A94E35","#F48365","#FFFFFF","#7378B9","#383C6C","#383C6C"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))
+
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-site-JSD.pdf",sep=""),useDingbats=F))
 
 ```
 
+Do similar but on log2 scale
 
+```{r sub_occurrence_divergence_versus_DMS_divergence_log2, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
+#subs_N501Y$sub_count_N501_log2pc <- log2(subs_N501Y$sub_count_N501+1)
+#subs_N501Y$sub_count_Y501_log2pc <- log2(subs_N501Y$sub_count_Y501+1)
 
+subs_N501Y$sub_count_N501_pc <- subs_N501Y$sub_count_N501; subs_N501Y[sub_count_N501_pc==0,sub_count_N501_pc:=0.1]
+subs_N501Y$sub_count_Y501_pc <- subs_N501Y$sub_count_Y501; subs_N501Y[sub_count_Y501_pc==0,sub_count_Y501_pc:=0.1]
+
+set.seed(500)
+ggplot(data=subs_N501Y[!is.na(delta_delta_bind),], aes(x=sub_count_N501_pc, y=sub_count_Y501_pc, color=delta_delta_bind))+
+  geom_jitter(width=0.15,height=0.15,shape=16)+
+  theme_classic()+
+  ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
+  scale_color_gradientn(colours=c("#A94E35","#A94E35","#F4836590","#DDDDDD50","#7378B990","#383C6C","#383C6C"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_x_continuous(trans = 'log2')+
+  scale_y_continuous(trans = 'log2')+
+  geom_text_repel(aes(label=ifelse(((delta_delta_bind < -1 | delta_delta_bind > 1) & (sub_count_N501 >1 | sub_count_Y501 >1) ),as.character(mutation),'')),size=3,color="gray60")
+
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-site-JSD_logscale.pdf",sep=""),useDingbats=F))
+
+```
 

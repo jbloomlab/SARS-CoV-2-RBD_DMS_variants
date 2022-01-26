@@ -1,0 +1,17 @@
+Date_Read,Plate,Sample,SampleNum,Virus,PlateLayout,StartDil,DilFactor
+210121,plate1_WT,S2H14,1,wildtype,layout1.csv,400,4
+210121,plate1_WT,S2H13,2,wildtype,layout1.csv,200,4
+210121,plate1_WT,S2X58,3,wildtype,layout1.csv,4,4
+210121,plate1_WT,S2E12,4,wildtype,layout1.csv,2,4
+210121,plate2_Y449H,S2H14,1,Y449H,layout1.csv,400,4
+210121,plate2_Y449H,S2H13,2,Y449H,layout1.csv,200,4
+210121,plate2_Y449H,S2X58,3,Y449H,layout1.csv,4,4
+210121,plate2_Y449H,S2E12,4,Y449H,layout1.csv,2,4
+210121,plate3_N501Y,S2H14,1,N501Y,layout1.csv,400,4
+210121,plate3_N501Y,S2H13,2,N501Y,layout1.csv,200,4
+210121,plate3_N501Y,S2X58,3,N501Y,layout1.csv,4,4
+210121,plate3_N501Y,S2E12,4,N501Y,layout1.csv,2,4
+210121,plate4_dbl,S2H14,1,Y449H+N501Y,layout1.csv,400,4
+210121,plate4_dbl,S2H13,2,Y449H+N501Y,layout1.csv,200,4
+210121,plate4_dbl,S2X58,3,Y449H+N501Y,layout1.csv,4,4
+210121,plate4_dbl,S2E12,4,Y449H+N501Y,layout1.csv,2,4
