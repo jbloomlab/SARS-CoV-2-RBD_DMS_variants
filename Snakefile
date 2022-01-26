@@ -37,19 +37,6 @@ assert len(pacbio_runs['pacbioRun'].unique()) == len(pacbio_runs['pacbioRun'])
 # Information on samples and barcode runs -------------------------------------
 barcode_runs = pd.read_csv(config['barcode_runs'])
 
-# barcode runs with R1 files expanded by glob
-barcode_runs_expandR1 = (
-    barcode_runs
-    .assign(R1=lambda x: x['R1'].str.split('; ').map(
-                    lambda y: list(itertools.chain(*map(glob.glob, y)))),
-            n_R1=lambda x: x['R1'].map(len),
-            sample_lib=lambda x: x['sample'] + '_' + x['library'],
-            )
-    )
-
-if any(barcode_runs_expandR1['n_R1'] < 1):
-    raise ValueError(f"no R1 for {barcode_runs_expandR1.query('n_R1 < 1')}")    
-
 # Rules -----------------------------------------------------------------------
 
 # making this summary is the target rule (in place of `all`) since it
@@ -60,6 +47,7 @@ rule make_summary:
         dag=os.path.join(config['summary_dir'], 'dag.svg'),
         get_mut_bind_expr=config['mut_bind_expr'],
         get_delta_mut_bind_expr=config['delta_mut_bind_expr'],
+        get_mut_antibody_escape=config['mut_antibody_escape'],
         process_ccs_Wuhan_Hu_1=nb_markdown('process_ccs_Wuhan_Hu_1.ipynb'),
         process_ccs_E484K=nb_markdown('process_ccs_E484K.ipynb'),
         process_ccs_N501Y=nb_markdown('process_ccs_N501Y.ipynb'),
@@ -76,9 +64,8 @@ rule make_summary:
         variant_expression_file=config['expression_sortseq_file'],
         collapse_scores='results/summary/collapse_scores.md',
         mut_phenos_file=config['final_variant_scores_mut_file'],
-        UShER_tree=config['UShER_tree'],
-        refseq=config['UShER_ref'],
-        gtf=config['UShER_gtf'],
+        sars2_subs=config['UShER_annotated_subs'],
+        parsed_subs_N501Y=config['UShER_parsed_subs_N501Y']
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -114,6 +101,8 @@ rule make_summary:
             
             6. [Derive final genotype-level phenotypes from replicate barcoded sequences]({path(input.collapse_scores)}).
                Generates final phenotypes, recorded in [this file]({path(input.mut_phenos_file)}).
+               
+            7. Download trees and reference files for analysis of the mutation-annotated tree provided in [UShER](https://github.com/yatisht/usher), and parse substitution occurrence counts by background: [N501Y]{path(input.parsed_subs_N501Y)}
 
 
             """
@@ -132,54 +121,72 @@ rule make_dag:
 rule get_UShER_tree:
     """Get UShER SARS-CoV-2 tree: https://github.com/yatisht/usher."""
     output:
-        directory=directory(config['UShER_dir']),
         mat=config['UShER_tree'],
+        nwk=config['UShER_tree_nwk']
+    params:
+        directory=directory(config['UShER_dir']),
+        nwk_gz=config['UShER_tree_nwk_gz']
     shell:
         """
+        mkdir -p {params.directory}
         wget \
             -r \
             -l 1 \
             -np \
             -nH \
             -R "index.html*" \
-            -P {output.directory} \
+            -P {params.directory} \
             http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/UShER_SARS-CoV-2/
-        mv {output.directory}/goldenPath/wuhCor1/UShER_SARS-CoV-2/* {output.directory}
-        rm -r {output.directory}/goldenPath
+        mv {params.directory}/goldenPath/wuhCor1/UShER_SARS-CoV-2/* {params.directory}
+        rm -r {params.directory}/goldenPath
+        gunzip {params.nwk_gz}
         """
 
-rule get_UShER_ref_files:
-    """Get UShER reference sequence and gene annotations."""
+rule get_UShER_gtf_file:
+    """Get UShER reference gene annotations."""
     output:
-    	refseq=config['UShER_ref'],
     	gtf=config['UShER_gtf']
     shell:
         """
-        efetch \
-            -format gb \
-            -db nuccore \
-            -id NC_045512.2 \
-            > {output.refseq}
         wget http://hgdownload.soe.ucsc.edu/goldenPath/wuhCor1/bigZips/genes/ncbiGenes.gtf.gz
         gunzip ncbiGenes.gtf.gz
         mv ./ncbiGenes.gtf {output.gtf}
         """
 
-
-rule genomic_mutcounts:
-    """Get counts of each genomic amino acid mutation."""
-    input:
-    	mat=config['UShER_tree']
+rule get_UShER_refseq_file:
+    """Get UShER reference sequence fasta."""
     output:
-    	genomic_mutcounts='results/genomic_mutcounts.csv'
+    	refseq=config['UShER_ref'],
+    run:
+        urllib.request.urlretrieve("https://raw.githubusercontent.com/yatisht/usher/master/test/NC_045512v2.fa", output.refseq)
+    
+
+rule enumerate_UShER_subs:
+    """Get counts of each amino acid mutation on the UShER MAT."""
+    input:
+    	mat=config['UShER_tree'],
+    	gtf=config['UShER_gtf'],
+    	refseq=config['UShER_ref']
+    output:
+    	subs=config['UShER_annotated_subs']
     shell:
         # https://usher-wiki.readthedocs.io/en/latest/matUtils.html#summary
         """
-        matUtils summary \
-            -T 4 \
-            -i {input.mat} \
-            -m {output.genomic_mutcounts}
+        matUtils summary --translate {output.subs} -i {input.mat} -g {input.gtf} -f {input.refseq}
         """
+
+rule parse_UShER_subs_N501Y:
+    """Get counts of substitutions on N501 versus Y501 backgrounds."""
+    input:
+    	nwk=config['UShER_tree_nwk'],
+    	subs=config['UShER_annotated_subs']
+    output:
+    	parsed_subs_N501Y=config['UShER_parsed_subs_N501Y']
+    shell:
+        """
+        python ./scripts/Will_search_mat_211123.py -t {input.nwk} -a {input.subs} -s N501Y --skip_transitions=False -o {output.parsed_subs_N501Y}
+        """
+
 
 rule collapse_scores:
     input:
@@ -280,6 +287,13 @@ rule get_delta_mut_bind_expr:
         file=config['delta_mut_bind_expr']
     run:
         urllib.request.urlretrieve(config['delta_mut_bind_expr_url'], output.file)
+
+rule get_mut_antibody_escape:
+    """Download SARS-CoV-2 mutation antibody-escape data from URL."""
+    output:
+        file=config['mut_antibody_escape']
+    run:
+        urllib.request.urlretrieve(config['mut_antibody_escape_url'], output.file)
         
 rule process_ccs_Wuhan_Hu_1:
     """Process the PacBio CCSs for Wuhan_Hu_1 background and build variant table."""

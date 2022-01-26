@@ -1,0 +1,431 @@
+---
+title: "Titer Spike pseudovirus by flow cytometry"
+output:
+  github_document:
+    html_preview: no
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, message=FALSE, warning=FALSE, error=FALSE}
+require("knitr")
+knitr::opts_chunk$set(echo = T)
+knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
+#list of packages to install/load
+packages = c("ggplot2", "data.table", "tidyverse", "dplyr", "gridExtra")
+#install any packages not already installed
+installed_packages <- packages %in% rownames(installed.packages())
+if(any(installed_packages == F)){
+  install.packages(packages[!installed_packages])
+}
+#load packages
+invisible(lapply(packages, library, character.only=T))
+#make results directory
+if(!file.exists("results")){
+ dir.create(file.path("results"))
+}
+```
+
+## Experiment: Titer Spike point mutant pseudovirus
+
+**2022-01-17 (ACE2hi)**
+**2022-01-24 (ACE2lo)**
+**2022-01-17 (p24 ELISA)**
+
+### Define colorblind-friendly palette
+```{r}
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+               "#0072B2", "#D55E00", "#CC79A7")
+# The palette with black
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7")
+```
+
+### Read in data from titering (luciferase) and p24 quantifications
+```{r read_input}
+dt <- read.csv(file="./titer_data/all_data.csv", stringsAsFactors=F)
+head(dt)
+```
+
+### Plot relative titers as measured by luciferase activity for WH1 cycle, HEK-ACE2 cell line
+```{r}
+dt_WH1 <- dt[dt$background=="WH1_D614G",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "Y449H", "N501Y", "Y449H/N501Y")))
+
+ggplot(dt_WH1,
+       aes(genotype, RLU_per_uL_ACE2hi/exp(mean(log(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2hi"]))))
+       ) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e-6, 1e1)) +
+  xlab("Spike gene") +
+  ylab("relative titer, ACE2-high cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_D614G-cycle_ACE2hi.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+### Plot absolute (RLU/uL) titers as measured by luciferase activity for WH1 cycle, HEK-ACE2 cell line
+```{r}
+ggplot(dt_WH1,
+       aes(genotype, RLU_per_uL_ACE2hi)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e0, 1e6)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/uL), ACE2-high cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_D614G-cycle_absolute_ACE2hi.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+
+
+### Plot relative titers as measured by luciferase activity for omicron cycle, HEK-ACE2 cell line
+```{r}
+dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+
+ggplot(dt_omicron,
+       aes(genotype, RLU_per_uL_ACE2hi/exp(mean(log(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]))))
+       ) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(5e-5, 1e1)) +
+  xlab("Spike gene") +
+  ylab("relative titer, ACE2-high cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_omicron-cycle_ACE2hi.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+
+### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, HEK-ACE2 cell line
+```{r}
+dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+
+ggplot(dt_omicron,
+       aes(genotype, RLU_per_uL_ACE2hi)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e0, 1e6)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/uL), ACE2-high cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_omicron-cycle_absolute_ACE2hi.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+
+### Plot relative titers as measured by luciferase activity for WH1 cycle, "clone A" cell line
+```{r}
+
+ggplot(dt_WH1,
+       aes(genotype, RLU_per_uL_ACE2lo/exp(mean(log(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2lo"]))))
+       ) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e-5, 1e1)) +
+  xlab("Spike gene") +
+  ylab("relative titer, ACE2-low cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_D614G-cycle_ACE2lo.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+### Plot absolute (RLU/uL) titers as measured by luciferase activity for WH1 cycle, "clone A" cell line
+```{r}
+ggplot(dt_WH1,
+       aes(genotype, RLU_per_uL_ACE2lo)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e0, 1e5)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/uL), ACE2-low cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_D614G-cycle_absolute_ACE2lo.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+
+
+### Plot relative titers as measured by luciferase activity for omicron cycle, "clone A" cell line
+```{r}
+dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+
+ggplot(dt_omicron,
+       aes(genotype, RLU_per_uL_ACE2lo/exp(mean(log(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]))))
+       ) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(5e-5, 1e1)) +
+  xlab("Spike gene") +
+  ylab("relative titer, ACE2-low cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_omicron-cycle_ACE2lo.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+
+### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, HEK-ACE2 cell line
+```{r}
+dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+
+ggplot(dt_omicron,
+       aes(genotype, RLU_per_uL_ACE2lo)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e0, 5e4)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/uL), ACE2-low cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_omicron-cycle_absolute_ACE2lo.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+```
+
+
+### Plot titers as RLU per pg p24 for WH1 cycle, HEK-ACE2 cell line
+
+```{r}
+dt$RLU_per_pg_p24_ACE2hi <- dt$RLU_per_uL_ACE2hi * 1000 / dt$p24_pg_per_mL
+dt$RLU_per_pg_p24_ACE2lo <- dt$RLU_per_uL_ACE2lo * 1000 / dt$p24_pg_per_mL
+```
+
+```{r}
+dt_WH1 <- dt[dt$background=="WH1_D614G",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "Y449H", "N501Y", "Y449H/N501Y")))
+
+ggplot(dt_WH1,
+       aes(genotype, RLU_per_pg_p24_ACE2hi)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e-3, 1e3)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/pg p24), ACE2-high cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_D614G-cycle_RLU-per-pg-p24_ACE2hi.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+
+```
+
+
+### Plot titers as RLU per pg p24 for WH1 cycle, "clone A" cell line
+```{r}
+dt_WH1 <- dt[dt$background=="WH1_D614G",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "Y449H", "N501Y", "Y449H/N501Y")))
+
+ggplot(dt_WH1,
+       aes(genotype, RLU_per_pg_p24_ACE2lo)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e-3, 1e2)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/pg p24), ACE2-low cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_D614G-cycle_RLU-per-pg-p24_ACE2lo.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+
+```
+
+### Plot titers as RLU per pg p24 for Omicron cycle, HEK-ACE2 cell line
+
+```{r}
+dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+
+ggplot(dt_omicron,
+       aes(genotype, RLU_per_pg_p24_ACE2hi)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e-5, 1e3)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/pg p24), ACE2-high cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_omicron-cycle_RLU-per-pg-p24_ACE2hi.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+
+```
+
+
+### Plot titers as RLU per pg p24 for omicron cycle, "clone A" cell line
+```{r}
+ggplot(dt_omicron,
+       aes(genotype, RLU_per_pg_p24_ACE2lo)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(8e-4, 1e2)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/pg p24), ACE2-low cell line") +
+  theme_bw()  +
+  ggtitle("Spike-pseudotyped virus") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(
+  "./results/titers_omicron-cycle_RLU-per-pg-p24_ACE2lo.pdf",
+  scale = 1,
+  width = 6,
+  height = 4,
+  useDingbats=F
+)
+
+```
+### t-tests for titer differences in omicron cycle
+```{r}
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
+
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
+
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
+
+t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
+
+
+```

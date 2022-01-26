@@ -1,0 +1,21 @@
+# config for analysis
+fixtop: True
+fixbottom: 0
+
+Ab_order:
+  - S2H14
+  - S2H13
+  - S2X58
+  - S2E12
+
+virus_order:
+  - wildtype
+  - Y449H
+  - N501Y
+  - Y449H+N501Y
+
+# the neutralization limit of detection is equal to the starting dilution
+NT50_LOD_S2H14: 400
+NT50_LOD_S2H13: 200
+NT50_LOD_S2X58: 4
+NT50_LOD_S2E12: 2

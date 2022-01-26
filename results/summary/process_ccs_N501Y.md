@@ -138,6 +138,20 @@ display(HTML(pacbio_runs.to_html(index=False)))
       <td>pool2_N501Y_210701_A</td>
       <td>results/ccs/pool2_N501Y_210701_A_ccs.fastq.gz</td>
     </tr>
+    <tr>
+      <td>pool1</td>
+      <td>N501Y</td>
+      <td>211118_A</td>
+      <td>pool1_N501Y_211118_A</td>
+      <td>results/ccs/pool1_N501Y_211118_A_ccs.fastq.gz</td>
+    </tr>
+    <tr>
+      <td>pool1</td>
+      <td>N501Y</td>
+      <td>211118_B</td>
+      <td>pool1_N501Y_211118_B</td>
+      <td>results/ccs/pool1_N501Y_211118_B_ccs.fastq.gz</td>
+    </tr>
   </tbody>
 </table>
 
@@ -568,7 +582,7 @@ print(f"Read {len(processed_ccs)} CCSs from {nlibs} libraries and {ntargets} tar
 display(HTML(processed_ccs.head().to_html(index=False)))
 ```
 
-    Read 421380 CCSs from 2 libraries and 1 targets.
+    Read 448849 CCSs from 2 libraries and 1 targets.
 
 
 
@@ -671,9 +685,9 @@ display(HTML(
     <tr>
       <th rowspan="2" valign="top">N501Y</th>
       <th>pool1</th>
-      <td>222407</td>
-      <td>52113</td>
-      <td>4.27</td>
+      <td>249876</td>
+      <td>54332</td>
+      <td>4.60</td>
     </tr>
     <tr>
       <th>pool2</th>
@@ -932,9 +946,9 @@ display(HTML(empirical_acc.to_html(index=False)))
   <tbody>
     <tr>
       <td>pool1</td>
-      <td>0.958133</td>
+      <td>0.959272</td>
       <td>retained</td>
-      <td>186093</td>
+      <td>209676</td>
       <td>False</td>
     </tr>
     <tr>
@@ -946,9 +960,9 @@ display(HTML(empirical_acc.to_html(index=False)))
     </tr>
     <tr>
       <td>pool1</td>
-      <td>0.987246</td>
+      <td>0.986981</td>
       <td>retained, no indel</td>
-      <td>178439</td>
+      <td>201046</td>
       <td>True</td>
     </tr>
     <tr>
@@ -960,9 +974,9 @@ display(HTML(empirical_acc.to_html(index=False)))
     </tr>
     <tr>
       <td>pool1</td>
-      <td>0.968226</td>
+      <td>0.969227</td>
       <td>10X accuracy</td>
-      <td>173070</td>
+      <td>195237</td>
       <td>False</td>
     </tr>
     <tr>
@@ -974,9 +988,9 @@ display(HTML(empirical_acc.to_html(index=False)))
     </tr>
     <tr>
       <td>pool1</td>
-      <td>0.987383</td>
+      <td>0.987335</td>
       <td>10X accuracy, no indel</td>
-      <td>167650</td>
+      <td>189073</td>
       <td>False</td>
     </tr>
     <tr>
@@ -1262,7 +1276,7 @@ _ = p.draw()
     <tr>
       <td>pool1</td>
       <td>N501Y</td>
-      <td>46554</td>
+      <td>48339</td>
     </tr>
     <tr>
       <td>pool2</td>
@@ -1515,9 +1529,9 @@ display(HTML(
   <tbody>
     <tr>
       <th>N501Y</th>
-      <td>46554</td>
+      <td>48339</td>
       <td>50728</td>
-      <td>97282</td>
+      <td>99067</td>
     </tr>
   </tbody>
 </table>
@@ -1702,15 +1716,15 @@ display(HTML(
       <th rowspan="9" valign="top">False</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>121</td>
+      <td>94</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>209</td>
+      <td>183</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3489</td>
+      <td>3542</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1728,29 +1742,29 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>29</td>
+      <td>24</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>61</td>
+      <td>46</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3729</td>
+      <td>3749</td>
     </tr>
     <tr>
       <th rowspan="9" valign="top">True</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>287</td>
+      <td>260</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>228</td>
+      <td>202</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3505</td>
+      <td>3558</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1768,30 +1782,30 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>187</td>
+      <td>182</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>79</td>
+      <td>64</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3754</td>
+      <td>3774</td>
     </tr>
     <tr>
       <th rowspan="18" valign="top">single</th>
       <th rowspan="9" valign="top">False</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>254</td>
+      <td>216</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>328</td>
+      <td>299</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3237</td>
+      <td>3304</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1809,29 +1823,29 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>76</td>
+      <td>62</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>129</td>
+      <td>107</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3614</td>
+      <td>3650</td>
     </tr>
     <tr>
       <th rowspan="9" valign="top">True</th>
       <th rowspan="3" valign="top">pool1</th>
       <th>0</th>
-      <td>438</td>
+      <td>400</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>339</td>
+      <td>310</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3243</td>
+      <td>3310</td>
     </tr>
     <tr>
       <th rowspan="3" valign="top">pool2</th>
@@ -1849,15 +1863,15 @@ display(HTML(
     <tr>
       <th rowspan="3" valign="top">all libraries</th>
       <th>0</th>
-      <td>250</td>
+      <td>236</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>148</td>
+      <td>126</td>
     </tr>
     <tr>
       <th>&gt;1</th>
-      <td>3622</td>
+      <td>3658</td>
     </tr>
   </tbody>
 </table>

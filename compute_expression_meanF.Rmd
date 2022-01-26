@@ -43,7 +43,7 @@ First, we will read in metadata on our sort samples, the table giving number of 
 
 ```{r input_data}
 #read dataframe with list of barcode runs
-barcode_runs <- read.csv(file=config$barcode_runs,stringsAsFactors=F); barcode_runs <- subset(barcode_runs, select=-c(R1,R1_prefix,R1_samplename,R1_postfix))
+barcode_runs <- read.csv(file=config$barcode_runs,stringsAsFactors=F); barcode_runs <- subset(barcode_runs, select=-c(R1))
 
 #eliminate rows from barcode_runs that are not from an expression sort-seq experiment
 barcode_runs <- barcode_runs[barcode_runs$sample_type == "SortSeq",]
