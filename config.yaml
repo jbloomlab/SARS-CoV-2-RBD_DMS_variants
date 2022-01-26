@@ -70,6 +70,7 @@ Titeseq_Kds_file: results/binding_Kd/bc_binding.csv
 final_variant_scores_dir: results/final_variant_scores
 final_variant_scores_mut_file: results/final_variant_scores/final_variant_scores.csv
 epistatic_shifts_dir: results/epistatic_shifts
+JSD_v_WH1_file: results/epistatic_shifts/JSD_versus_Wuhan1_by_target.csv
 UShER_dir: results/UShER_SARS-CoV-2
 UShER_tree: results/UShER_SARS-CoV-2/public-latest.all.masked.pb
 UShER_tree_nwk_gz: results/UShER_SARS-CoV-2/public-latest.all.nwk.gz
