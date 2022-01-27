@@ -150,11 +150,11 @@ JS <- function(vec1,vec2){
 #first, for bind measurements
 #data table for storing difference in correlation in profiles between bg pairs at each site
 #generate table with all combinations of bg_1 and bg_2 for each site
-diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta"),bg_1=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta")))
+diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta"),bg_1=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta")))
 
 #remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
 diffs_bind <- diffs_bind[bg_1 != bg_2,]
-diffs_bind <- diffs_bind[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
+diffs_bind <- diffs_bind[bg_1 == "Wuhan-Hu-1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","Beta","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("Beta","Delta")) | bg_1=="Beta" & bg_2=="Delta"]
 
 #loop through and compute JSD for each site for each pair of bgs, for bind metric
 diffs_bind$JSD <- as.numeric(NA) #jensen-shannon distance, from raw bind values (lower limit 5)
@@ -175,11 +175,11 @@ for(i in 1:nrow(diffs_bind)){
 #repeat for expr measurements
 #data table for storign difference in correlation in profiles between bg pairs at each site
 #generate table with all combinations of bg_1 and bg_2 for each site
-diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta"),bg_1=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta")))
+diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta"),bg_1=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta")))
 
 #remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
 diffs_expr <- diffs_expr[bg_1 != bg_2,]
-diffs_expr <- diffs_expr[bg_1 == "Wuhan_Hu_1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","B1351","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("B1351","Delta")) | bg_1=="B1351" & bg_2=="Delta"]
+diffs_expr <- diffs_expr[bg_1 == "Wuhan-Hu-1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","Beta","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("Beta","Delta")) | bg_1=="Beta" & bg_2=="Delta"]
 
 #loop through and compute JSD for each site for each pair of bgs, for expr metric
 diffs_expr$JSD <- as.numeric(NA) #jensen-shannon distance, from raw expr values
@@ -235,30 +235,30 @@ plot_scatter <- function(site, bg1, bg2, JSD=F, JSD_min3bc=T, JSD_min5bc=F,n_bc_
 
 ``` r
 par(mfrow=c(2,2))
-plot_scatter(site=484,"Wuhan_Hu_1","N501Y")
-plot_scatter(site=501,"Wuhan_Hu_1","N501Y")
-plot_scatter(site=403,"Wuhan_Hu_1","N501Y")
-plot_scatter(site=498,"Wuhan_Hu_1","N501Y")
+plot_scatter(site=484,"Wuhan-Hu-1","N501Y")
+plot_scatter(site=501,"Wuhan-Hu-1","N501Y")
+plot_scatter(site=403,"Wuhan-Hu-1","N501Y")
+plot_scatter(site=498,"Wuhan-Hu-1","N501Y")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/example_correlation-1.png" style="display: block; margin: auto;" />
 
 ``` r
 par(mfrow=c(2,2))
-plot_scatter(site=446,"Wuhan_Hu_1","N501Y")
-plot_scatter(site=447,"Wuhan_Hu_1","N501Y")
-plot_scatter(site=448,"Wuhan_Hu_1","N501Y")
-plot_scatter(site=449,"Wuhan_Hu_1","N501Y")
+plot_scatter(site=446,"Wuhan-Hu-1","N501Y")
+plot_scatter(site=447,"Wuhan-Hu-1","N501Y")
+plot_scatter(site=448,"Wuhan-Hu-1","N501Y")
+plot_scatter(site=449,"Wuhan-Hu-1","N501Y")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/corrs_N501Y_WH1_446-loop-1.png" style="display: block; margin: auto;" />
 
 ``` r
 par(mfrow=c(2,2))
-plot_scatter(site=452,"Wuhan_Hu_1","B1351")
-plot_scatter(site=452,"Wuhan_Hu_1","N501Y")
-plot_scatter(site=452,"Wuhan_Hu_1","E484K")
-plot_scatter(site=452,"E484K","B1351")
+plot_scatter(site=452,"Wuhan-Hu-1","Beta")
+plot_scatter(site=452,"Wuhan-Hu-1","N501Y")
+plot_scatter(site=452,"Wuhan-Hu-1","E484K")
+plot_scatter(site=452,"E484K","Beta")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/corrs_452-1.png" style="display: block; margin: auto;" />
@@ -293,7 +293,7 @@ label_df <- data.frame(xmin=sig_mAb_sites-0.5,
 
 ``` r
 #define focal bg for others to compare to
-bg <- "Wuhan_Hu_1"
+bg <- "Wuhan-Hu-1"
 temp <- diffs_bind[bg_1==bg | bg_2 == bg]
 temp$target <- as.character(NA)
 for(i in 1:nrow(temp)){
@@ -305,10 +305,10 @@ for(i in 1:nrow(temp)){
 }
 
 #define colors for each bg
-group.colors <- c("Wuhan_Hu_1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "B1351"=cbPalette[6], "Delta"=cbPalette[7])
+group.colors <- c("Wuhan-Hu-1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "Beta"=cbPalette[6], "Delta"=cbPalette[7])
 
 #define order for plotting of bgs
-temp$target <- factor(temp$target,levels=c("E484K","N501Y","B1351","Delta"))
+temp$target <- factor(temp$target,levels=c("E484K","N501Y","Beta","Delta"))
 
 
 ggplot(data=temp, aes(x=site, y=JSD, color=target))+
@@ -400,7 +400,7 @@ Repeat for expression measurements (just do multiple line overlay)
 
 ``` r
 #define focal bg for others to compare to
-bg <- "Wuhan_Hu_1"
+bg <- "Wuhan-Hu-1"
 temp <- diffs_expr[bg_1==bg | bg_2 == bg]
 temp$target <- as.character(NA)
 for(i in 1:nrow(temp)){
@@ -412,10 +412,10 @@ for(i in 1:nrow(temp)){
 }
 
 #define colors for each bg
-group.colors <- c("Wuhan_Hu_1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "B1351"=cbPalette[6], "Delta"=cbPalette[7])
+group.colors <- c("Wuhan-Hu-1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "Beta"=cbPalette[6], "Delta"=cbPalette[7])
 
 #define order for plotting of bgs
-temp$target <- factor(temp$target,levels=c("E484K","N501Y","B1351","Delta"))
+temp$target <- factor(temp$target,levels=c("E484K","N501Y","Beta","Delta"))
 
 
 ggplot(data=temp, aes(x=site, y=JSD, color=target))+
@@ -465,12 +465,12 @@ pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
 ``` r
 #iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
-for(s in c("E484K","N501Y","B1351","Delta")){
+for(s in c("E484K","N501Y","Beta","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
   for(i in 1:nrow(pdb_wh1$atom)){
     if(pdb_wh1$atom$chain[i]=="E"){
       res <- pdb_wh1$atom$resno[i]
-      JSD <- diffs_bind[bg_1=="Wuhan_Hu_1" & bg_2==s & site==res, JSD_min3bc]
+      JSD <- diffs_bind[bg_1=="Wuhan-Hu-1" & bg_2==s & site==res, JSD_min3bc]
       if(length(JSD)>0){
         b[i] <- JSD
       }
@@ -490,12 +490,12 @@ pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
 ``` r
 #iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
-for(s in c("E484K","N501Y","B1351","Delta")){
+for(s in c("E484K","N501Y","Beta","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
   for(i in 1:nrow(pdb_wh1$atom)){
     if(pdb_wh1$atom$chain[i]=="E"){
       res <- pdb_wh1$atom$resno[i]
-      JSD <- diffs_expr[bg_1=="Wuhan_Hu_1" & bg_2==s & site==res, JSD_min3bc]
+      JSD <- diffs_expr[bg_1=="Wuhan-Hu-1" & bg_2==s & site==res, JSD_min3bc]
       if(length(JSD)>0){
         b[i] <- JSD
       }
@@ -514,42 +514,42 @@ measured in E484K as the K484E mut)
 ``` r
 cycle_bind <- data.table()
 
-cycle_bind$geno <- "Wuhan_Hu_1"
-cycle_bind$bind <- dt[target=="Wuhan_Hu_1" & position==331 & wildtype==mutant,bind]
-cycle_bind$n_bc <- dt[target=="Wuhan_Hu_1" & position==331 & wildtype==mutant,n_bc_bind]
+cycle_bind$geno <- "Wuhan-Hu-1"
+cycle_bind$bind <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,bind]
+cycle_bind$n_bc <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,n_bc_bind]
 cycle_bind$nmut <- 0
 
 
-cycle_bind <- rbind(cycle_bind,list("Wuhan_Hu_1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
-cycle_bind <- rbind(cycle_bind,list("Wuhan_Hu_1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
 
 
 #K417N
-cycle_bind <- rbind(cycle_bind,list("K417N",dt[target=="Wuhan_Hu_1" & position==417 & mutant=="N",bind],dt[target=="Wuhan_Hu_1" & position==417 & mutant=="N",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("K417N",dt[target=="Wuhan-Hu-1" & position==417 & mutant=="N",bind],dt[target=="Wuhan-Hu-1" & position==417 & mutant=="N",n_bc_bind],1))
 
 #E484K
-cycle_bind <- rbind(cycle_bind,list("E484K",dt[target=="Wuhan_Hu_1" & position==484 & mutant=="K",bind],dt[target=="Wuhan_Hu_1" & position==484 & mutant=="K",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("E484K",dt[target=="Wuhan-Hu-1" & position==484 & mutant=="K",bind],dt[target=="Wuhan-Hu-1" & position==484 & mutant=="K",n_bc_bind],1))
 cycle_bind <- rbind(cycle_bind,list("E484K",dt[target=="E484K" & position==484 & mutant==wildtype,bind],dt[target=="E484K" & position==484 & mutant==wildtype,n_bc_bind],1))
 
 #N501Y
-cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan_Hu_1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan_Hu_1" & position==501 & mutant=="Y",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",n_bc_bind],1))
 cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="N501Y" & position==484 & mutant==wildtype,bind],dt[target=="N501Y" & position==484 & mutant==wildtype,n_bc_bind],1))
 
 #K417N/E484K
 cycle_bind <- rbind(cycle_bind,list("K417N/E484K",dt[target=="E484K" & position==417 & mutant=="N",bind],dt[target=="E484K" & position==417 & mutant=="N",n_bc_bind],2))
-cycle_bind <- rbind(cycle_bind,list("K417N/E484K",dt[target=="B1351" & position==501 & mutant=="N",bind],dt[target=="B1351" & position==501 & mutant=="N",n_bc_bind],2))
+cycle_bind <- rbind(cycle_bind,list("K417N/E484K",dt[target=="Beta" & position==501 & mutant=="N",bind],dt[target=="Beta" & position==501 & mutant=="N",n_bc_bind],2))
 
 #K417N/N501Y
 cycle_bind <- rbind(cycle_bind,list("K417N/N501Y",dt[target=="N501Y" & position==417 & mutant=="N",bind],dt[target=="N501Y" & position==417 & mutant=="N",n_bc_bind],2))
-cycle_bind <- rbind(cycle_bind,list("K417N/N501Y",dt[target=="B1351" & position==484 & mutant=="E",bind],dt[target=="B1351" & position==484 & mutant=="E",n_bc_bind],2))
+cycle_bind <- rbind(cycle_bind,list("K417N/N501Y",dt[target=="Beta" & position==484 & mutant=="E",bind],dt[target=="Beta" & position==484 & mutant=="E",n_bc_bind],2))
 
 #E484K/N501Y
 cycle_bind <- rbind(cycle_bind,list("E484K/N501Y",dt[target=="E484K" & position==501 & mutant=="Y",bind],dt[target=="E484K" & position==501 & mutant=="Y",n_bc_bind],2))
 cycle_bind <- rbind(cycle_bind,list("E484K/N501Y",dt[target=="N501Y" & position==484 & mutant=="K",bind],dt[target=="N501Y" & position==484 & mutant=="K",n_bc_bind],2))
-cycle_bind <- rbind(cycle_bind,list("E484K/N501Y",dt[target=="B1351" & position==417 & mutant=="K",bind],dt[target=="B1351" & position==417 & mutant=="K",n_bc_bind],2))
+cycle_bind <- rbind(cycle_bind,list("E484K/N501Y",dt[target=="Beta" & position==417 & mutant=="K",bind],dt[target=="Beta" & position==417 & mutant=="K",n_bc_bind],2))
 
-#B1351
-cycle_bind <- rbind(cycle_bind,list("B1351",dt[target=="B1351" & position==417 & mutant==wildtype,bind],dt[target=="B1351" & position==417 & mutant==wildtype,n_bc_bind],3))
+#Beta
+cycle_bind <- rbind(cycle_bind,list("Beta",dt[target=="Beta" & position==417 & mutant==wildtype,bind],dt[target=="Beta" & position==417 & mutant==wildtype,n_bc_bind],3))
 
 plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
 ```
@@ -557,28 +557,28 @@ plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="bindin
 <img src="epistatic_shifts_files/figure-gfm/additivity_triple_mut_cycle_bind_beta-1.png" style="display: block; margin: auto;" />
 
 ``` r
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/B1351_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/Beta_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
 ```
 
 ``` r
 cycle_bind <- data.table()
 
-cycle_bind$geno <- "Wuhan_Hu_1"
-cycle_bind$bind <- dt[target=="Wuhan_Hu_1" & position==331 & wildtype==mutant,bind]
-cycle_bind$n_bc <- dt[target=="Wuhan_Hu_1" & position==331 & wildtype==mutant,n_bc_bind]
+cycle_bind$geno <- "Wuhan-Hu-1"
+cycle_bind$bind <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,bind]
+cycle_bind$n_bc <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,n_bc_bind]
 cycle_bind$nmut <- 0
 
 
-cycle_bind <- rbind(cycle_bind,list("Wuhan_Hu_1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
-cycle_bind <- rbind(cycle_bind,list("Wuhan_Hu_1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
 
 
 #N501Y
-cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan_Hu_1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan_Hu_1" & position==501 & mutant=="Y",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",n_bc_bind],1))
 cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="N501Y" & position==484 & mutant==wildtype,bind],dt[target=="N501Y" & position==484 & mutant==wildtype,n_bc_bind],1))
 
 #Y449H
-cycle_bind <- rbind(cycle_bind,list("Y449H",dt[target=="Wuhan_Hu_1" & position==449 & mutant=="H",bind],dt[target=="Wuhan_Hu_1" & position==449 & mutant=="H",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("Y449H",dt[target=="Wuhan-Hu-1" & position==449 & mutant=="H",bind],dt[target=="Wuhan-Hu-1" & position==449 & mutant=="H",n_bc_bind],1))
 
 #Y449H/N501Y
 cycle_bind <- rbind(cycle_bind,list("Y449H/N501Y",dt[target=="N501Y" & position==449 & mutant=="H",bind],dt[target=="N501Y" & position==449 & mutant=="H",n_bc_bind],2))
@@ -595,22 +595,22 @@ invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/Y449H_N501Y_epistas
 ``` r
 cycle_bind <- data.table()
 
-cycle_bind$geno <- "Wuhan_Hu_1"
-cycle_bind$bind <- dt[target=="Wuhan_Hu_1" & position==331 & wildtype==mutant,bind]
-cycle_bind$n_bc <- dt[target=="Wuhan_Hu_1" & position==331 & wildtype==mutant,n_bc_bind]
+cycle_bind$geno <- "Wuhan-Hu-1"
+cycle_bind$bind <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,bind]
+cycle_bind$n_bc <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,n_bc_bind]
 cycle_bind$nmut <- 0
 
 
-cycle_bind <- rbind(cycle_bind,list("Wuhan_Hu_1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
-cycle_bind <- rbind(cycle_bind,list("Wuhan_Hu_1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
 
 
 #N501Y
-cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan_Hu_1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan_Hu_1" & position==501 & mutant=="Y",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",n_bc_bind],1))
 cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="N501Y" & position==484 & mutant==wildtype,bind],dt[target=="N501Y" & position==484 & mutant==wildtype,n_bc_bind],1))
 
 #Q498R
-cycle_bind <- rbind(cycle_bind,list("Q498R",dt[target=="Wuhan_Hu_1" & position==498 & mutant=="R",bind],dt[target=="Wuhan_Hu_1" & position==498 & mutant=="R",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("Q498R",dt[target=="Wuhan-Hu-1" & position==498 & mutant=="R",bind],dt[target=="Wuhan-Hu-1" & position==498 & mutant=="R",n_bc_bind],1))
 
 #Q498R/N501Y
 cycle_bind <- rbind(cycle_bind,list("Q498R/N501Y",dt[target=="N501Y" & position==498 & mutant=="R",bind],dt[target=="N501Y" & position==498 & mutant=="R",n_bc_bind],2))
@@ -655,8 +655,8 @@ subs$delta_bind <- as.numeric(NA)
 for(i in 1:nrow(subs)){
   if(subs[i,WT] != "*" & subs[i,MUT] != "*"){
     if(subs[i,Background=="N501N"]){
-      ref_bind <- dt[target=="Wuhan_Hu_1" & position==subs[i,POS] & mutant==as.character(subs[i,WT]),bind]
-      mut_bind <- dt[target=="Wuhan_Hu_1" & position==subs[i,POS] & mutant==as.character(subs[i,MUT]),bind]
+      ref_bind <- dt[target=="Wuhan-Hu-1" & position==subs[i,POS] & mutant==as.character(subs[i,WT]),bind]
+      mut_bind <- dt[target=="Wuhan-Hu-1" & position==subs[i,POS] & mutant==as.character(subs[i,MUT]),bind]
       subs[i,"delta_bind"] <- mut_bind - ref_bind
     }else if(subs[i,Background=="N501Y"]){
       ref_bind <- dt[target=="N501Y" & position==subs[i,POS] & mutant==as.character(subs[i,WT]),bind]
@@ -712,7 +712,7 @@ N501 backgrounds) versus Y501 backgrounds
 
 ``` r
 #make talbe for N501 versus Y501. Note, this is all done very hackily...
-subs_N501Y <- dt[target=="Wuhan_Hu_1",.(wildtype,position,mutant,mutation,delta_bind,n_bc_bind)] 
+subs_N501Y <- dt[target=="Wuhan-Hu-1",.(wildtype,position,mutant,mutation,delta_bind,n_bc_bind)] 
 setnames(subs_N501Y, "delta_bind", "delta_bind_N501")
 setnames(subs_N501Y, "n_bc_bind", "n_bc_bind_N501")
 
@@ -727,7 +727,7 @@ subs_N501Y$delta_delta_bind <- subs_N501Y$delta_bind_N501 - subs_N501Y$delta_bin
 #add column given the sitewise JS-distance for that site between WH1 versus N501Y DMS data
 subs_N501Y$site_JSD <- as.numeric(NA)
 for(i in 1:nrow(subs_N501Y)){
-  subs_N501Y[i,site_JSD := diffs_bind[bg_1=="Wuhan_Hu_1" & bg_2=="N501Y" & site==subs_N501Y[i,position], JSD_min3bc]]
+  subs_N501Y[i,site_JSD := diffs_bind[bg_1=="Wuhan-Hu-1" & bg_2=="N501Y" & site==subs_N501Y[i,position], JSD_min3bc]]
 }
 
 #add columns giving counts of each mutation in N501 and Y501 backgrounds on USHER tree
