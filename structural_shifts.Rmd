@@ -1,0 +1,82 @@
+---
+title: "Analyze structural shift"
+author: "Tyler Starr"
+date: "1/26/2022"
+output:
+  github_document:
+    toc: true
+    html_preview: false
+editor_options: 
+  chunk_output_type: inline
+---
+This notebook analyzes structural shifts in the ACE2-bound RBD structure, and compares to functional shifts in mutational effects.
+
+```{r setup, message=FALSE, warning=FALSE, error=FALSE}
+require("knitr")
+knitr::opts_chunk$set(echo = T)
+knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
+
+#list of packages to install/load
+packages = c("yaml","data.table","tidyverse","gridExtra","egg","bio3d")
+#install any packages not already installed
+installed_packages <- packages %in% rownames(installed.packages())
+if(any(installed_packages == F)){
+  install.packages(packages[!installed_packages])
+}
+#load packages
+invisible(lapply(packages, library, character.only=T))
+
+#read in config file
+config <- read_yaml("config.yaml")
+
+#make output directory
+if(!file.exists(config$structural_shifts_dir)){
+  dir.create(file.path(config$structural_shifts_dir))
+}
+
+```
+Session info for reproducing environment:
+```{r print_sessionInfo}
+sessionInfo()
+```
+
+Define colorblind-friendly palette
+```{r define_color_palette}
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+               "#0072B2", "#D55E00", "#CC79A7")
+# The palette with black
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                "#0072B2", "#D55E00", "#CC79A7")
+```
+
+## Setup
+
+Read in PDBs. These were aligned to minimize RBD Calpha RMSD using PyMol. For beta, omicron structures, this was performed for both RBD:ACE2 units in the asymmetric unit. (These structures also included mAbs used in the crystallization.) The pdbs in these aligned coordinates were then output. Structures include WH1 (6m0j), N501Y (7mjn, local refinement of a cryoEM map), beta (not yet published), and omicron (not yet published).
+
+```{r input_data}
+WH1 <- read.pdb(file=config$pdb_WH1)
+N501Y <- read.pdb(file=config$pdb_N501Y)
+beta1 <- read.pdb(file=config$pdb_beta1)
+beta2 <- read.pdb(file=config$pdb_beta2)
+delta1 <- read.pdb(file=config$pdb_delta1)
+delta2 <- read.pdb(file=config$pdb_delta2)
+omicron1 <- read.pdb(file=config$pdb_omicron1)
+omicron2 <- read.pdb(file=config$pdb_omicron2)
+```
+
+## Calculate pairwise C-alpha and C-beta distances for each structure compared to WH1
+
+```{r input_data}
+WH1 <- read.pdb(file=config$pdb_WH1)
+N501Y <- read.pdb(file=config$pdb_N501Y)
+beta1 <- read.pdb(file=config$pdb_beta1)
+beta2 <- read.pdb(file=config$pdb_beta2)
+omicron1 <- read.pdb(file=config$pdb_omicron1)
+omicron2 <- read.pdb(file=config$pdb_omicron2)
+```
+
+
+
+
+
