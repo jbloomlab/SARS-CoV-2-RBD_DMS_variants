@@ -50,7 +50,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.4 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -545,7 +545,8 @@ p1 <- ggplot(temp[measurement=="bind",],aes(position,mutant))+geom_tile(aes(fill
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
   facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
-  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
+  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")+
+  theme(strip.text.x = element_text(size = 18))
 
 p1
 ```
@@ -566,7 +567,8 @@ p1 <- ggplot(temp[measurement=="delta_bind",],aes(position,mutant))+geom_tile(ae
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
   facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
-  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
+  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")+
+  theme(strip.text.x = element_text(size = 18))
 
 p1
 ```
@@ -589,7 +591,8 @@ p1 <- ggplot(temp[measurement=="expr",],aes(position,mutant))+geom_tile(aes(fill
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
   facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
-  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
+  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")+
+  theme(strip.text.x = element_text(size = 18))
 
 p1
 ```
@@ -610,7 +613,8 @@ p1 <- ggplot(temp[measurement=="delta_expr",],aes(position,mutant))+geom_tile(ae
   coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
   facet_wrap(~target,nrow=5)+
   guides(y.sec=guide_axis_label_trans())+
-  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")
+  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")+
+  theme(strip.text.x = element_text(size = 18))
 
 p1
 ```
