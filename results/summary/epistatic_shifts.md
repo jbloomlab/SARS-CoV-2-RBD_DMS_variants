@@ -1,17 +1,24 @@
----
-title: "Shifts in mutation effects among variant backgrounds"
-author: "Tyler Starr"
-date: "10/11/2021"
-output:
-  github_document:
-    toc: true
-    html_preview: false
-editor_options: 
-  chunk_output_type: inline
----
-This notebook analyzes sites whose mutation effects deviate most strongly among the variant RBD backgrounds.
+Shifts in mutation effects among variant backgrounds
+================
+Tyler Starr
+10/11/2021
 
-```{r setup, message=FALSE, warning=FALSE, error=FALSE}
+-   [Setup](#setup)
+-   [Calculate site-wise Jensen-Shannon distance, a metric of divergence
+    in site-specific mutational
+    profiles](#calculate-site-wise-jensen-shannon-distance-a-metric-of-divergence-in-site-specific-mutational-profiles)
+-   [Line plots of JS distance from WH1 across RBD
+    sites](#line-plots-of-js-distance-from-wh1-across-rbd-sites)
+-   [Map distance to pdb structure](#map-distance-to-pdb-structure)
+-   [Epistatic cycles from binding
+    data](#epistatic-cycles-from-binding-data)
+-   [Comparison of mutant accumulation on N501 versus Y501
+    backgrounds](#comparison-of-mutant-accumulation-on-n501-versus-y501-backgrounds)
+
+This notebook analyzes sites whose mutation effects deviate most
+strongly among the variant RBD backgrounds.
+
+``` r
 require("knitr")
 knitr::opts_chunk$set(echo = T)
 knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
@@ -39,13 +46,56 @@ if(!file.exists(paste(config$epistatic_shifts_dir,"/pdbs/",sep=""))){
   dir.create(file.path(paste(config$epistatic_shifts_dir,"/pdbs/",sep="")))
 }
 ```
+
 Session info for reproducing environment:
-```{r print_sessionInfo}
+
+``` r
 sessionInfo()
 ```
 
+    ## R version 3.6.2 (2019-12-12)
+    ## Platform: x86_64-pc-linux-gnu (64-bit)
+    ## Running under: Ubuntu 18.04.5 LTS
+    ## 
+    ## Matrix products: default
+    ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] ggrepel_0.8.1     ggridges_0.5.1    bio3d_2.4-0       egg_0.4.5        
+    ##  [5] gridExtra_2.3     forcats_0.4.0     stringr_1.4.0     dplyr_0.8.3      
+    ##  [9] purrr_0.3.3       readr_1.3.1       tidyr_1.0.0       tibble_3.0.2     
+    ## [13] ggplot2_3.3.0     tidyverse_1.3.0   data.table_1.12.8 yaml_2.2.0       
+    ## [17] knitr_1.26       
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] tidyselect_1.1.0 xfun_0.11        haven_2.2.0      colorspace_1.4-1
+    ##  [5] vctrs_0.3.1      generics_0.0.2   htmltools_0.4.0  rlang_0.4.7     
+    ##  [9] pillar_1.4.5     glue_1.3.1       withr_2.1.2      DBI_1.1.0       
+    ## [13] dbplyr_1.4.2     modelr_0.1.5     readxl_1.3.1     plyr_1.8.5      
+    ## [17] lifecycle_0.2.0  munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0
+    ## [21] rvest_0.3.5      evaluate_0.14    parallel_3.6.2   fansi_0.4.0     
+    ## [25] broom_0.7.0      Rcpp_1.0.3       scales_1.1.0     backports_1.1.5 
+    ## [29] jsonlite_1.6     fs_1.3.1         hms_0.5.2        digest_0.6.23   
+    ## [33] stringi_1.4.3    grid_3.6.2       cli_2.0.0        tools_3.6.2     
+    ## [37] magrittr_1.5     crayon_1.3.4     pkgconfig_2.0.3  ellipsis_0.3.0  
+    ## [41] xml2_1.2.2       reprex_0.3.0     lubridate_1.7.4  assertthat_0.2.1
+    ## [45] rmarkdown_2.0    httr_1.4.1       rstudioapi_0.10  R6_2.4.1        
+    ## [49] compiler_3.6.2
+
 Define colorblind-friendly palette
-```{r define_color_palette}
+
+``` r
 # The palette with grey:
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
                "#0072B2", "#D55E00", "#CC79A7")
@@ -58,16 +108,19 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 
 Read in tables of mutant measurements.
 
-```{r input_data}
+``` r
 dt <- data.table(read.csv(file=config$final_variant_scores_mut_file,stringsAsFactors=F))
 ```
 
 ## Calculate site-wise Jensen-Shannon distance, a metric of divergence in site-specific mutational profiles
 
-For each pair of backgrounds, at each site I want to compute the Jensen-Shannon distance between the profile of mutation effects of all mutations at the site. (Remove any measurements determined for <3 or <5 bc to avoid measurements with lower precision driving noise in the global JSD metric.)
+For each pair of backgrounds, at each site I want to compute the
+Jensen-Shannon distance between the profile of mutation effects of all
+mutations at the site. (Remove any measurements determined for \<3 or
+\<5 bc to avoid measurements with lower precision driving noise in the
+global JSD metric.)
 
-
-```{r setup_table}
+``` r
 #define a minbc bind measurement that requires three barcodes be averaged for a final determination, otherwise change to NA
 dt[,bind_min3bc := bind]
 dt[n_bc_bind < 3, bind_min3bc := NA]
@@ -143,14 +196,14 @@ for(i in 1:nrow(diffs_expr)){
   diffs_expr[i,JSD_min3bc := JS(x_min3bc,y_min3bc)]
   diffs_expr[i,JSD_min5bc := JS(x_min3bc,y_min5bc)]
 }
-
 ```
 
 Plotting/visualizing:
 
-Utility function: plot scatterplot showing affinity of each of the 20 amino acids in a pair of sites
+Utility function: plot scatterplot showing affinity of each of the 20
+amino acids in a pair of sites
 
-```{r scatterplot_function}
+``` r
 plot_scatter <- function(site, bg1, bg2, JSD=F, JSD_min3bc=T, JSD_min5bc=F,n_bc_cutoff=3,phenotype="bind"){
   x <- dt[target==bg1 & position==site,get(phenotype)]
   x_n_bc <- dt[target==bg1 & position==site,get(paste("n_bc_",phenotype,sep=""))]
@@ -178,43 +231,50 @@ plot_scatter <- function(site, bg1, bg2, JSD=F, JSD_min3bc=T, JSD_min5bc=F,n_bc_
     legend("topleft",bty="n",cex=1,legend=paste("distance (min 5bc):",format(val,digits=3)))
   }
 }
-
 ```
 
-```{r example_correlation, echo=T, fig.width=8, fig.height=8, fig.align="center", dpi=300,dev="png"}
+``` r
 par(mfrow=c(2,2))
 plot_scatter(site=484,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=501,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=403,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=498,"Wuhan_Hu_1","N501Y")
-
 ```
-```{r corrs_N501Y_WH1_446-loop, echo=T, fig.width=8, fig.height=8, fig.align="center", dpi=300,dev="png"}
+
+<img src="epistatic_shifts_files/figure-gfm/example_correlation-1.png" style="display: block; margin: auto;" />
+
+``` r
 par(mfrow=c(2,2))
 plot_scatter(site=446,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=447,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=448,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=449,"Wuhan_Hu_1","N501Y")
-
 ```
 
-```{r corrs_452, echo=T, fig.width=8, fig.height=8, fig.align="center", dpi=300,dev="png"}
+<img src="epistatic_shifts_files/figure-gfm/corrs_N501Y_WH1_446-loop-1.png" style="display: block; margin: auto;" />
+
+``` r
 par(mfrow=c(2,2))
 plot_scatter(site=452,"Wuhan_Hu_1","B1351")
 plot_scatter(site=452,"Wuhan_Hu_1","N501Y")
 plot_scatter(site=452,"Wuhan_Hu_1","E484K")
 plot_scatter(site=452,"E484K","B1351")
-
 ```
+
+<img src="epistatic_shifts_files/figure-gfm/corrs_452-1.png" style="display: block; margin: auto;" />
 
 ## Line plots of JS distance from WH1 across RBD sites
 
-Make lineplots showing JS-D across sites for each variant compared to WH1.
+Make lineplots showing JS-D across sites for each variant compared to
+WH1.
 
-Also add gray shading for sites of escape from antibodies from our large panel of antibodies we've profiled w.r.t. WH1 escape, downloaded from: https://raw.githubusercontent.com/jbloomlab/SARS2_RBD_Ab_escape_maps/main/processed_data/escape_data.csv
+Also add gray shading for sites of escape from antibodies from our large
+panel of antibodies we’ve profiled w.r.t. WH1 escape, downloaded from:
+<https://raw.githubusercontent.com/jbloomlab/SARS2_RBD_Ab_escape_maps/main/processed_data/escape_data.csv>
 
 First, define sites of substantial antibody escape
-```{r antibody_escape_sites}
+
+``` r
 dt_mAb <- data.table(read.csv(file=config$mut_antibody_escape,stringsAsFactors = F))
 dt_mAb <- unique(dt_mAb[condition_type=="antibody",.(condition, condition_type, condition_subtype, site, wildtype, site_total_escape, site_mean_escape, normalized_site_total_escape, normalized_site_mean_escape)])
 
@@ -229,10 +289,9 @@ sig_mAb_sites <- site_escape[site_average_escape>0.05, site]
 #define some epitope classes for adding highlights
 label_df <- data.frame(xmin=sig_mAb_sites-0.5,
                        xmax=sig_mAb_sites+0.5)
-
 ```
 
-```{r line_plots_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+``` r
 #define focal bg for others to compare to
 bg <- "Wuhan_Hu_1"
 temp <- diffs_bind[bg_1==bg | bg_2 == bg]
@@ -260,12 +319,17 @@ ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
   ylab("JS distance versus Wuhan-Hu-1")
+```
 
+<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1.pdf",sep=""),useDingbats=F))
 ```
 
 Same but require minimum 3 bc for a measurement
-```{r line_plots_JSD_v_WH1_min3bc, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+
+``` r
 ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
   geom_line(size=1)+
@@ -274,13 +338,17 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
   ylab("JS distance versus Wuhan-Hu-1")
+```
 
+<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_min3bc-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc.pdf",sep=""),useDingbats=F))
 ```
 
 Separate facet per bg comparison
 
-```{r line_plots_JSD_v_WH1_faceted, echo=T, fig.width=12, fig.height=12, fig.align="center", dpi=300,dev="png"}
+``` r
 ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
   geom_line(size=1)+
@@ -291,13 +359,17 @@ ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   ylab("JS distance versus Wuhan-Hu-1")+
   facet_wrap(~target,ncol=1)+
   theme(strip.text.x = element_text(size = 18))
+```
 
+<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_faceted-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_faceted.pdf",sep=""),useDingbats=F))
 ```
 
 Again requiring min 3 bc
 
-```{r line_plots_JSD_v_WH1_faceted_min3bc, echo=T, fig.width=12, fig.height=12, fig.align="center", dpi=300,dev="png"}
+``` r
 ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
   geom_line(size=1)+
@@ -308,12 +380,17 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   ylab("JS distance versus Wuhan-Hu-1")+
   facet_wrap(~target,ncol=1)+
   theme(strip.text.x = element_text(size = 18))
+```
 
+<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_faceted_min3bc-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_faceted_min3bc.pdf",sep=""),useDingbats=F))
 ```
 
 Output file with the site-pair JS distances.
-```{r save_JSD_bind_file, echo=T}
+
+``` r
 temp[,.(target,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
   mutate_if(is.numeric, round, digits=6) %>%
   write.csv(file=config$JSD_v_WH1_file, row.names=F,quote=F)
@@ -321,7 +398,7 @@ temp[,.(target,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
 
 Repeat for expression measurements (just do multiple line overlay)
 
-```{r line_plots_JSD_v_WH1_expr, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+``` r
 #define focal bg for others to compare to
 bg <- "Wuhan_Hu_1"
 temp <- diffs_expr[bg_1==bg | bg_2 == bg]
@@ -349,12 +426,17 @@ ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
   ylab("JS distance versus Wuhan-Hu-1")
+```
 
+<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_expr-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_expr.pdf",sep=""),useDingbats=F))
 ```
 
 Same but require minimum 3 bc for a measurement
-```{r line_plots_JSD_v_WH1_min3bc_expr, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+
+``` r
 ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
   geom_line(size=1)+
@@ -363,16 +445,25 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
   ylab("JS distance versus Wuhan-Hu-1")
+```
 
+<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_min3bc_expr-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_expr.pdf",sep=""),useDingbats=F))
 ```
 
 ## Map distance to pdb structure
 
 First, bind
-```{r map_JSD_to_pdb}
-pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
+``` r
+pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
+```
+
+    ##    PDB has ALT records, taking A only, rm.alt=TRUE
+
+``` r
 #iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
 for(s in c("E484K","N501Y","B1351","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
@@ -387,12 +478,17 @@ for(s in c("E484K","N501Y","B1351","Delta")){
   }
   write.pdb(pdb=pdb_wh1, file=paste(config$epistatic_shifts_dir,"/pdbs/",s,"_v_WH1_JSD-min3bc.pdb",sep=""), b=b)
 }
-
 ```
-repeat for expression measures
-```{r map_JSD_to_pdb_expr}
-pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
+repeat for expression measures
+
+``` r
+pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
+```
+
+    ##    PDB has ALT records, taking A only, rm.alt=TRUE
+
+``` r
 #iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
 for(s in c("E484K","N501Y","B1351","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
@@ -407,13 +503,15 @@ for(s in c("E484K","N501Y","B1351","Delta")){
   }
   write.pdb(pdb=pdb_wh1, file=paste(config$epistatic_shifts_dir,"/pdbs/",s,"_v_WH1_JSD-min3bc_expr.pdb",sep=""), b=b)
 }
-
 ```
+
 ## Epistatic cycles from binding data
 
-Additivity of 417/484/501 muts? Build out cycle of mutants from the different places where each mutant is measured (e.g. WH1 is also measured in E484K as the K484E mut)
+Additivity of 417/484/501 muts? Build out cycle of mutants from the
+different places where each mutant is measured (e.g. WH1 is also
+measured in E484K as the K484E mut)
 
-```{r additivity_triple_mut_cycle_bind_beta, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
+``` r
 cycle_bind <- data.table()
 
 cycle_bind$geno <- "Wuhan_Hu_1"
@@ -454,11 +552,15 @@ cycle_bind <- rbind(cycle_bind,list("E484K/N501Y",dt[target=="B1351" & position=
 cycle_bind <- rbind(cycle_bind,list("B1351",dt[target=="B1351" & position==417 & mutant==wildtype,bind],dt[target=="B1351" & position==417 & mutant==wildtype,n_bc_bind],3))
 
 plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+```
 
+<img src="epistatic_shifts_files/figure-gfm/additivity_triple_mut_cycle_bind_beta-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/B1351_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
 ```
 
-```{r epistatic_double_mut_cycle_bind_N501Y_Y449H, echo=T, fig.width=3.5, fig.height=4, fig.align="center", dpi=300,dev="png"}
+``` r
 cycle_bind <- data.table()
 
 cycle_bind$geno <- "Wuhan_Hu_1"
@@ -482,11 +584,15 @@ cycle_bind <- rbind(cycle_bind,list("Y449H",dt[target=="Wuhan_Hu_1" & position==
 cycle_bind <- rbind(cycle_bind,list("Y449H/N501Y",dt[target=="N501Y" & position==449 & mutant=="H",bind],dt[target=="N501Y" & position==449 & mutant=="H",n_bc_bind],2))
 
 plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+```
 
+<img src="epistatic_shifts_files/figure-gfm/epistatic_double_mut_cycle_bind_N501Y_Y449H-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/Y449H_N501Y_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
 ```
 
-```{r epistatic_double_mut_cycle_bind_N501Y_Q498R, echo=T, fig.width=4, fig.height=4, fig.align="center", dpi=300,dev="png"}
+``` r
 cycle_bind <- data.table()
 
 cycle_bind$geno <- "Wuhan_Hu_1"
@@ -510,20 +616,28 @@ cycle_bind <- rbind(cycle_bind,list("Q498R",dt[target=="Wuhan_Hu_1" & position==
 cycle_bind <- rbind(cycle_bind,list("Q498R/N501Y",dt[target=="N501Y" & position==498 & mutant=="R",bind],dt[target=="N501Y" & position==498 & mutant=="R",n_bc_bind],2))
 
 plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+```
 
+<img src="epistatic_shifts_files/figure-gfm/epistatic_double_mut_cycle_bind_N501Y_Q498R-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/Q498R_N501Y_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
 ```
 
-
 ## Comparison of mutant accumulation on N501 versus Y501 backgrounds
 
-Does affinity enhancement of N501Y enable more robustness to affinity-decreasing mutations on Y501 backgrounds?
+Does affinity enhancement of N501Y enable more robustness to
+affinity-decreasing mutations on Y501 backgrounds?
 
-Working with preliminary output generated by Will to enumerate phylogenetic substitution occurrence (so, not simply sequence counts) of mutations on N501 versus Y501 backgrounds. We can later integrate this as a script into the analysis pipeline
+Working with preliminary output generated by Will to enumerate
+phylogenetic substitution occurrence (so, not simply sequence counts) of
+mutations on N501 versus Y501 backgrounds. We can later integrate this
+as a script into the analysis pipeline
 
-Read in counts, add affinity change information, generate vectors of mutant counts in each background, plot violin plots of distributions
+Read in counts, add affinity change information, generate vectors of
+mutant counts in each background, plot violin plots of distributions
 
-```{r substitution_accrual_N501Y, echo=T, fig.width=5, fig.height=6, fig.align="center", dpi=300,dev="png"}
+``` r
 subs <- data.table(read.csv(file=config$UShER_parsed_subs_N501Y,stringsAsFactors = F))
 
 #keep just RBD changes
@@ -571,10 +685,11 @@ for(i in 1:nrow(subs)){
 #collapse <= -2
 delta_bind_N501[!is.na(delta_bind_N501) & delta_bind_N501 < -2] <- -2
 delta_bind_Y501[!is.na(delta_bind_Y501) & delta_bind_Y501 < -2] <- -2
-
 ```
+
 Show distributions as joyplots (ridge plots)
-```{r substitution_accrual_N501Y_vioplot, echo=T, fig.width=5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+
+``` r
 temp2 <- rbind(data.frame(bg=rep("N501",length(delta_bind_N501)),delta_bind=delta_bind_N501),data.frame(bg=rep("Y501",length(delta_bind_Y501)),delta_bind=delta_bind_Y501))
 
 p1 <- ggplot(temp2, aes(y=bg, x=delta_bind, height= ..ndensity..))+
@@ -582,13 +697,20 @@ p1 <- ggplot(temp2, aes(y=bg, x=delta_bind, height= ..ndensity..))+
   ggtitle("substitutions accrued on N501 vs Y501 backgrounds")+theme_classic()
 
 p1
+```
 
+<img src="epistatic_shifts_files/figure-gfm/substitution_accrual_N501Y_vioplot-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/N501_v_Y501_sub_affinity-effects_ridgeplot.pdf",sep=""),useDingbats=F))
 ```
 
-Look at specific mutation occurrences on each background. Want to know whether sites with strong differences in mutation effect profiles also differ in rates of substitution occurrence. Doing first "WH1" (proxy: N501 backgrounds) versus Y501 backgrounds
+Look at specific mutation occurrences on each background. Want to know
+whether sites with strong differences in mutation effect profiles also
+differ in rates of substitution occurrence. Doing first “WH1” (proxy:
+N501 backgrounds) versus Y501 backgrounds
 
-```{r sub_occurrence_divergence_versus_DMS_divergence, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
+``` r
 #make talbe for N501 versus Y501. Note, this is all done very hackily...
 subs_N501Y <- dt[target=="Wuhan_Hu_1",.(wildtype,position,mutant,mutation,delta_bind,n_bc_bind)] 
 setnames(subs_N501Y, "delta_bind", "delta_bind_N501")
@@ -635,14 +757,17 @@ ggplot(data=subs_N501Y, aes(x=sub_count_N501, y=sub_count_Y501, color=delta_delt
   theme_classic()+
   ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
   scale_color_gradientn(colours=c("#A94E35","#A94E35","#F48365","#FFFFFF","#7378B9","#383C6C","#383C6C"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))
+```
 
+<img src="epistatic_shifts_files/figure-gfm/sub_occurrence_divergence_versus_DMS_divergence-1.png" style="display: block; margin: auto;" />
+
+``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-site-JSD.pdf",sep=""),useDingbats=F))
-
 ```
 
 Do similar but on log2 scale
 
-```{r sub_occurrence_divergence_versus_DMS_divergence_log2, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
+``` r
 #subs_N501Y$sub_count_N501_log2pc <- log2(subs_N501Y$sub_count_N501+1)
 #subs_N501Y$sub_count_Y501_log2pc <- log2(subs_N501Y$sub_count_Y501+1)
 
@@ -658,8 +783,10 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind),], aes(x=sub_count_N501_pc, y=su
   scale_x_continuous(trans = 'log2')+
   scale_y_continuous(trans = 'log2')+
   geom_text_repel(aes(label=ifelse(((delta_delta_bind < -1 | delta_delta_bind > 1) & (sub_count_N501 >1 | sub_count_Y501 >1) ),as.character(mutation),'')),size=3,color="gray60")
-
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-site-JSD_logscale.pdf",sep=""),useDingbats=F))
-
 ```
 
+<img src="epistatic_shifts_files/figure-gfm/sub_occurrence_divergence_versus_DMS_divergence_log2-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-site-JSD_logscale.pdf",sep=""),useDingbats=F))
+```

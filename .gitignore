@@ -33,3 +33,7 @@ results/binding_Kd/*
 !results/final_variant_scores
 results/final_variant_scores/*
 !results/final_variant_scores/final_variant_scores.csv
+
+!results/epistatic_shifts
+results/epistatic_shifts/*
+!results/epistatic_shifts/JSD_versus_Wuhan1_by_target.csv

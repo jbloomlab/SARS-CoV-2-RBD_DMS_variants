@@ -1664,12 +1664,12 @@ display(HTML(
   </thead>
   <tbody>
     <tr>
-      <td>pool2</td>
-      <td>154919</td>
-    </tr>
-    <tr>
       <td>pool1</td>
       <td>182710</td>
+    </tr>
+    <tr>
+      <td>pool2</td>
+      <td>154919</td>
     </tr>
   </tbody>
 </table>

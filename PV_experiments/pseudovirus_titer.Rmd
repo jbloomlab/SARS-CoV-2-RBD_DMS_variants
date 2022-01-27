@@ -63,9 +63,9 @@ ggplot(dt_WH1,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e-6, 1e1)) +
   xlab("Spike gene") +
-  ylab("relative titer, ACE2-high cell line") +
+  ylab("relative titer") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("D614G background, ACE2-high cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -86,9 +86,9 @@ ggplot(dt_WH1,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e0, 1e6)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/uL), ACE2-high cell line") +
+  ylab("entry titer (RLU/uL)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("D614G background, ACE2-high cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -116,9 +116,9 @@ ggplot(dt_omicron,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(5e-5, 1e1)) +
   xlab("Spike gene") +
-  ylab("relative titer, ACE2-high cell line") +
+  ylab("relative titer") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("Omicron background, ACE2-high cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -144,9 +144,9 @@ ggplot(dt_omicron,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e0, 1e6)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/uL), ACE2-high cell line") +
+  ylab("entry titer (RLU/uL)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("Omicron background, ACE2-high cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -170,9 +170,9 @@ ggplot(dt_WH1,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e-5, 1e1)) +
   xlab("Spike gene") +
-  ylab("relative titer, ACE2-low cell line") +
+  ylab("relative titer") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("D614G background, ACE2-low cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -193,9 +193,9 @@ ggplot(dt_WH1,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e0, 1e5)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/uL), ACE2-low cell line") +
+  ylab("entry titer (RLU/uL)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("D614G background, ACE2-low cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -223,9 +223,9 @@ ggplot(dt_omicron,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(5e-5, 1e1)) +
   xlab("Spike gene") +
-  ylab("relative titer, ACE2-low cell line") +
+  ylab("relative titer") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("Omicron background, ACE2-low cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -237,7 +237,7 @@ ggsave(
 )
 ```
 
-### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, HEK-ACE2 cell line
+### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, "clone A" cell line
 ```{r}
 dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
                                 levels=c("none", "wt", 
@@ -251,9 +251,9 @@ ggplot(dt_omicron,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e0, 5e4)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/uL), ACE2-low cell line") +
+  ylab("entry titer (RLU/uL)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("Omicron background, ACE2-low cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -286,9 +286,9 @@ ggplot(dt_WH1,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e-3, 1e3)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/pg p24), ACE2-high cell line") +
+  ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("D614G background, ACE2-high cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -316,9 +316,9 @@ ggplot(dt_WH1,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e-3, 1e2)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/pg p24), ACE2-low cell line") +
+  ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("D614G background, ACE2-low cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -346,9 +346,9 @@ ggplot(dt_omicron,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(1e-5, 1e3)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/pg p24), ACE2-high cell line") +
+  ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("Omicron background, ACE2-high cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -372,9 +372,9 @@ ggplot(dt_omicron,
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
   scale_y_log10(lim=c(8e-4, 1e2)) +
   xlab("Spike gene") +
-  ylab("entry titer (RLU/pg p24), ACE2-low cell line") +
+  ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
-  ggtitle("Spike-pseudotyped virus") +
+  ggtitle("Omicron background, ACE2-low cell line") +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(
@@ -386,8 +386,79 @@ ggsave(
 )
 
 ```
-### t-tests for titer differences in omicron cycle
+### quants and t-tests for titer differences in omicron cycle
 ```{r}
+#geomean function
+geomean <- function(x){
+  return(exp(mean(log(x))))
+}
+
+#calc fold-change in geomean titer compared to wt, absolute titer, ACE2hi
+#omicron R498Q vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"])
+#omicron Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"])
+#omicron R498Q/Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"])
+
+#calc fold-change in geomean titer compared to wt, absolute titer, ACE2lo
+#omicron R498Q vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"])
+#omicron Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"])
+#omicron R498Q/Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"])
+
+#calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2hi
+#omicron R498Q vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+#omicron Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+#omicron R498Q/Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+
+#calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2lo
+#omicron R498Q vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron R498Q/Y501N vs wt
+geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+
+#calc fold-change in geomean titer compared to wt, absolute titer, ACE2hi
+#WH1 Y449H vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H","RLU_per_uL_ACE2hi"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2hi"])
+#WH1 N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="N501Y","RLU_per_uL_ACE2hi"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2hi"])
+#WH1 Y449H/N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H/N501Y","RLU_per_uL_ACE2hi"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2hi"])
+
+#calc fold-change in geomean titer compared to wt, absolute titer, ACE2lo
+#WH1 Y449H vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H","RLU_per_uL_ACE2lo"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2lo"])
+#WH1 N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="N501Y","RLU_per_uL_ACE2lo"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2lo"])
+#WH1 Y449H/N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H/N501Y","RLU_per_uL_ACE2lo"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2lo"])
+
+#calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2hi
+#WH1 Y449H vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H","RLU_per_pg_p24_ACE2hi"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+#WH1 N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="N501Y","RLU_per_pg_p24_ACE2hi"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+#WH1 Y449H/N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H/N501Y","RLU_per_pg_p24_ACE2hi"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+
+#calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2lo
+#WH1 Y449H vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H","RLU_per_pg_p24_ACE2lo"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#WH1 N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="N501Y","RLU_per_pg_p24_ACE2lo"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#WH1 Y449H/N501Y vs wt
+geomean(dt_WH1[dt_WH1$genotype=="Y449H/N501Y","RLU_per_pg_p24_ACE2lo"])/geomean(dt_WH1[dt_WH1$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+
+
+
 t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]))
 t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]))
 t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
