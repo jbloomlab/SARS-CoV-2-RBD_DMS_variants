@@ -367,6 +367,13 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_expr.pdf",sep=""),useDingbats=F))
 ```
 
+Output file with the site-pair JS distances.
+```{r save_JSD_expr_file, echo=T}
+temp[,.(target,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
+  mutate_if(is.numeric, round, digits=6) %>%
+  write.csv(file=config$JSD_v_WH1_expr_file, row.names=F,quote=F)
+```
+
 ## Map distance to pdb structure
 
 First, bind
