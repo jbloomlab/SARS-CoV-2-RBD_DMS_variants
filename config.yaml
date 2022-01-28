@@ -34,9 +34,10 @@ site_number_offset: 330  # add this to sequential sites to get RBD numbering
 # pdbs for mapping, analysis
 pdb_6m0j: data/6m0j.pdb
 pdb_WH1: data/VOC_structures/RBD_WH1_6m0j.pdb
-pdb_N501Y: data/VOC_structures/RBD_alpha_7mjn.pdb
-pdb_beta1: data/VOC_structures/RBD_beta1.pdb
+pdb_N501Y: data/VOC_structures/RBD_alpha1_7ekf.pdb
+pdb_beta1: data/VOC_structures/RBD_beta1_7ekg.pdb
 pdb_beta2: data/VOC_structures/RBD_beta2.pdb
+pdb_beta3: data/VOC_structures/RBD_beta3.pdb
 pdb_delta1: data/VOC_structures/RBD_delta1_7wbq.pdb
 pdb_delta2: data/VOC_structures/RBD_delta2_7wbq.pdb
 pdb_omicron1: data/VOC_structures/RBD_omicron1.pdb
@@ -88,6 +89,7 @@ UShER_annotated_subs: results/UShER_SARS-CoV-2/annotated_subs.tsv
 UShER_parsed_subs_N501Y: results/UShER_SARS-CoV-2/parsed_subs_N501Y.csv
 epistatic_shifts_dir: results/epistatic_shifts
 JSD_v_WH1_file: results/epistatic_shifts/JSD_versus_Wuhan1_by_target.csv
+JSD_v_WH1_expr_file: results/epistatic_shifts/JSD_versus_Wuhan1_EXPRESSION_by_target.csv
 structural_shifts_dir: results/structural_shifts
 
 
