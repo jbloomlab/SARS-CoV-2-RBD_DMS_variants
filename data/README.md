@@ -19,4 +19,5 @@ These files are used for the basic processing of the deep sequencing data to cal
    - [6m0j.pdb](6m0j.pdb): ACE2-bound SARS-CoV-2 RBD structure
    
    - [./VOC_structures](./VOC_structures): structurally aligned RBDs of ACE2-bound RBD structures for the Wuhan-Hu-1, alpha, beta, and omicron structures. See the description in the [structural_shifts](../structural_shifts.Rmd) analysis of how these files were created.
+
    

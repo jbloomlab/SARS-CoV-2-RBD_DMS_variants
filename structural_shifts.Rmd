@@ -52,7 +52,7 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 
 ## Setup
 
-Read in PDBs. These were aligned to minimize RBD Calpha RMSD using PyMol. For beta, omicron structures, this was performed for both RBD:ACE2 units in the asymmetric unit. (These structures also included mAbs used in the crystallization.) The pdbs in these aligned coordinates were then output. Structures include WH1 (6m0j), N501Y (7mjn, local refinement of a cryoEM map), beta (not yet published), and omicron (not yet published).
+Read in PDBs. These were aligned to minimize RBD Calpha RMSD using PyMol. For beta, omicron structures, this was performed for both RBD units in the asymmetric unit. (These structures also included mAbs used in the crystallization.) RBD and ACE2s were then split into separate objects/pdbs. The pdbs in these aligned coordinates were then output. Structures include WH1 (6m0j), N501Y (7ekf, local refinement of a cryoEM map), beta (beta1=7ekg, beta2,3 not yet published), and omicron (omicron 1,2 not yet published, omicron3=7wbp).
 
 ```{r input_data}
 WH1 <- read.pdb(file=config$pdb_WH1)
@@ -341,7 +341,7 @@ ggplot(data=dRSA[rep==1 & site %in% seq(334,515),], aes(x=site, y=value, color=v
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("Change in relative solvent accessibility versus Wuhan-Hu-1 [6m0j]")+
+  ylab("Change in relative solvent accessibility \nversus Wuhan-Hu-1 [6m0j]")+
   geom_text_repel(aes(label=ifelse(((abs(value) > 0.15 & variable=="Beta")),as.character(site),'')),size=3,color="gray40")
 
 invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/dRSA_v_WH1.pdf",sep=""),useDingbats=F))
@@ -384,7 +384,7 @@ for(i in 1:nrow(cgamma)){
 Calpha displacement:
 
 ```{r scatter_plots_calpha_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
-ggplot(data=calpha[rep==1,],aes(x=abs(value),y=JSD_bind,color=variable))+
+ggplot(data=calpha[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
   geom_point(pch=19)+
   scale_color_manual(values=group.colors)+
   theme_classic()+
@@ -401,7 +401,7 @@ invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_calp
 Cbeta displacement:
 
 ```{r scatter_plots_cbeta_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
-ggplot(data=cbeta[rep==1,],aes(x=abs(value),y=JSD_bind,color=variable))+
+ggplot(data=cbeta[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
   geom_point(pch=19)+
   scale_color_manual(values=group.colors)+
   theme_classic()+
@@ -414,11 +414,26 @@ ggplot(data=cbeta[rep==1,],aes(x=abs(value),y=JSD_bind,color=variable))+
 invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_cbeta.pdf",sep=""),useDingbats=F))
 ```
 
+C-gamma displacement:
+
+```{r scatter_plots_cgamma_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+ggplot(data=cgamma[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
+  geom_point(pch=19)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  xlab("C-gamma displacement versus Wuhan-Hu-1 [6m0j]")+
+  ylab("JS distance versus Wuhan-Hu-1")+
+  facet_wrap(~variable,nrow=1)+
+  theme(strip.text.x = element_text(size = 18))+
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75)),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_cgamma.pdf",sep=""),useDingbats=F))
+```
 
 Change in relative solvent accessibility:
 
 ```{r scatter_plots_dRSA_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
-ggplot(data=dRSA[rep==1,],aes(x=abs(value),y=JSD_bind,color=variable))+
+ggplot(data=dRSA[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
   geom_point(pch=19)+
   scale_color_manual(values=group.colors)+
   theme_classic()+
@@ -431,4 +446,188 @@ ggplot(data=dRSA[rep==1,],aes(x=abs(value),y=JSD_bind,color=variable))+
 invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_dRSA.pdf",sep=""),useDingbats=F))
 ```
 
+## Change in residue relative solvent accessibility **with ACE2 bound**
 
+Analysis above is in split pdbs where it's ACE2-bound RBD, but I'm calculating RSA of RBD alone. Let's repeat using pdbs with ACE2 present. I used the same pdbs above, but now the pdbs keep the cognate ACE2 molecule from the structure. I do still split pdbs manually, because some structures have two RBD:ACE2s in the asymmetric unit, or Fabs that I remove for the RSA calculation.
+
+```{r calc_ACE2_bound_dRSA}
+WH1_ACE2 <- read.pdb(file=config$pdb_WH1_ACE2)
+WH1_ACE2 <- cat.pdb(WH1, WH1_ACE2)
+WH1_ACE2_dssp <- dssp(WH1_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+WH1_ACE2_SASA <- data.frame(site=names(WH1_ACE2_dssp$sse),SASA=WH1_ACE2_dssp$acc,amino_acid=pdbseq(WH1_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(WH1_ACE2_SASA)){
+    WH1_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(WH1_ACE2_SASA$site[i]),split="_")[[1]][2])
+    WH1_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(WH1_ACE2_SASA$site[i]),split="_")[[1]][1])
+    WH1_ACE2_SASA$RSA[i] <- WH1_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==WH1_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#N501Y
+N501Y_ACE2 <- read.pdb(file=config$pdb_N501Y_ACE2)
+N501Y_ACE2 <- cat.pdb(N501Y, N501Y_ACE2)
+N501Y_ACE2_dssp <- dssp(N501Y_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+N501Y_ACE2_SASA <- data.frame(site=names(N501Y_ACE2_dssp$sse),SASA=N501Y_ACE2_dssp$acc,amino_acid=pdbseq(N501Y_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(N501Y_ACE2_SASA)){
+    N501Y_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(N501Y_ACE2_SASA$site[i]),split="_")[[1]][2])
+    N501Y_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(N501Y_ACE2_SASA$site[i]),split="_")[[1]][1])
+    N501Y_ACE2_SASA$RSA[i] <- N501Y_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==N501Y_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#beta1
+beta1_ACE2 <- read.pdb(file=config$pdb_beta1_ACE2)
+beta1_ACE2 <- cat.pdb(beta1, beta1_ACE2)
+beta1_ACE2_dssp <- dssp(beta1_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+beta1_ACE2_SASA <- data.frame(site=names(beta1_ACE2_dssp$sse),SASA=beta1_ACE2_dssp$acc,amino_acid=pdbseq(beta1_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(beta1_ACE2_SASA)){
+    beta1_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(beta1_ACE2_SASA$site[i]),split="_")[[1]][2])
+    beta1_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(beta1_ACE2_SASA$site[i]),split="_")[[1]][1])
+    beta1_ACE2_SASA$RSA[i] <- beta1_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==beta1_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#beta2
+beta2_ACE2 <- read.pdb(file=config$pdb_beta2_ACE2)
+beta2_ACE2 <- cat.pdb(beta2, beta2_ACE2)
+beta2_ACE2_dssp <- dssp(beta2_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+beta2_ACE2_SASA <- data.frame(site=names(beta2_ACE2_dssp$sse),SASA=beta2_ACE2_dssp$acc,amino_acid=pdbseq(beta2_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(beta2_ACE2_SASA)){
+    beta2_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(beta2_ACE2_SASA$site[i]),split="_")[[1]][2])
+    beta2_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(beta2_ACE2_SASA$site[i]),split="_")[[1]][1])
+    beta2_ACE2_SASA$RSA[i] <- beta2_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==beta2_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#beta3
+beta3_ACE2 <- read.pdb(file=config$pdb_beta3_ACE2)
+beta3_ACE2 <- cat.pdb(beta3, beta3_ACE2)
+beta3_ACE2_dssp <- dssp(beta3_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+beta3_ACE2_SASA <- data.frame(site=names(beta3_ACE2_dssp$sse),SASA=beta3_ACE2_dssp$acc,amino_acid=pdbseq(beta3_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(beta3_ACE2_SASA)){
+    beta3_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(beta3_ACE2_SASA$site[i]),split="_")[[1]][2])
+    beta3_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(beta3_ACE2_SASA$site[i]),split="_")[[1]][1])
+    beta3_ACE2_SASA$RSA[i] <- beta3_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==beta3_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#delta1
+delta1_ACE2 <- read.pdb(file=config$pdb_delta1_ACE2)
+delta1_ACE2 <- cat.pdb(delta1, delta1_ACE2)
+delta1_ACE2_dssp <- dssp(delta1_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+delta1_ACE2_SASA <- data.frame(site=names(delta1_ACE2_dssp$sse),SASA=delta1_ACE2_dssp$acc,amino_acid=pdbseq(delta1_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(delta1_ACE2_SASA)){
+    delta1_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(delta1_ACE2_SASA$site[i]),split="_")[[1]][2])
+    delta1_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(delta1_ACE2_SASA$site[i]),split="_")[[1]][1])
+    delta1_ACE2_SASA$RSA[i] <- delta1_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==delta1_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#delta2
+delta2_ACE2 <- read.pdb(file=config$pdb_delta2_ACE2)
+delta2_ACE2 <- cat.pdb(delta2, delta2_ACE2)
+delta2_ACE2_dssp <- dssp(delta2_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+delta2_ACE2_SASA <- data.frame(site=names(delta2_ACE2_dssp$sse),SASA=delta2_ACE2_dssp$acc,amino_acid=pdbseq(delta2_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(delta2_ACE2_SASA)){
+    delta2_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(delta2_ACE2_SASA$site[i]),split="_")[[1]][2])
+    delta2_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(delta2_ACE2_SASA$site[i]),split="_")[[1]][1])
+    delta2_ACE2_SASA$RSA[i] <- delta2_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==delta2_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#omicron1
+omicron1_ACE2 <- read.pdb(file=config$pdb_omicron1_ACE2)
+omicron1_ACE2 <- cat.pdb(omicron1, omicron1_ACE2)
+omicron1_ACE2_dssp <- dssp(omicron1_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+omicron1_ACE2_SASA <- data.frame(site=names(omicron1_ACE2_dssp$sse),SASA=omicron1_ACE2_dssp$acc,amino_acid=pdbseq(omicron1_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(omicron1_ACE2_SASA)){
+    omicron1_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(omicron1_ACE2_SASA$site[i]),split="_")[[1]][2])
+    omicron1_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(omicron1_ACE2_SASA$site[i]),split="_")[[1]][1])
+    omicron1_ACE2_SASA$RSA[i] <- omicron1_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==omicron1_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#omicron2
+omicron2_ACE2 <- read.pdb(file=config$pdb_omicron2_ACE2)
+omicron2_ACE2 <- cat.pdb(omicron2, omicron2_ACE2)
+omicron2_ACE2_dssp <- dssp(omicron2_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+omicron2_ACE2_SASA <- data.frame(site=names(omicron2_ACE2_dssp$sse),SASA=omicron2_ACE2_dssp$acc,amino_acid=pdbseq(omicron2_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(omicron2_ACE2_SASA)){
+    omicron2_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(omicron2_ACE2_SASA$site[i]),split="_")[[1]][2])
+    omicron2_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(omicron2_ACE2_SASA$site[i]),split="_")[[1]][1])
+    omicron2_ACE2_SASA$RSA[i] <- omicron2_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==omicron2_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+#omicron3
+omicron3_ACE2 <- read.pdb(file=config$pdb_omicron3_ACE2)
+omicron3_ACE2 <- cat.pdb(omicron3, omicron3_ACE2)
+omicron3_ACE2_dssp <- dssp(omicron3_ACE2, exefile="/fh/fast/bloom_j/computational_notebooks/tstarr/2020/SARS-CoV-2-RBD_DMS/env/bin/mkdssp")
+omicron3_ACE2_SASA <- data.frame(site=names(omicron3_ACE2_dssp$sse),SASA=omicron3_ACE2_dssp$acc,amino_acid=pdbseq(omicron3_ACE2),stringsAsFactors = F)
+for(i in 1:nrow(omicron3_ACE2_SASA)){
+    omicron3_ACE2_SASA$chain[i] <- as.character(strsplit(as.character(omicron3_ACE2_SASA$site[i]),split="_")[[1]][2])
+    omicron3_ACE2_SASA$site[i] <- as.numeric(strsplit(as.character(omicron3_ACE2_SASA$site[i]),split="_")[[1]][1])
+    omicron3_ACE2_SASA$RSA[i] <- omicron3_ACE2_SASA$SASA[i]/max_SASA[max_SASA$AA==omicron3_ACE2_SASA$amino_acid[i],"max_SASA"]
+}
+
+
+for(voc in c("N501Y","beta1","beta2","beta3","delta1","delta2","omicron1","omicron2","omicron3")){
+  RBD_sites[,paste(voc,"_v_WH1_ACE2_dRSA",sep=""):=as.numeric(NA)]
+  for(i in 1:nrow(RBD_sites)){
+    site <- RBD_sites[i,site]
+    WH1_RSA <- WH1_ACE2_SASA[WH1_ACE2_SASA$chain=="A" & WH1_ACE2_SASA$site==site,"RSA"]
+    voc_RSA <- get(paste(voc,"_ACE2_SASA",sep=""))[get(paste(voc,"_ACE2_SASA",sep=""))$chain=="A" & get(paste(voc,"_ACE2_SASA",sep=""))$site==site,"RSA"]
+    if(length(WH1_RSA)==1 & length(voc_RSA)==1){
+      RBD_sites[i,paste(voc,"_v_WH1_ACE2_dRSA",sep="") := WH1_RSA - voc_RSA] 
+    }else{
+      #print(paste("no distance for", voc, "site",site))
+    }
+  }
+}
+
+```
+
+Line plots:
+
+```{r line_plots_ACE2-bound-dRSA_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+ACE2_dRSA <- melt(RBD_sites[,.(site,N501Y_v_WH1_ACE2_dRSA,beta1_v_WH1_ACE2_dRSA,beta2_v_WH1_ACE2_dRSA,beta3_v_WH1_ACE2_dRSA,delta1_v_WH1_ACE2_dRSA,delta2_v_WH1_ACE2_dRSA)], id.vars=c("site"))
+ACE2_dRSA[,rep:=1]
+ACE2_dRSA[variable=="N501Y_v_WH1_ACE2_dRSA",variable:="N501Y"]
+ACE2_dRSA[variable=="beta1_v_WH1_ACE2_dRSA",variable:="Beta"]
+ACE2_dRSA[variable=="beta2_v_WH1_ACE2_dRSA",rep:=2]
+ACE2_dRSA[variable=="beta2_v_WH1_ACE2_dRSA",variable:="Beta"]
+ACE2_dRSA[variable=="beta3_v_WH1_ACE2_dRSA",rep:=3]
+ACE2_dRSA[variable=="beta3_v_WH1_ACE2_dRSA",variable:="Beta"]
+ACE2_dRSA[variable=="delta1_v_WH1_ACE2_dRSA",variable:="Delta"]
+ACE2_dRSA[variable=="delta2_v_WH1_ACE2_dRSA",rep:=2]
+ACE2_dRSA[variable=="delta2_v_WH1_ACE2_dRSA",variable:="Delta"]
+
+#define colors for each bg
+group.colors <- c("Wuhan-Hu-1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "Beta"=cbPalette[6], "Delta"=cbPalette[7], "Omicron"=cbPalette[2])
+
+#define order for plotting of bgs
+ACE2_dRSA$variable <- factor(ACE2_dRSA$variable,levels=c("E484K","N501Y","Beta","Delta"))
+
+ggplot(data=ACE2_dRSA[rep==1 & site %in% seq(334,515),], aes(x=site, y=value, color=variable))+
+  geom_line(size=1)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("Change in relative solvent accessibility\nversus Wuhan-Hu-1 [6m0j]")+
+  geom_text_repel(aes(label=ifelse(((abs(value) > 0.15 & variable=="Beta")),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/dRSA-ACE2-bound_v_WH1.pdf",sep=""),useDingbats=F))
+```
+
+
+
+
+```{r scatter_plots_ACE2_dRSA_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+for(i in 1:nrow(ACE2_dRSA)){
+  ACE2_dRSA$JSD_bind[i] <- JSD_bind[site==ACE2_dRSA$site[i] & target==ACE2_dRSA$variable[i],JSD_min3bc]
+  ACE2_dRSA$JSD_expr[i] <- JSD_expr[site==ACE2_dRSA$site[i] & target==ACE2_dRSA$variable[i],JSD_min3bc]
+}
+
+ggplot(data=ACE2_dRSA[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
+  geom_point(pch=19)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  xlab("Change in relative solvent accessibility versus Wuhan-Hu-1 [6m0j]")+
+  ylab("JS distance versus Wuhan-Hu-1")+
+  facet_wrap(~variable,nrow=1)+
+  theme(strip.text.x = element_text(size = 18))+
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.1)),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_dRSA-ACE2-bound.pdf",sep=""),useDingbats=F))
+```

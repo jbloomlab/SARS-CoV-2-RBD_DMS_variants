@@ -33,16 +33,28 @@ site_number_offset: 330  # add this to sequential sites to get RBD numbering
 
 # pdbs for mapping, analysis
 pdb_6m0j: data/6m0j.pdb
-pdb_WH1: data/VOC_structures/RBD_WH1_6m0j.pdb
-pdb_N501Y: data/VOC_structures/RBD_alpha1_7ekf.pdb
-pdb_beta1: data/VOC_structures/RBD_beta1_7ekg.pdb
-pdb_beta2: data/VOC_structures/RBD_beta2.pdb
-pdb_beta3: data/VOC_structures/RBD_beta3.pdb
-pdb_delta1: data/VOC_structures/RBD_delta1_7wbq.pdb
-pdb_delta2: data/VOC_structures/RBD_delta2_7wbq.pdb
-pdb_omicron1: data/VOC_structures/RBD_omicron1.pdb
-pdb_omicron2: data/VOC_structures/RBD_omicron2.pdb
-pdb_omicron3: data/VOC_structures/RBD_omicron3_7wbp.pdb
+pdb_WH1: data/VOC_structures/split_and_aligned/RBD_WH1_6m0j.pdb
+pdb_N501Y: data/VOC_structures/split_and_aligned/RBD_alpha1_7ekf.pdb
+pdb_beta1: data/VOC_structures/split_and_aligned/RBD_beta1_7ekg.pdb
+pdb_beta2: data/VOC_structures/split_and_aligned/RBD_beta2.pdb
+pdb_beta3: data/VOC_structures/split_and_aligned/RBD_beta3.pdb
+pdb_delta1: data/VOC_structures/split_and_aligned/RBD_delta1_7wbq.pdb
+pdb_delta2: data/VOC_structures/split_and_aligned/RBD_delta2_7wbq.pdb
+pdb_omicron1: data/VOC_structures/split_and_aligned/RBD_omicron1.pdb
+pdb_omicron2: data/VOC_structures/split_and_aligned/RBD_omicron2.pdb
+pdb_omicron3: data/VOC_structures/split_and_aligned/RBD_omicron3_7wbp.pdb
+
+pdb_WH1_ACE2: data/VOC_structures/split_and_aligned/ACE2_WH1_6m0j.pdb
+pdb_N501Y_ACE2: data/VOC_structures/split_and_aligned/ACE2_alpha1_7ekf.pdb
+pdb_beta1_ACE2: data/VOC_structures/split_and_aligned/ACE2_beta1_7ekg.pdb
+pdb_beta2_ACE2: data/VOC_structures/split_and_aligned/ACE2_beta2.pdb
+pdb_beta3_ACE2: data/VOC_structures/split_and_aligned/ACE2_beta3.pdb
+pdb_delta1_ACE2: data/VOC_structures/split_and_aligned/ACE2_delta1_7wbq.pdb
+pdb_delta2_ACE2: data/VOC_structures/split_and_aligned/ACE2_delta2_7wbq.pdb
+pdb_omicron1_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron1.pdb
+pdb_omicron2_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron2.pdb
+pdb_omicron3_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron3_7wbp.pdb
+
 
 # URLs from which we download binding & expression of mutants & variants
 mut_bind_expr_url: https://media.githubusercontent.com/media/jbloomlab/SARS-CoV-2-RBD_DMS/master/results/single_mut_effects/single_mut_effects.csv
