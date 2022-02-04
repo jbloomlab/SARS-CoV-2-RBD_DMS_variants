@@ -31,8 +31,30 @@ barcode_runs: data/barcode_runs.csv
 wildtype_sequence: data/wildtype_sequence.fasta
 site_number_offset: 330  # add this to sequential sites to get RBD numbering
 
-# pdb for mapping
+# pdbs for mapping, analysis
 pdb_6m0j: data/6m0j.pdb
+pdb_WH1: data/VOC_structures/split_and_aligned/RBD_WH1_6m0j.pdb
+pdb_N501Y: data/VOC_structures/split_and_aligned/RBD_alpha1_7ekf.pdb
+pdb_beta1: data/VOC_structures/split_and_aligned/RBD_beta1_7ekg.pdb
+pdb_beta2: data/VOC_structures/split_and_aligned/RBD_beta2.pdb
+pdb_beta3: data/VOC_structures/split_and_aligned/RBD_beta3.pdb
+pdb_delta1: data/VOC_structures/split_and_aligned/RBD_delta1_7wbq.pdb
+pdb_delta2: data/VOC_structures/split_and_aligned/RBD_delta2_7wbq.pdb
+pdb_omicron1: data/VOC_structures/split_and_aligned/RBD_omicron1.pdb
+pdb_omicron2: data/VOC_structures/split_and_aligned/RBD_omicron2.pdb
+pdb_omicron3: data/VOC_structures/split_and_aligned/RBD_omicron3_7wbp.pdb
+
+pdb_WH1_ACE2: data/VOC_structures/split_and_aligned/ACE2_WH1_6m0j.pdb
+pdb_N501Y_ACE2: data/VOC_structures/split_and_aligned/ACE2_alpha1_7ekf.pdb
+pdb_beta1_ACE2: data/VOC_structures/split_and_aligned/ACE2_beta1_7ekg.pdb
+pdb_beta2_ACE2: data/VOC_structures/split_and_aligned/ACE2_beta2.pdb
+pdb_beta3_ACE2: data/VOC_structures/split_and_aligned/ACE2_beta3.pdb
+pdb_delta1_ACE2: data/VOC_structures/split_and_aligned/ACE2_delta1_7wbq.pdb
+pdb_delta2_ACE2: data/VOC_structures/split_and_aligned/ACE2_delta2_7wbq.pdb
+pdb_omicron1_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron1.pdb
+pdb_omicron2_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron2.pdb
+pdb_omicron3_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron3_7wbp.pdb
+
 
 # URLs from which we download binding & expression of mutants & variants
 mut_bind_expr_url: https://media.githubusercontent.com/media/jbloomlab/SARS-CoV-2-RBD_DMS/master/results/single_mut_effects/single_mut_effects.csv
@@ -69,8 +91,6 @@ Titeseq_Kds_dir: results/binding_Kd
 Titeseq_Kds_file: results/binding_Kd/bc_binding.csv
 final_variant_scores_dir: results/final_variant_scores
 final_variant_scores_mut_file: results/final_variant_scores/final_variant_scores.csv
-epistatic_shifts_dir: results/epistatic_shifts
-JSD_v_WH1_file: results/epistatic_shifts/JSD_versus_Wuhan1_by_target.csv
 UShER_dir: results/UShER_SARS-CoV-2
 UShER_tree: results/UShER_SARS-CoV-2/public-latest.all.masked.pb
 UShER_tree_nwk_gz: results/UShER_SARS-CoV-2/public-latest.all.nwk.gz
@@ -79,6 +99,10 @@ UShER_ref: results/UShER_SARS-CoV-2/NC_045512.2.fa
 UShER_gtf: results/UShER_SARS-CoV-2/ncbiGenes.gtf
 UShER_annotated_subs: results/UShER_SARS-CoV-2/annotated_subs.tsv
 UShER_parsed_subs_N501Y: results/UShER_SARS-CoV-2/parsed_subs_N501Y.csv
+epistatic_shifts_dir: results/epistatic_shifts
+JSD_v_WH1_file: results/epistatic_shifts/JSD_versus_Wuhan1_by_target.csv
+JSD_v_WH1_expr_file: results/epistatic_shifts/JSD_versus_Wuhan1_EXPRESSION_by_target.csv
+structural_shifts_dir: results/structural_shifts
 
 
 # parameters for running PacBio `ccs` program

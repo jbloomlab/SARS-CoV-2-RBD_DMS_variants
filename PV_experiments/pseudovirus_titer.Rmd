@@ -48,34 +48,6 @@ dt <- read.csv(file="./titer_data/all_data.csv", stringsAsFactors=F)
 head(dt)
 ```
 
-### Plot relative titers as measured by luciferase activity for WH1 cycle, HEK-ACE2 cell line
-```{r}
-dt_WH1 <- dt[dt$background=="WH1_D614G",] %>% mutate(genotype = factor(genotype, 
-                                levels=c("none", "wt", 
-                                         "Y449H", "N501Y", "Y449H/N501Y")))
-
-ggplot(dt_WH1,
-       aes(genotype, RLU_per_uL_ACE2hi/exp(mean(log(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2hi"]))))
-       ) +
-  geom_point(size=3.5,
-             shape=16,
-             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
-  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
-  scale_y_log10(lim=c(1e-6, 1e1)) +
-  xlab("Spike gene") +
-  ylab("relative titer") +
-  theme_bw()  +
-  ggtitle("D614G background, ACE2-high cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggsave(
-  "./results/titers_D614G-cycle_ACE2hi.pdf",
-  scale = 1,
-  width = 6,
-  height = 4,
-  useDingbats=F
-)
-```
 ### Plot absolute (RLU/uL) titers as measured by luciferase activity for WH1 cycle, HEK-ACE2 cell line
 ```{r}
 ggplot(dt_WH1,
@@ -100,35 +72,6 @@ ggsave(
 )
 ```
 
-
-### Plot relative titers as measured by luciferase activity for omicron cycle, HEK-ACE2 cell line
-```{r}
-dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
-                                levels=c("none", "wt", 
-                                         "R498Q", "Y501N", "R498Q/Y501N")))
-
-ggplot(dt_omicron,
-       aes(genotype, RLU_per_uL_ACE2hi/exp(mean(log(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]))))
-       ) +
-  geom_point(size=3.5,
-             shape=16,
-             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
-  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
-  scale_y_log10(lim=c(5e-5, 1e1)) +
-  xlab("Spike gene") +
-  ylab("relative titer") +
-  theme_bw()  +
-  ggtitle("Omicron background, ACE2-high cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggsave(
-  "./results/titers_omicron-cycle_ACE2hi.pdf",
-  scale = 1,
-  width = 6,
-  height = 4,
-  useDingbats=F
-)
-```
 
 ### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, HEK-ACE2 cell line
 ```{r}
@@ -158,31 +101,6 @@ ggsave(
 )
 ```
 
-### Plot relative titers as measured by luciferase activity for WH1 cycle, "clone A" cell line
-```{r}
-
-ggplot(dt_WH1,
-       aes(genotype, RLU_per_uL_ACE2lo/exp(mean(log(dt_WH1[dt_WH1$genotype=="wt","RLU_per_uL_ACE2lo"]))))
-       ) +
-  geom_point(size=3.5,
-             shape=16,
-             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
-  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
-  scale_y_log10(lim=c(1e-5, 1e1)) +
-  xlab("Spike gene") +
-  ylab("relative titer") +
-  theme_bw()  +
-  ggtitle("D614G background, ACE2-low cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggsave(
-  "./results/titers_D614G-cycle_ACE2lo.pdf",
-  scale = 1,
-  width = 6,
-  height = 4,
-  useDingbats=F
-)
-```
 ### Plot absolute (RLU/uL) titers as measured by luciferase activity for WH1 cycle, "clone A" cell line
 ```{r}
 ggplot(dt_WH1,
@@ -207,35 +125,6 @@ ggsave(
 )
 ```
 
-
-### Plot relative titers as measured by luciferase activity for omicron cycle, "clone A" cell line
-```{r}
-dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
-                                levels=c("none", "wt", 
-                                         "R498Q", "Y501N", "R498Q/Y501N")))
-
-ggplot(dt_omicron,
-       aes(genotype, RLU_per_uL_ACE2lo/exp(mean(log(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]))))
-       ) +
-  geom_point(size=3.5,
-             shape=16,
-             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
-  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
-  scale_y_log10(lim=c(5e-5, 1e1)) +
-  xlab("Spike gene") +
-  ylab("relative titer") +
-  theme_bw()  +
-  ggtitle("Omicron background, ACE2-low cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
-
-ggsave(
-  "./results/titers_omicron-cycle_ACE2lo.pdf",
-  scale = 1,
-  width = 6,
-  height = 4,
-  useDingbats=F
-)
-```
 
 ### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, "clone A" cell line
 ```{r}
@@ -381,7 +270,7 @@ ggsave(
   "./results/titers_omicron-cycle_RLU-per-pg-p24_ACE2lo.pdf",
   scale = 1,
   width = 6,
-  height = 4,
+  height = 6,
   useDingbats=F
 )
 

@@ -507,8 +507,12 @@ invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/correlations_Wu
 Order factor variables for plotting
 
 ``` r
-#order target by order given in config
-dt_final$target <- factor(dt_final$target,levels=c("Wuhan_Hu_1","E484K","N501Y","B1351","Delta"))
+#rename B1351 to Beta, WH1
+dt_final[target=="Wuhan_Hu_1",target:="Wuhan-Hu-1"]
+dt_final[target=="B1351",target:="Beta"]
+
+#order targets in plotting order
+dt_final$target <- factor(dt_final$target,levels=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta"))
 #order mutant as a factor for grouping by rough biochemical grouping
 dt_final$mutant <- factor(dt_final$mutant, levels=c("C","P","G","V","M","L","I","A","F","W","Y","T","S","N","Q","E","D","H","K","R"))
 #add character vector indicating wildtype to use as plotting symbols for wt

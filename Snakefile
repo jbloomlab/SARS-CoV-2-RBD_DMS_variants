@@ -66,7 +66,8 @@ rule make_summary:
         mut_phenos_file=config['final_variant_scores_mut_file'],
         sars2_subs=config['UShER_annotated_subs'],
         parsed_subs_N501Y=config['UShER_parsed_subs_N501Y'],
-        epistatic_shifts='results/summary/epistatic_shifts.md'
+        epistatic_shifts='results/summary/epistatic_shifts.md',
+        structural_shifts='results/summary/structural_shifts.md'
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -106,6 +107,8 @@ rule make_summary:
             7. Download trees and reference files for analysis of the mutation-annotated tree provided in [UShER](https://github.com/yatisht/usher), and parse substitution occurrence counts by background: [N501Y]({path(input.parsed_subs_N501Y)})
             
             8. [Analyze patterns of epistasis in the DMS data and in SARS-CoV-2 genomic data]({path(input.epistatic_shifts)}).
+            
+            9. [Analyze structural perturbations in variant RBD structures and compare to DMS data]({path(input.structural_shifts)}).
 
 
             """
@@ -120,6 +123,26 @@ rule make_dag:
     shell:
         "snakemake --forceall --dag | dot -Tsvg > {output}"
 
+rule structural_shifts:
+    input:
+        config['final_variant_scores_mut_file'],
+        config['JSD_v_WH1_file']
+    output:
+        md='results/summary/structural_shifts.md',
+        md_files=directory('results/summary/structural_shifts_files')
+    envmodules:
+        'R/3.6.2-foss-2019b'
+    params:
+        nb='structural_shifts.Rmd',
+        md='structural_shifts.md',
+        md_files='structural_shifts_files'
+    shell:
+        """
+        R -e \"rmarkdown::render(input=\'{params.nb}\')\";
+        mv {params.md} {output.md};
+        mv {params.md_files} {output.md_files}
+        """
+
 rule epistatic_shifts:
     input:
         config['final_variant_scores_mut_file'],
@@ -127,6 +150,7 @@ rule epistatic_shifts:
         config['UShER_parsed_subs_N501Y']
     output:
         config['JSD_v_WH1_file'],
+        config['JSD_v_WH1_expr_file'],
         md='results/summary/epistatic_shifts.md',
         md_files=directory('results/summary/epistatic_shifts_files')
     envmodules:
