@@ -29,3 +29,5 @@ workflow:
 7. Download trees and reference files for analysis of the mutation-annotated tree provided in [UShER](https://github.com/yatisht/usher), and parse substitution occurrence counts by background: [N501Y](../UShER_SARS-CoV-2/parsed_subs_N501Y.csv)
 
 8. [Analyze patterns of epistasis in the DMS data and in SARS-CoV-2 genomic data](epistatic_shifts.md).
+
+9. [Analyze structural perturbations in variant RBD structures and compare to DMS data](structural_shifts.md).
