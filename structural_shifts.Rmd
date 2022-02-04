@@ -69,6 +69,8 @@ omicron3 <- read.pdb(file=config$pdb_omicron3)
 
 ## Calculate pairwise C-alpha, beta, and gamma distances for each structure compared to WH1
 
+Note, the Cgamma calc excludes residues with no gamma-atom (alanine and glycine) or beta-branching (and thus a gamma1 and gamma2 atom: isoleucine, threonine, valine)
+
 ```{r calc_Ca_dists}
 RBD_sites <- data.table(read.csv(file=config$RBD_sites))
 
@@ -383,7 +385,7 @@ for(i in 1:nrow(cgamma)){
 
 Calpha displacement:
 
-```{r scatter_plots_calpha_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r scatter_plots_calpha_v_JSD_v_WH1, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
 ggplot(data=calpha[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
   geom_point(pch=19)+
   scale_color_manual(values=group.colors)+
@@ -392,7 +394,7 @@ ggplot(data=calpha[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind
   ylab("JS distance versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
-  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75)),as.character(site),'')),size=3,color="gray40")
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
 
 invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_calpha.pdf",sep=""),useDingbats=F))
 ```
@@ -400,7 +402,7 @@ invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_calp
 
 Cbeta displacement:
 
-```{r scatter_plots_cbeta_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r scatter_plots_cbeta_v_JSD_v_WH1, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
 ggplot(data=cbeta[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
   geom_point(pch=19)+
   scale_color_manual(values=group.colors)+
@@ -409,14 +411,14 @@ ggplot(data=cbeta[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,
   ylab("JS distance versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
-  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75)),as.character(site),'')),size=3,color="gray40")
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
 
 invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_cbeta.pdf",sep=""),useDingbats=F))
 ```
 
 C-gamma displacement:
 
-```{r scatter_plots_cgamma_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r scatter_plots_cgamma_v_JSD_v_WH1, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
 ggplot(data=cgamma[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
   geom_point(pch=19)+
   scale_color_manual(values=group.colors)+
@@ -425,7 +427,7 @@ ggplot(data=cgamma[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind
   ylab("JS distance versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
-  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75)),as.character(site),'')),size=3,color="gray40")
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
 
 invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_cgamma.pdf",sep=""),useDingbats=F))
 ```
