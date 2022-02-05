@@ -55,7 +55,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -216,52 +216,87 @@ plot_scatter <- function(site, bg1, bg2, JSD=F, JSD_min3bc=T, JSD_min5bc=F,n_bc_
   x_min5bc <- dt[target==bg1 & position==site,bind_min5bc]
   y_min5bc <- dt[target==bg2 & position==site,bind_min5bc]
   chars <- dt[target==bg1 & position==site,mutant]
-  cols <- rep("black",20); cols[which(x_n_bc <= n_bc_cutoff | y_n_bc <= n_bc_cutoff)] <- "orange"
+  cols <- rep("black",20); cols[which(x_n_bc < n_bc_cutoff | y_n_bc < n_bc_cutoff)] <- "orange"
   plot(x,y, xlim=c(4.5,12),ylim=c(4.5,12),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
   abline(v=x_ref,lty=2,col="red")
   abline(h=y_ref,lty=2,col="red")
   if(JSD==T){
     val <- JS(x,y)
-    legend("topleft",bty="n",cex=1,legend=paste("distance:",format(val,digits=3)))
+    legend("topleft",bty="n",cex=1,legend=paste("JSD:",format(val,digits=3)))
   }else if(JSD_min3bc==T){
     val <- JS(x_min3bc,y_min3bc)
-    legend("topleft",bty="n",cex=1,legend=paste("distance (min 3bc):",format(val,digits=3)))
+    legend("topleft",bty="n",cex=1,legend=paste("JSD:",format(val,digits=3)))
   }else if(JSD_min5bc==T){
     val <- JS(x_min5bc,y_min5bc)
-    legend("topleft",bty="n",cex=1,legend=paste("distance (min 5bc):",format(val,digits=3)))
+    legend("topleft",bty="n",cex=1,legend=paste("JSD:",format(val,digits=3)))
   }
 }
 ```
 
 ``` r
-par(mfrow=c(2,2))
-plot_scatter(site=484,"Wuhan-Hu-1","N501Y")
-plot_scatter(site=501,"Wuhan-Hu-1","N501Y")
-plot_scatter(site=403,"Wuhan-Hu-1","N501Y")
-plot_scatter(site=498,"Wuhan-Hu-1","N501Y")
+par(mfrow=c(1,3))
+plot_scatter(site=417,"Wuhan-Hu-1","Beta")
+plot_scatter(site=484,"Wuhan-Hu-1","Beta")
+plot_scatter(site=501,"Wuhan-Hu-1","Beta")
 ```
 
-<img src="epistatic_shifts_files/figure-gfm/example_correlation-1.png" style="display: block; margin: auto;" />
+<img src="epistatic_shifts_files/figure-gfm/scatters_Beta_muts-1.png" style="display: block; margin: auto;" />
 
 ``` r
-par(mfrow=c(2,2))
-plot_scatter(site=446,"Wuhan-Hu-1","N501Y")
-plot_scatter(site=447,"Wuhan-Hu-1","N501Y")
-plot_scatter(site=448,"Wuhan-Hu-1","N501Y")
-plot_scatter(site=449,"Wuhan-Hu-1","N501Y")
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_Beta-muts.pdf",sep=""),useDingbats=F))
 ```
-
-<img src="epistatic_shifts_files/figure-gfm/corrs_N501Y_WH1_446-loop-1.png" style="display: block; margin: auto;" />
 
 ``` r
-par(mfrow=c(2,2))
-plot_scatter(site=452,"Wuhan-Hu-1","Beta")
-plot_scatter(site=452,"Wuhan-Hu-1","N501Y")
-plot_scatter(site=452,"Wuhan-Hu-1","E484K")
-plot_scatter(site=452,"E484K","Beta")
+par(mfrow=c(1,3))
+plot_scatter(site=446,"Wuhan-Hu-1","Beta")
+plot_scatter(site=447,"Wuhan-Hu-1","Beta")
+plot_scatter(site=449,"Wuhan-Hu-1","Beta")
 ```
 
-<img src="epistatic_shifts_files/figure-gfm/corrs_452-1.png" style="display: block; margin: auto;" />
+<img src="epistatic_shifts_files/figure-gfm/corrs_Beta_WH1_446-loop-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_class3-loop-muts.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+par(mfrow=c(1,4))
+plot_scatter(site=403,"Wuhan-Hu-1","Beta")
+plot_scatter(site=406,"Wuhan-Hu-1","Beta")
+plot_scatter(site=505,"Wuhan-Hu-1","Beta")
+plot_scatter(site=506,"Wuhan-Hu-1","Beta")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/corrs_403-406-505-506-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_403-perturbation.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+par(mfrow=c(1,7))
+plot_scatter(site=491,"Wuhan-Hu-1","Beta")
+plot_scatter(site=492,"Wuhan-Hu-1","Beta")
+plot_scatter(site=493,"Wuhan-Hu-1","Beta")
+plot_scatter(site=494,"Wuhan-Hu-1","Beta")
+plot_scatter(site=495,"Wuhan-Hu-1","Beta")
+plot_scatter(site=496,"Wuhan-Hu-1","Beta")
+plot_scatter(site=498,"Wuhan-Hu-1","Beta")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/corrs_RBM-perturbations-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_RBM-perturbation.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+par(mfrow=c(1,3))
+plot_scatter(site=419,"Wuhan-Hu-1","Beta")
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_419-perturbation.pdf",sep=""),useDingbats=F))
+```
+
+<img src="epistatic_shifts_files/figure-gfm/corrs_419-1.png" style="display: block; margin: auto;" />
 
 ## Line plots of JS distance from WH1 across RBD sites
 
@@ -453,6 +488,14 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_expr.pdf",sep=""),useDingbats=F))
 ```
 
+Output file with the site-pair JS distances.
+
+``` r
+temp[,.(target,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
+  mutate_if(is.numeric, round, digits=6) %>%
+  write.csv(file=config$JSD_v_WH1_expr_file, row.names=F,quote=F)
+```
+
 ## Map distance to pdb structure
 
 First, bind
@@ -552,6 +595,11 @@ cycle_bind <- rbind(cycle_bind,list("E484K/N501Y",dt[target=="Beta" & position==
 cycle_bind <- rbind(cycle_bind,list("Beta",dt[target=="Beta" & position==417 & mutant==wildtype,bind],dt[target=="Beta" & position==417 & mutant==wildtype,n_bc_bind],3))
 
 plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+
+#additive prediction?
+additive <- mean(cycle_bind[geno=="Wuhan-Hu-1",bind]) + (mean(cycle_bind[geno=="K417N",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind])) + (mean(cycle_bind[geno=="E484K",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind])) + ( mean(cycle_bind[geno=="N501Y",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind]))
+
+points(3,additive,pch=8,col="#7f7f7f")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/additivity_triple_mut_cycle_bind_beta-1.png" style="display: block; margin: auto;" />
@@ -584,12 +632,91 @@ cycle_bind <- rbind(cycle_bind,list("Y449H",dt[target=="Wuhan-Hu-1" & position==
 cycle_bind <- rbind(cycle_bind,list("Y449H/N501Y",dt[target=="N501Y" & position==449 & mutant=="H",bind],dt[target=="N501Y" & position==449 & mutant=="H",n_bc_bind],2))
 
 plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+
+#additive prediction?
+additive <- mean(cycle_bind[geno=="Wuhan-Hu-1",bind]) + (mean(cycle_bind[geno=="N501Y",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind])) + (mean(cycle_bind[geno=="Y449H",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind]))
+
+points(2,additive,pch=8,col="#7f7f7f")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/epistatic_double_mut_cycle_bind_N501Y_Y449H-1.png" style="display: block; margin: auto;" />
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/Y449H_N501Y_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+cycle_bind <- data.table()
+
+cycle_bind$geno <- "Wuhan-Hu-1"
+cycle_bind$bind <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,bind]
+cycle_bind$n_bc <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,n_bc_bind]
+cycle_bind$nmut <- 0
+
+
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
+
+
+#N501Y
+cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="N501Y" & position==484 & mutant==wildtype,bind],dt[target=="N501Y" & position==484 & mutant==wildtype,n_bc_bind],1))
+
+#G446V
+cycle_bind <- rbind(cycle_bind,list("G446V",dt[target=="Wuhan-Hu-1" & position==446 & mutant=="V",bind],dt[target=="Wuhan-Hu-1" & position==446 & mutant=="V",n_bc_bind],1))
+
+#G446V/N501Y
+cycle_bind <- rbind(cycle_bind,list("G446V/N501Y",dt[target=="N501Y" & position==446 & mutant=="V",bind],dt[target=="N501Y" & position==446 & mutant=="V",n_bc_bind],2))
+
+plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+
+#additive prediction?
+additive <- mean(cycle_bind[geno=="Wuhan-Hu-1",bind]) + (mean(cycle_bind[geno=="N501Y",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind])) + (mean(cycle_bind[geno=="G446V",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind]))
+
+points(2,additive,pch=8,col="#7f7f7f")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/epistatic_double_mut_cycle_bind_N501Y_G446V-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/G446V_N501Y_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+cycle_bind <- data.table()
+
+cycle_bind$geno <- "Wuhan-Hu-1"
+cycle_bind$bind <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,bind]
+cycle_bind$n_bc <- dt[target=="Wuhan-Hu-1" & position==331 & wildtype==mutant,n_bc_bind]
+cycle_bind$nmut <- 0
+
+
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="E484K" & position==484 & mutant=="E",bind],dt[target=="E484K" & position==484 & mutant=="E",n_bc_bind],0))
+cycle_bind <- rbind(cycle_bind,list("Wuhan-Hu-1",dt[target=="N501Y" & position==501 & mutant=="N",bind],dt[target=="N501Y" & position==501 & mutant=="N",n_bc_bind],0))
+
+
+#N501Y
+cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",bind],dt[target=="Wuhan-Hu-1" & position==501 & mutant=="Y",n_bc_bind],1))
+cycle_bind <- rbind(cycle_bind,list("N501Y",dt[target=="N501Y" & position==484 & mutant==wildtype,bind],dt[target=="N501Y" & position==484 & mutant==wildtype,n_bc_bind],1))
+
+#G446S
+cycle_bind <- rbind(cycle_bind,list("G446S",dt[target=="Wuhan-Hu-1" & position==446 & mutant=="S",bind],dt[target=="Wuhan-Hu-1" & position==446 & mutant=="S",n_bc_bind],1))
+
+#G446S/N501Y
+cycle_bind <- rbind(cycle_bind,list("G446S/N501Y",dt[target=="N501Y" & position==446 & mutant=="S",bind],dt[target=="N501Y" & position==446 & mutant=="S",n_bc_bind],2))
+
+plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+
+#additive prediction?
+additive <- mean(cycle_bind[geno=="Wuhan-Hu-1",bind]) + (mean(cycle_bind[geno=="N501Y",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind])) + (mean(cycle_bind[geno=="G446S",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind]))
+
+points(2,additive,pch=8,col="#7f7f7f")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/epistatic_double_mut_cycle_bind_N501Y_G446S-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/G446S_N501Y_epistasis_cycle_bind.pdf",sep=""),useDingbats=F))
 ```
 
 ``` r
@@ -616,6 +743,11 @@ cycle_bind <- rbind(cycle_bind,list("Q498R",dt[target=="Wuhan-Hu-1" & position==
 cycle_bind <- rbind(cycle_bind,list("Q498R/N501Y",dt[target=="N501Y" & position==498 & mutant=="R",bind],dt[target=="N501Y" & position==498 & mutant=="R",n_bc_bind],2))
 
 plot(cycle_bind$nmut,cycle_bind$bind,pch=19,xlab="number mutations",ylab="binding affinity (log10(Kd))")
+
+#additive prediction?
+additive <- mean(cycle_bind[geno=="Wuhan-Hu-1",bind]) + (mean(cycle_bind[geno=="N501Y",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind])) + (mean(cycle_bind[geno=="Q498R",bind]) - mean(cycle_bind[geno=="Wuhan-Hu-1",bind]))
+
+points(2,additive,pch=8,col="#7f7f7f")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/epistatic_double_mut_cycle_bind_N501Y_Q498R-1.png" style="display: block; margin: auto;" />
@@ -762,7 +894,7 @@ ggplot(data=subs_N501Y, aes(x=sub_count_N501, y=sub_count_Y501, color=delta_delt
 <img src="epistatic_shifts_files/figure-gfm/sub_occurrence_divergence_versus_DMS_divergence-1.png" style="display: block; margin: auto;" />
 
 ``` r
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-site-JSD.pdf",sep=""),useDingbats=F))
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-ddlog10Kd.pdf",sep=""),useDingbats=F))
 ```
 
 Do similar but on log2 scale
@@ -788,5 +920,5 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind),], aes(x=sub_count_N501_pc, y=su
 <img src="epistatic_shifts_files/figure-gfm/sub_occurrence_divergence_versus_DMS_divergence_log2-1.png" style="display: block; margin: auto;" />
 
 ``` r
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-site-JSD_logscale.pdf",sep=""),useDingbats=F))
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-ddlog10Kd_logscale.pdf",sep=""),useDingbats=F))
 ```

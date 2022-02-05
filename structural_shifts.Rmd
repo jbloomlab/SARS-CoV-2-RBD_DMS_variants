@@ -52,7 +52,7 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 
 ## Setup
 
-Read in PDBs. These were aligned to minimize RBD Calpha RMSD using PyMol. For beta, omicron structures, this was performed for both RBD units in the asymmetric unit. (These structures also included mAbs used in the crystallization.) RBD and ACE2s were then split into separate objects/pdbs. The pdbs in these aligned coordinates were then output. Structures include WH1 (6m0j), N501Y (7ekf, local refinement of a cryoEM map), beta (beta1=7ekg, beta2,3 not yet published), and omicron (omicron 1,2 not yet published, omicron3=7wbp).
+Read in PDBs. These were aligned to minimize RBD Calpha RMSD using PyMol. For beta, omicron structures, this was performed for both RBD units in the asymmetric unit. (These structures also included mAbs used in the crystallization.) RBD and ACE2s were then split into separate objects/pdbs. The pdbs in these aligned coordinates were then output. Structures include WH1 (6m0j), N501Y (7ekf), beta (beta1=7ekg, beta2,3 not yet published), and omicron (omicron 1,2 not yet published, omicron3=7wbp).
 
 ```{r input_data}
 WH1 <- read.pdb(file=config$pdb_WH1)
@@ -434,7 +434,7 @@ invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_cgam
 
 Change in relative solvent accessibility:
 
-```{r scatter_plots_dRSA_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r scatter_plots_dRSA_v_JSD_v_WH1, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
 ggplot(data=dRSA[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
   geom_point(pch=19)+
   scale_color_manual(values=group.colors)+
@@ -615,7 +615,7 @@ invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/dRSA-ACE2-bound_v_
 
 
 
-```{r scatter_plots_ACE2_dRSA_v_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r scatter_plots_ACE2_dRSA_v_JSD_v_WH1, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
 for(i in 1:nrow(ACE2_dRSA)){
   ACE2_dRSA$JSD_bind[i] <- JSD_bind[site==ACE2_dRSA$site[i] & target==ACE2_dRSA$variable[i],JSD_min3bc]
   ACE2_dRSA$JSD_expr[i] <- JSD_expr[site==ACE2_dRSA$site[i] & target==ACE2_dRSA$variable[i],JSD_min3bc]
@@ -629,7 +629,223 @@ ggplot(data=ACE2_dRSA[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_b
   ylab("JS distance versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
-  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.1)),as.character(site),'')),size=3,color="gray40")
-
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.08 & abs(value) > 0.1) | (JSD_bind > 0.15 & abs(value) > 0.005)),as.character(site),'')),size=3,color="gray40")
 invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_dRSA-ACE2-bound.pdf",sep=""),useDingbats=F))
 ```
+
+
+## Repeat with aligned cryo-EM based local refined RBD:ACE2 structures
+
+## Setup
+
+Read in PDBs. These were aligned to minimize RBD Calpha RMSD using PyMol. Structures include WH1 (7kmb), N501Y (7ekf), beta (7vx4), and delta (7v8b)
+
+```{r input_data_cryo}
+WH1 <- read.pdb(file=config$pdb_WH1_cryo)
+alpha <- read.pdb(file=config$pdb_alpha_cryo)
+beta <- read.pdb(file=config$pdb_beta_cryo)
+delta <- read.pdb(file=config$pdb_delta_cryo)
+```
+
+## Calculate pairwise C-alpha, beta, and gamma distances for each structure compared to WH1
+
+Note, the Cgamma calc excludes residues with no gamma-atom (alanine and glycine) or beta-branching (and thus a gamma1 and gamma2 atom: isoleucine, threonine, valine)
+
+```{r calc_Ca_dists_cryo}
+RBD_sites <- data.table(read.csv(file=config$RBD_sites))
+
+for(voc in c("alpha","beta","delta")){
+  RBD_sites[,paste(voc,"_v_WH1_Ca_dist",sep=""):=as.numeric(NA)]
+  for(i in 1:nrow(RBD_sites)){
+    site <- RBD_sites[i,site]
+    WH1_calpha <- WH1$atom[WH1$atom$resno==site & WH1$atom$elety=="CA",]
+    voc_calpha <- get(voc)$atom[get(voc)$atom$resno==site & get(voc)$atom$elety=="CA",]
+    if(nrow(WH1_calpha)==1 & nrow(voc_calpha)==1){
+      RBD_sites[i,paste(voc,"_v_WH1_Ca_dist",sep="") := sqrt((WH1_calpha$x - voc_calpha$x)^2 + (WH1_calpha$y - voc_calpha$y)^2 + (WH1_calpha$z - voc_calpha$z)^2)] 
+    }else{
+      #print(paste("no distance for", voc, "site",site))
+    }
+  }
+}
+
+```
+
+```{r calc_Cb_dists_cryo}
+for(voc in c("alpha","beta","delta")){
+  RBD_sites[,paste(voc,"_v_WH1_Cb_dist",sep=""):=as.numeric(NA)]
+  for(i in 1:nrow(RBD_sites)){
+    site <- RBD_sites[i,site]
+    WH1_cbeta <- WH1$atom[WH1$atom$resno==site & WH1$atom$elety=="CB",]
+    voc_cbeta <- get(voc)$atom[get(voc)$atom$resno==site & get(voc)$atom$elety=="CB",]
+    if(nrow(WH1_cbeta)==1 & nrow(voc_cbeta)==1){
+      RBD_sites[i,paste(voc,"_v_WH1_Cb_dist",sep="") := sqrt((WH1_cbeta$x - voc_cbeta$x)^2 + (WH1_cbeta$y - voc_cbeta$y)^2 + (WH1_cbeta$z - voc_cbeta$z)^2)] 
+    }else{
+      #print(paste("no distance for", voc, "site",site))
+    }
+  }
+}
+
+```
+
+```{r calc_Cg_dists_cryo}
+for(voc in c("alpha","beta","delta")){
+  RBD_sites[,paste(voc,"_v_WH1_Cg_dist",sep=""):=as.numeric(NA)]
+  for(i in 1:nrow(RBD_sites)){
+    site <- RBD_sites[i,site]
+    WH1_cgamma <- WH1$atom[WH1$atom$resno==site & WH1$atom$elety %in% c("CG","SG","OG"),]
+    voc_cgamma <- get(voc)$atom[get(voc)$atom$resno==site & get(voc)$atom$elety %in% c("CG","SG","OG"),]
+    if(nrow(WH1_cgamma)==1 & nrow(voc_cgamma)==1){
+      RBD_sites[i,paste(voc,"_v_WH1_Cg_dist",sep="") := sqrt((WH1_cgamma$x - voc_cgamma$x)^2 + (WH1_cgamma$y - voc_cgamma$y)^2 + (WH1_cgamma$z - voc_cgamma$z)^2)] 
+    }else{
+      #print(paste("no distance for", voc, "site",site))
+    }
+  }
+}
+
+```
+
+Line plots of Calpha, beta, gamma displacement compared to WH1 structure
+
+```{r line_plots_Calpha-dist_v_WH1_cryo, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+#define focal bg for others to compare to
+calpha <- melt(RBD_sites[,.(site,alpha_v_WH1_Ca_dist,beta_v_WH1_Ca_dist,delta_v_WH1_Ca_dist)], id.vars=c("site"))
+calpha[variable=="alpha_v_WH1_Ca_dist",variable:="N501Y"]
+calpha[variable=="beta_v_WH1_Ca_dist",variable:="Beta"]
+calpha[variable=="delta_v_WH1_Ca_dist",variable:="Delta"]
+
+#define colors for each bg
+group.colors <- c("Wuhan-Hu-1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "Beta"=cbPalette[6], "Delta"=cbPalette[7], "Omicron"=cbPalette[2])
+
+#define order for plotting of bgs
+calpha$variable <- factor(calpha$variable,levels=c("E484K","N501Y","Beta","Delta"))
+
+ggplot(data=calpha[site %in% seq(334,515),], aes(x=site, y=value, color=variable))+
+  geom_line(size=1)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("C-alpha distance versus Wuhan-Hu-1 [7kmb] (A)")+
+  geom_text_repel(aes(label=ifelse(((value > 1) & variable=="Beta"),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/Calpha_v_WH1_cryo.pdf",sep=""),useDingbats=F))
+```
+
+```{r line_plots_Cbeta-dist_v_WH1_cryo, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+#define focal bg for others to compare to
+cbeta <- melt(RBD_sites[,.(site,alpha_v_WH1_Cb_dist,beta_v_WH1_Cb_dist,delta_v_WH1_Cb_dist)], id.vars=c("site"))
+cbeta[variable=="alpha_v_WH1_Cb_dist",variable:="N501Y"]
+cbeta[variable=="beta_v_WH1_Cb_dist",variable:="Beta"]
+cbeta[variable=="delta_v_WH1_Cb_dist",variable:="Delta"]
+
+#define order for plotting of bgs
+cbeta$variable <- factor(cbeta$variable,levels=c("E484K","N501Y","Beta","Delta"))
+
+ggplot(data=cbeta[site %in% seq(334,515),], aes(x=site, y=value, color=variable))+
+  geom_line(size=1)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("C-beta distance versus Wuhan-Hu-1 [7kmb] (A)")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/Cbeta_v_WH1_cryo.pdf",sep=""),useDingbats=F))
+```
+
+
+```{r line_plots_Cgamma-dist_v_WH1_cryo, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
+#define focal bg for others to compare to
+cgamma <- melt(RBD_sites[,.(site,alpha_v_WH1_Cg_dist,beta_v_WH1_Cg_dist,delta_v_WH1_Cg_dist)], id.vars=c("site"))
+cgamma[variable=="alpha_v_WH1_Cg_dist",variable:="N501Y"]
+cgamma[variable=="beta_v_WH1_Cg_dist",variable:="Beta"]
+cgamma[variable=="delta_v_WH1_Cg_dist",variable:="Delta"]
+
+#define order for plotting of bgs
+cgamma$variable <- factor(cgamma$variable,levels=c("E484K","N501Y","Beta","Delta"))
+
+ggplot(data=cgamma[site %in% seq(334,515),], aes(x=site, y=value, color=variable))+
+  geom_line(size=1)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("C-gamma distance versus Wuhan-Hu-1 [7kmb] (A)")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/Cgamma_v_WH1_cryo.pdf",sep=""),useDingbats=F))
+```
+
+## Compare structural shift to functional shift
+
+We have a metric of functional perturbation at a site, derived from our deep mutational scanning measurements. Let's see how structural perturbations correlate (or don't) with structural perturbations.
+
+```{r load_JSD_cryo}
+JSD_bind <- data.table(read.csv(file=config$JSD_v_WH1_file))
+JSD_expr <- data.table(read.csv(file=config$JSD_v_WH1_expr_file))
+
+for(i in 1:nrow(calpha)){
+  calpha$JSD_bind[i] <- JSD_bind[site==calpha$site[i] & target==calpha$variable[i],JSD_min3bc]
+  calpha$JSD_expr[i] <- JSD_expr[site==calpha$site[i] & target==calpha$variable[i],JSD_min3bc]
+}
+
+for(i in 1:nrow(cbeta)){
+  cbeta$JSD_bind[i] <- JSD_bind[site==cbeta$site[i] & target==cbeta$variable[i],JSD_min3bc]
+  cbeta$JSD_expr[i] <- JSD_expr[site==cbeta$site[i] & target==cbeta$variable[i],JSD_min3bc]
+}
+
+for(i in 1:nrow(cgamma)){
+  cgamma$JSD_bind[i] <- JSD_bind[site==cgamma$site[i] & target==cgamma$variable[i],JSD_min3bc]
+  cgamma$JSD_expr[i] <- JSD_expr[site==cgamma$site[i] & target==cgamma$variable[i],JSD_min3bc]
+}
+
+```
+
+Calpha displacement:
+
+```{r scatter_plots_calpha_v_JSD_v_WH1_cryo, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(data=calpha[site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
+  geom_point(pch=19)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  xlab("C-alpha displacement versus Wuhan-Hu-1 [7kmb]")+
+  ylab("JS distance versus Wuhan-Hu-1")+
+  facet_wrap(~variable,nrow=1)+
+  theme(strip.text.x = element_text(size = 18))+
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_calpha_cryo.pdf",sep=""),useDingbats=F))
+```
+
+
+Cbeta displacement:
+
+```{r scatter_plots_cbeta_v_JSD_v_WH1_cryo, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(data=cbeta[site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
+  geom_point(pch=19)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  xlab("C-beta displacement versus Wuhan-Hu-1 [6m0j]")+
+  ylab("JS distance versus Wuhan-Hu-1")+
+  facet_wrap(~variable,nrow=1)+
+  theme(strip.text.x = element_text(size = 18))+
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_cbeta_cryo.pdf",sep=""),useDingbats=F))
+```
+
+C-gamma displacement:
+
+```{r scatter_plots_cgamma_v_JSD_v_WH1_cryo, echo=T, fig.width=7, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(data=cgamma[site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=variable))+
+  geom_point(pch=19)+
+  scale_color_manual(values=group.colors)+
+  theme_classic()+
+  xlab("C-gamma displacement versus Wuhan-Hu-1 [6m0j]")+
+  ylab("JS distance versus Wuhan-Hu-1")+
+  facet_wrap(~variable,nrow=1)+
+  theme(strip.text.x = element_text(size = 18))+
+  geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$structural_shifts_dir,"/scatter_JSD_v_cgamma_cryo.pdf",sep=""),useDingbats=F))
+```
+
+

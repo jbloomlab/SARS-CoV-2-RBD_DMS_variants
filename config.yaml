@@ -55,6 +55,11 @@ pdb_omicron1_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron1.pdb
 pdb_omicron2_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron2.pdb
 pdb_omicron3_ACE2: data/VOC_structures/split_and_aligned/ACE2_omicron3_7wbp.pdb
 
+pdb_WH1_cryo: data/VOC_structures/cryo/WH1_7kmb.pdb
+pdb_alpha_cryo: data/VOC_structures/cryo/alpha_7mjn.pdb
+pdb_beta_cryo: data/VOC_structures/cryo/beta_7vx4.pdb
+pdb_delta_cryo: data/VOC_structures/cryo/delta_7v8b.pdb
+
 
 # URLs from which we download binding & expression of mutants & variants
 mut_bind_expr_url: https://media.githubusercontent.com/media/jbloomlab/SARS-CoV-2-RBD_DMS/master/results/single_mut_effects/single_mut_effects.csv
