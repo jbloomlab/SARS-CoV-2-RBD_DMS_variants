@@ -211,13 +211,13 @@ plot_scatter <- function(site, bg1, bg2, JSD=F, JSD_min3bc=T, JSD_min5bc=F,n_bc_
   y <- dt[target==bg2 & position==site,get(phenotype)]
   y_n_bc <- dt[target==bg2 & position==site,get(paste("n_bc_",phenotype,sep=""))]
   y_ref <- dt[target==bg2 & position==site & as.character(mutant)==as.character(wildtype),get(phenotype)]
-  x_min3bc <- dt[target==bg1 & position==site,bind_min3bc]
-  y_min3bc <- dt[target==bg2 & position==site,bind_min3bc]
-  x_min5bc <- dt[target==bg1 & position==site,bind_min5bc]
-  y_min5bc <- dt[target==bg2 & position==site,bind_min5bc]
+  x_min3bc <- dt[target==bg1 & position==site,get(paste(phenotype,"_min3bc",sep=""))]
+  y_min3bc <- dt[target==bg2 & position==site,get(paste(phenotype,"_min3bc",sep=""))]
+  x_min5bc <- dt[target==bg1 & position==site,get(paste(phenotype,"_min5bc",sep=""))]
+  y_min5bc <- dt[target==bg2 & position==site,get(paste(phenotype,"_min5bc",sep=""))]
   chars <- dt[target==bg1 & position==site,mutant]
   cols <- rep("black",20); cols[which(x_n_bc < n_bc_cutoff | y_n_bc < n_bc_cutoff)] <- "orange"
-  plot(x,y, xlim=c(4.5,12),ylim=c(4.5,12),pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
+  plot(x,y, xlim=if(phenotype=="bind"){c(4.5,12)}else{c(5.5,11)},ylim=if(phenotype=="bind"){c(4.5,12)}else{c(5.5,11)},pch=chars,xlab=paste(bg1,phenotype),ylab=paste(bg2,phenotype),col=cols,main=paste("site",site))
   abline(v=x_ref,lty=2,col="red")
   abline(h=y_ref,lty=2,col="red")
   if(JSD==T){
@@ -298,6 +298,22 @@ invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_419-per
 
 <img src="epistatic_shifts_files/figure-gfm/corrs_419-1.png" style="display: block; margin: auto;" />
 
+``` r
+par(mfrow=c(2,3))
+plot_scatter(site=349,"Wuhan-Hu-1","Beta",phenotype="expr")
+plot_scatter(site=401,"Wuhan-Hu-1","Beta",phenotype="expr")
+plot_scatter(site=404,"Wuhan-Hu-1","Beta",phenotype="expr")
+plot_scatter(site=409,"Wuhan-Hu-1","Beta",phenotype="expr")
+plot_scatter(site=495,"Wuhan-Hu-1","Beta",phenotype="expr")
+plot_scatter(site=506,"Wuhan-Hu-1","Beta",phenotype="expr")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/corrs_expression-sites-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_expression-sites.pdf",sep=""),useDingbats=F))
+```
+
 ## Line plots of JS distance from WH1 across RBD sites
 
 Make lineplots showing JS-D across sites for each variant compared to
@@ -372,55 +388,14 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")
+  ylab("JS distance versus Wuhan-Hu-1")+
+  geom_text_repel(aes(label=ifelse(((JSD_min3bc > 0.15)),as.character(site),'')),size=3,color="gray40")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_min3bc-1.png" style="display: block; margin: auto;" />
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc.pdf",sep=""),useDingbats=F))
-```
-
-Separate facet per bg comparison
-
-``` r
-ggplot(data=temp, aes(x=site, y=JSD, color=target))+
-  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
-  geom_line(size=1)+
-  scale_color_manual(values=group.colors)+
-  theme_classic()+
-  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
-  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")+
-  facet_wrap(~target,ncol=1)+
-  theme(strip.text.x = element_text(size = 18))
-```
-
-<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_faceted-1.png" style="display: block; margin: auto;" />
-
-``` r
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_faceted.pdf",sep=""),useDingbats=F))
-```
-
-Again requiring min 3 bc
-
-``` r
-ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
-  geom_rect(data=label_df, aes(x=NULL, y=NULL, color=NULL,xmin=xmin, xmax=xmax, ymin=0,ymax=1.1*max(temp$JSD,na.rm=T)), alpha=0.2)+
-  geom_line(size=1)+
-  scale_color_manual(values=group.colors)+
-  theme_classic()+
-  scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
-  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")+
-  facet_wrap(~target,ncol=1)+
-  theme(strip.text.x = element_text(size = 18))
-```
-
-<img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_faceted_min3bc-1.png" style="display: block; margin: auto;" />
-
-``` r
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_faceted_min3bc.pdf",sep=""),useDingbats=F))
 ```
 
 Output file with the site-pair JS distances.
@@ -431,7 +406,7 @@ temp[,.(target,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
   write.csv(file=config$JSD_v_WH1_file, row.names=F,quote=F)
 ```
 
-Repeat for expression measurements (just do multiple line overlay)
+Repeat for expression measurements
 
 ``` r
 #define focal bg for others to compare to
@@ -479,7 +454,8 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")
+  ylab("JS distance versus Wuhan-Hu-1, expression DMS")+
+  geom_text_repel(aes(label=ifelse(((JSD_min3bc > 0.06)),as.character(site),'')),size=3,color="gray40")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_min3bc_expr-1.png" style="display: block; margin: auto;" />
@@ -921,4 +897,149 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind),], aes(x=sub_count_N501_pc, y=su
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-ddlog10Kd_logscale.pdf",sep=""),useDingbats=F))
+```
+
+Want a figure to illustrate concept of non-specific buffering of
+mutations in Omicron. Make a table and diagram illustrating the DMS
+effect of each of the 15 BA.1 RBD mutations as measured in the WH1
+versus N501Y DMS datasets. Mutations in BA.1 RBD: G339D, S371L, S373P,
+S375P, K417N, N440K, G446S, S477N, T478K, E484A, Q493R, G496S, Q498R,
+N501Y, Y505H
+
+``` r
+subs_omicron <- data.table(data.table(mut=c("G339D", "S371L", "S373P", "S375P", "K417N", "N440K", "G446S", "S477N", "T478K", "E484A", "Q493R", "G496S", "Q498R", "N501Y", "Y505H"),site=c(339, 371, 373, 375, 417, 440, 446, 477, 478, 484, 493, 496, 498, 501, 505),aa=c("D", "L", "P", "P", "N", "K", "S", "N", "K", "A", "R", "S", "R", "Y", "H")))
+
+subs_omicron$delta_bind_WH1 <- as.numeric(NA)
+subs_omicron$delta_bind_N501Y <- as.numeric(NA)
+subs_omicron$delta_bind_Beta <- as.numeric(NA)
+
+for(i in 1:nrow(subs_omicron)){
+  subs_omicron[i,"delta_bind_WH1"] <- dt[position==subs_omicron[i,site] & mutant==subs_omicron[i,aa] & target=="Wuhan-Hu-1",delta_bind]
+  subs_omicron[i,"delta_bind_N501Y"] <- dt[position==subs_omicron[i,site] & mutant==subs_omicron[i,aa] & target=="N501Y",delta_bind]
+  subs_omicron[i,"delta_bind_Beta"] <- dt[position==subs_omicron[i,site] & mutant==subs_omicron[i,aa] & target=="Beta",delta_bind]
+}
+
+# #replace the N501Y value in the N501Y and Beta column (don't want it as zero, want it as the WH1 N501Y value)
+# subs_omicron[mut=="N501Y","delta_bind_N501Y"] <- subs_omicron[mut=="N501Y","delta_bind_WH1"]
+# subs_omicron[mut=="N501Y","delta_bind_Beta"] <- subs_omicron[mut=="N501Y","delta_bind_WH1"]
+
+#replace the N501Y value in the N501Y and Beta column (don't want it as zero, want it as the inverse of Y501N)
+subs_omicron[mut=="N501Y","delta_bind_N501Y"] <- -dt[target=="N501Y" & mutation=="Y501N",delta_bind]
+subs_omicron[mut=="N501Y","delta_bind_Beta"] <- -dt[target=="Beta" & mutation=="Y501N",delta_bind]
+
+# #replace the K417N value in the Beta column (don't want it as zero, want it as the inverse of the N417K mutation)
+# subs_omicron[mut=="K417N","delta_bind_Beta"] <- subs_omicron[mut=="K417N","delta_bind_WH1"]
+
+#replace the K417N value in the Beta column (don't want it as zero, want it as the inverse of the N417K mutation)
+subs_omicron[mut=="K417N","delta_bind_Beta"] <- -dt[target=="Beta" & mutation=="N417K",delta_bind]
+
+# #replace the E484A value in the Beta column (don't want it as the K484A value, want it as the WH1 E484A value)
+# subs_omicron[mut=="E484A","delta_bind_Beta"] <- subs_omicron[mut=="E484A","delta_bind_WH1"]
+
+#replace the E484A value in the Beta column (don't want it as the K484A value, want it as the E484A difference)
+subs_omicron[mut=="E484A","delta_bind_Beta"] <- dt[target=="Beta" & mutation=="K484A",delta_bind] - dt[target=="Beta" & mutation=="K484E",delta_bind]
+
+
+subs_omicron_WH1order <- copy(subs_omicron[order(subs_omicron$delta_bind_WH1,decreasing=T),])
+subs_omicron_N501Yorder <- copy(subs_omicron[order(subs_omicron$delta_bind_N501Y,decreasing=T),])
+subs_omicron_Betaorder <- copy(subs_omicron[order(subs_omicron$delta_bind_Beta,decreasing=T),])
+#put N501Y first one
+subs_omicron_N501Yorder <- subs_omicron_N501Yorder[c(2,1,3:15)]
+subs_omicron_Betaorder <- subs_omicron_Betaorder[c(2,1,3:15)]
+
+#make cumulative affinity column for plotting
+subs_omicron_WH1order[1,"value"] <- subs_omicron_WH1order[1,"delta_bind_WH1"]
+for(i in 2:nrow(subs_omicron_WH1order)){
+  subs_omicron_WH1order[i,"value"] <- subs_omicron_WH1order[i-1,"value"] + subs_omicron_WH1order[i,"delta_bind_WH1"]
+}
+
+subs_omicron_N501Yorder[1,"value"] <- subs_omicron_N501Yorder[1,"delta_bind_N501Y"]
+for(i in 2:nrow(subs_omicron_N501Yorder)){
+  subs_omicron_N501Yorder[i,"value"] <- subs_omicron_N501Yorder[i-1,"value"] + subs_omicron_N501Yorder[i,"delta_bind_N501Y"]
+}
+
+subs_omicron_Betaorder[1,"value"] <- subs_omicron_Betaorder[1,"delta_bind_Beta"]
+for(i in 2:nrow(subs_omicron_Betaorder)){
+  subs_omicron_Betaorder[i,"value"] <- subs_omicron_Betaorder[i-1,"value"] + subs_omicron_Betaorder[i,"delta_bind_Beta"]
+}
+
+ggplot(data=subs_omicron_WH1order, aes(y=value, x=as.numeric(row.names(subs_omicron_WH1order))))+
+  geom_point(shape=16,size=2)+geom_line()+
+  theme_classic()+
+  ylim(-2.75,3.8)+
+  ylab("cumulative additive affinity relative to Wuhan-Hu-1")+xlab("")+
+  geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
+  geom_hline(yintercept=0,linetype=2,color="red")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_WH1-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron-cumulative_affinity_WH1-muts.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+ggplot(data=subs_omicron_N501Yorder, aes(y=value, x=as.numeric(row.names(subs_omicron_N501Yorder))))+
+  geom_point(shape=16,size=2)+geom_line()+
+  theme_classic()+
+  ylim(-2.75,3.8)+
+  ylab("cumulative additive affinity relative to Wuhan-Hu-1 [N501Y measures]")+xlab("")+
+  geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
+  geom_hline(yintercept=0,linetype=2,color="red")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_N501Y-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron-cumulative_affinity_N501Y-muts.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+ggplot(data=subs_omicron_Betaorder, aes(y=value, x=as.numeric(row.names(subs_omicron_Betaorder))))+
+  geom_point(shape=16,size=2)+geom_line()+
+  theme_classic()+
+  ylim(-2.75,3.8)+
+  ylab("cumulative additive affinity relative to Wuhan-Hu-1 [Beta measures]")+xlab("")+
+  geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
+  geom_hline(yintercept=0,linetype=2,color="red")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_Beta-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron-cumulative_affinity_Beta-muts.pdf",sep=""),useDingbats=F))
+```
+
+Why difference in Beta and Alpha plots? Likely what we’ve seen in other
+contexts, some global effect in N501Y likely due to it having
+significantly higher base affinity than the other wildtype backgrounds?
+Can see this in the plot below, where mutations are biased to being
+slightly to the left of the 1:1 line.
+
+``` r
+ggplot(data=subs_omicron_Betaorder, aes(y=delta_bind_Beta, x=delta_bind_N501Y))+
+  geom_point(shape=16,size=2)+
+  theme_classic()+
+  ylab("delta-bind in Beta RBD")+xlab("delta-bind in Alpha RBD")+
+  geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
+  geom_abline(slope=1,intercept=0,lty=2,col="red")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_alpha-v-beta-1.png" style="display: block; margin: auto;" />
+
+Also, for completeness, Beta vs WH1 for the mutations on the diagram
+
+``` r
+ggplot(data=subs_omicron_Betaorder, aes(y=delta_bind_Beta, x=delta_bind_WH1))+
+  geom_point(shape=16,size=2)+
+  theme_classic()+
+  ylab("delta-bind in Beta RBD")+xlab("delta-bind in Wuhan-Hu-1 RBD")+
+  geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
+  geom_abline(slope=1,intercept=0,lty=2,col="red")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_beta-v-WH1-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron_mut-diffs-beta-v-wh1.pdf",sep=""),useDingbats=F))
 ```
