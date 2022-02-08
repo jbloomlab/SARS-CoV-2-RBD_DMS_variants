@@ -150,20 +150,20 @@ help for choosing a minimum number of barcodes to use.
 par(mfrow=c(2,3))
 plot(dt_bind[library=="pool1A" & variant_class=="1 nonsynonymous",n_bc_bind],
      dt_bind[library=="pool1A" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
-     pch=19,col="#00000005",main="pool1A, bind",ylab="SEM",xlab="number barcodes collapsed")
+     pch=16,col="#00000005",main="pool1A, bind",ylab="SEM",xlab="number barcodes collapsed")
 plot(dt_bind[library=="pool1B" & variant_class=="1 nonsynonymous",n_bc_bind],
      dt_bind[library=="pool1B" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
-     pch=19,col="#00000005",main="pool1B, bind",ylab="SEM",xlab="number barcodes collapsed")
+     pch=16,col="#00000005",main="pool1B, bind",ylab="SEM",xlab="number barcodes collapsed")
 plot(dt_bind[library=="pool2A" & variant_class=="1 nonsynonymous",n_bc_bind],
      dt_bind[library=="pool2A" & variant_class=="1 nonsynonymous",sd_bind/sqrt(n_bc_bind)],
-     pch=19,col="#00000005",main="pool2A, bind",ylab="SEM",xlab="number barcodes collapsed")
+     pch=16,col="#00000005",main="pool2A, bind",ylab="SEM",xlab="number barcodes collapsed")
 plot(dt_expr[library=="pool1" & variant_class=="1 nonsynonymous",n_bc_expr],
      dt_expr[library=="pool1" & variant_class=="1 nonsynonymous",sd_expr/sqrt(n_bc_expr)],
-     pch=19,col="#00000005",main="pool1, expr",ylab="SEM",xlab="number barcodes collapsed")
+     pch=16,col="#00000005",main="pool1, expr",ylab="SEM",xlab="number barcodes collapsed")
 plot(0,type='n',axes=FALSE,ann=F)
 plot(dt_expr[library=="pool2" & variant_class=="1 nonsynonymous",n_bc_expr],
      dt_expr[library=="pool2" & variant_class=="1 nonsynonymous",sd_expr/sqrt(n_bc_expr)],
-     pch=19,col="#00000005",main="pool2, expr",ylab="SEM",xlab="number barcodes collapsed")
+     pch=16,col="#00000005",main="pool2, expr",ylab="SEM",xlab="number barcodes collapsed")
 ```
 
 <img src="collapse_scores_files/figure-gfm/sem_v_n-bc-1.png" style="display: block; margin: auto;" />
@@ -268,12 +268,12 @@ correlations!
 
 ``` r
 par(mfrow=c(2,3))
-x <- dt_mutant_expr[library=="pool1" & wildtype!=mutant,mean_expr]; y <- dt_mutant_expr[library=="pool2" & wildtype!=mutant,mean_expr]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1",ylab="replicate 2",main="expression");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_mutant_expr[library=="pool1" & wildtype!=mutant,mean_expr]; y <- dt_mutant_expr[library=="pool2" & wildtype!=mutant,mean_expr]; plot(x,y,pch=16,col="#00000020",xlab="replicate 1",ylab="replicate 2",main="expression");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 plot(0,type='n',axes=FALSE,ann=F)
 plot(0,type='n',axes=FALSE,ann=F)
-x <- dt_mutant_bind[library=="pool1A" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool2A" & wildtype!=mutant,mean_bind]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1A",ylab="replicate 2",main="binding affinity");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-x <- dt_mutant_bind[library=="pool1B" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool2A" & wildtype!=mutant,mean_bind]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1B",ylab="replicate 2",main="binding affinity");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-x <- dt_mutant_bind[library=="pool1A" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool1B" & wildtype!=mutant,mean_bind]; plot(x,y,pch=19,col="#00000020",xlab="replicate 1A",ylab="replicate 1B",main="binding affinity");model <- lm(y~x);abline(model,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_mutant_bind[library=="pool1A" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool2A" & wildtype!=mutant,mean_bind]; plot(x,y,pch=16,col="#00000020",xlab="replicate 1A",ylab="replicate 2",main="binding affinity");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_mutant_bind[library=="pool1B" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool2A" & wildtype!=mutant,mean_bind]; plot(x,y,pch=16,col="#00000020",xlab="replicate 1B",ylab="replicate 2",main="binding affinity");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_mutant_bind[library=="pool1A" & wildtype!=mutant,mean_bind]; y <- dt_mutant_bind[library=="pool1B" & wildtype!=mutant,mean_bind]; plot(x,y,pch=16,col="#00000020",xlab="replicate 1A",ylab="replicate 1B",main="binding affinity");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 ```
 
 <img src="collapse_scores_files/figure-gfm/plot_correlations-1.png" style="display: block; margin: auto;" />
@@ -371,8 +371,8 @@ pooled measurements. (Exclude delta)
 
 ``` r
 par(mfrow=c(1,2))
-hist(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind],col="gray50",main=paste("mutant bind score,\nmedian ",median(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind]),xlab="number barcodes")
-hist(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr],col="gray50",main=paste("mutant expr score,\nmedian ",median(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr]),xlab="")
+hist(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind],col="gray50",main=paste("mutant bind score,\nmedian ",median(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant & target!="Delta", n_bc_bind])/2,xlab="number barcodes")
+hist(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr],col="gray50",main=paste("mutant expr score,\nmedian ",median(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr],na.rm=T),sep=""),right=F,breaks=max(dt_final[wildtype!=mutant & target!="Delta", n_bc_expr])/2,xlab="")
 ```
 
 <img src="collapse_scores_files/figure-gfm/n_barcode_plots-1.png" style="display: block; margin: auto;" />
@@ -389,37 +389,37 @@ bind phenotype
 ``` r
 par(mfrow=c(4,4))
 
-x <- dt_final[target=="B1351",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="B1351",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="B1351",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=16,col="#00000020",xlab="B1351",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="N501Y",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="N501Y",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=16,col="#00000020",xlab="N501Y",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=16,col="#00000020",xlab="E484K",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-
-plot(0,type='n',axes=FALSE,ann=F)
-
-x <- dt_final[target=="N501Y",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-
-x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-
-x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="Delta",bind]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
 plot(0,type='n',axes=FALSE,ann=F)
 
-plot(0,type='n',axes=FALSE,ann=F)
+x <- dt_final[target=="N501Y",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=16,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=16,col="#00000020",xlab="E484K",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="B1351",bind]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
 plot(0,type='n',axes=FALSE,ann=F)
 
 plot(0,type='n',axes=FALSE,ann=F)
 
+x <- dt_final[target=="E484K",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=16,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="N501Y",bind]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
 plot(0,type='n',axes=FALSE,ann=F)
 
-x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="E484K",bind]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="E484K",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+plot(0,type='n',axes=FALSE,ann=F)
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+x <- dt_final[target=="Wuhan_Hu_1",bind]; y <- dt_final[target=="E484K",bind]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="E484K",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 ```
 
 <img src="collapse_scores_files/figure-gfm/plot_correlations_by_bg_bind-1.png" style="display: block; margin: auto;" />
@@ -434,37 +434,37 @@ expr phenotype
 ``` r
 par(mfrow=c(4,4))
 
-x <- dt_final[target=="B1351",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="B1351",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="B1351",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=16,col="#00000020",xlab="B1351",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="N501Y",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="N501Y",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=16,col="#00000020",xlab="N501Y",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=16,col="#00000020",xlab="E484K",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-
-plot(0,type='n',axes=FALSE,ann=F)
-
-x <- dt_final[target=="N501Y",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=19,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-
-x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
-
-x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="Delta",expr]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="Delta",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
 plot(0,type='n',axes=FALSE,ann=F)
 
-plot(0,type='n',axes=FALSE,ann=F)
+x <- dt_final[target=="N501Y",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=16,col="#00000020",xlab="N501Y",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=19,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=16,col="#00000020",xlab="E484K",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="B1351",expr]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="B1351",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
 plot(0,type='n',axes=FALSE,ann=F)
 
 plot(0,type='n',axes=FALSE,ann=F)
 
+x <- dt_final[target=="E484K",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=16,col="#00000020",xlab="E484K",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="N501Y",expr]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="N501Y",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+
 plot(0,type='n',axes=FALSE,ann=F)
 
-x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="E484K",expr]; plot(x,y,pch=19,col="#00000020",xlab="Wuhan_Hu_1",ylab="E484K",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+plot(0,type='n',axes=FALSE,ann=F)
+
+plot(0,type='n',axes=FALSE,ann=F)
+
+x <- dt_final[target=="Wuhan_Hu_1",expr]; y <- dt_final[target=="E484K",expr]; plot(x,y,pch=16,col="#00000020",xlab="Wuhan_Hu_1",ylab="E484K",main="", xlim=c(5,11.5),ylim=c(5,11.5));model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 ```
 
 <img src="collapse_scores_files/figure-gfm/plot_correlations_by_bg_expr-1.png" style="display: block; margin: auto;" />
@@ -480,20 +480,22 @@ binding to dimeric ACE2
 ``` r
 dt_og <- data.table(read.csv(file=config$mut_bind_expr,stringsAsFactors = F))
 
+dt_og[,bind:=bind_avg+10.79]
+
 dt_og$bind_new <- as.numeric(NA)
 dt_og$expr_new <- as.numeric(NA)
 
 for(i in 1:nrow(dt_og)){
   if(dt_og[i,mutant]!="*"){
-    dt_og[i,"bind_new"] <- dt_final[target=="Wuhan_Hu_1" & position==dt_og[i,site_SARS2] & mutant==dt_og[i,mutant],delta_bind]
+    dt_og[i,"bind_new"] <- dt_final[target=="Wuhan_Hu_1" & position==dt_og[i,site_SARS2] & mutant==dt_og[i,mutant],bind]
     dt_og[i,"expr_new"] <- dt_final[target=="Wuhan_Hu_1" & position==dt_og[i,site_SARS2] & mutant==dt_og[i,mutant],delta_expr]
   }
 }
 
 par(mfrow=c(1,2))
-x <- dt_og[,expr_avg]; y <- dt_og[,expr_new]; plot(x,y,pch=19,col="#00000020",xlab="original DMS",ylab="new DMS",main="expression");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_og[,expr_avg]; y <- dt_og[,expr_new]; plot(x,y,pch=16,col="#00000020",xlab="original DMS",ylab="new DMS",main="expression");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 
-x <- dt_og[,bind_avg]; y <- dt_og[,bind_new]; plot(x,y,pch=19,col="#00000020",xlab="original DMS (ACE2 dimer)",ylab="new DMS (ACE2 monomer)",main="binding affinity");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
+x <- dt_og[,bind]; y <- dt_og[,bind_new]; plot(x,y,pch=16,col="#00000020",xlab="ACE2-binding avidity (ACE2 dimer, Starr et al. 2020)",ylab="ACE2-binding affinity (ACE2 monomer, this study)",main="binding affinity");model <- lm(y~x);abline(a=0,b=1,lty=2,col="red");legend("topleft",legend=paste("R2: ",round(summary(model)$r.squared,3),sep=""),bty="n")
 ```
 
 <img src="collapse_scores_files/figure-gfm/plot_correlations_v_og_DMS-1.png" style="display: block; margin: auto;" />
