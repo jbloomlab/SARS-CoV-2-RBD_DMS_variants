@@ -373,27 +373,27 @@ deep mutational scanning measurements. Let’s see how structural
 perturbations correlate (or don’t) with structural perturbations.
 
 ``` r
-JSD_bind <- data.table(read.csv(file=config$JSD_v_WH1_file))
-JSD_expr <- data.table(read.csv(file=config$JSD_v_WH1_expr_file))
+JSD_bind <- data.table(read.csv(file=config$JSD_v_WH1_file, stringsAsFactors=F))
+JSD_expr <- data.table(read.csv(file=config$JSD_v_WH1_expr_file, stringsAsFactors=F))
 
 for(i in 1:nrow(calpha)){
-  calpha$JSD_bind[i] <- JSD_bind[site==calpha$site[i] & target==calpha$variable[i],JSD_min3bc]
-  calpha$JSD_expr[i] <- JSD_expr[site==calpha$site[i] & target==calpha$variable[i],JSD_min3bc]
+  calpha$JSD_bind[i] <- JSD_bind[site==calpha$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==calpha$variable[i],JSD_min3bc]
+  calpha$JSD_expr[i] <- JSD_expr[site==calpha$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==calpha$variable[i],JSD_min3bc]
 }
 
 for(i in 1:nrow(cbeta)){
-  cbeta$JSD_bind[i] <- JSD_bind[site==cbeta$site[i] & target==cbeta$variable[i],JSD_min3bc]
-  cbeta$JSD_expr[i] <- JSD_expr[site==cbeta$site[i] & target==cbeta$variable[i],JSD_min3bc]
+  cbeta$JSD_bind[i] <- JSD_bind[site==cbeta$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cbeta$variable[i],JSD_min3bc]
+  cbeta$JSD_expr[i] <- JSD_expr[site==cbeta$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cbeta$variable[i],JSD_min3bc]
 }
 
 for(i in 1:nrow(cgamma)){
-  cgamma$JSD_bind[i] <- JSD_bind[site==cgamma$site[i] & target==cgamma$variable[i],JSD_min3bc]
-  cgamma$JSD_expr[i] <- JSD_expr[site==cgamma$site[i] & target==cgamma$variable[i],JSD_min3bc]
+  cgamma$JSD_bind[i] <- JSD_bind[site==cgamma$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cgamma$variable[i],JSD_min3bc]
+  cgamma$JSD_expr[i] <- JSD_expr[site==cgamma$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cgamma$variable[i],JSD_min3bc]
 }
 
 for(i in 1:nrow(all_atom)){
-  all_atom$JSD_bind[i] <- JSD_bind[site==all_atom$site[i] & target==all_atom$variable[i],JSD_min3bc]
-  all_atom$JSD_expr[i] <- JSD_expr[site==all_atom$site[i] & target==all_atom$variable[i],JSD_min3bc]
+  all_atom$JSD_bind[i] <- JSD_bind[site==all_atom$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==all_atom$variable[i],JSD_min3bc]
+  all_atom$JSD_expr[i] <- JSD_expr[site==all_atom$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==all_atom$variable[i],JSD_min3bc]
 }
 ```
 
@@ -716,23 +716,23 @@ JSD_bind <- data.table(read.csv(file=config$JSD_v_WH1_file))
 JSD_expr <- data.table(read.csv(file=config$JSD_v_WH1_expr_file))
 
 for(i in 1:nrow(calpha)){
-  calpha$JSD_bind[i] <- JSD_bind[site==calpha$site[i] & target==calpha$variable[i],JSD_min3bc]
-  calpha$JSD_expr[i] <- JSD_expr[site==calpha$site[i] & target==calpha$variable[i],JSD_min3bc]
+  calpha$JSD_bind[i] <- JSD_bind[site==calpha$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==calpha$variable[i],JSD_min3bc]
+  calpha$JSD_expr[i] <- JSD_expr[site==calpha$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==calpha$variable[i],JSD_min3bc]
 }
 
 for(i in 1:nrow(cbeta)){
-  cbeta$JSD_bind[i] <- JSD_bind[site==cbeta$site[i] & target==cbeta$variable[i],JSD_min3bc]
-  cbeta$JSD_expr[i] <- JSD_expr[site==cbeta$site[i] & target==cbeta$variable[i],JSD_min3bc]
+  cbeta$JSD_bind[i] <- JSD_bind[site==cbeta$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cbeta$variable[i],JSD_min3bc]
+  cbeta$JSD_expr[i] <- JSD_expr[site==cbeta$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cbeta$variable[i],JSD_min3bc]
 }
 
 for(i in 1:nrow(cgamma)){
-  cgamma$JSD_bind[i] <- JSD_bind[site==cgamma$site[i] & target==cgamma$variable[i],JSD_min3bc]
-  cgamma$JSD_expr[i] <- JSD_expr[site==cgamma$site[i] & target==cgamma$variable[i],JSD_min3bc]
+  cgamma$JSD_bind[i] <- JSD_bind[site==cgamma$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cgamma$variable[i],JSD_min3bc]
+  cgamma$JSD_expr[i] <- JSD_expr[site==cgamma$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==cgamma$variable[i],JSD_min3bc]
 }
 
 for(i in 1:nrow(all_atom)){
-  all_atom$JSD_bind[i] <- JSD_bind[site==all_atom$site[i] & target==all_atom$variable[i],JSD_min3bc]
-  all_atom$JSD_expr[i] <- JSD_expr[site==all_atom$site[i] & target==all_atom$variable[i],JSD_min3bc]
+  all_atom$JSD_bind[i] <- JSD_bind[site==all_atom$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==all_atom$variable[i],JSD_min3bc]
+  all_atom$JSD_expr[i] <- JSD_expr[site==all_atom$site[i] & bg_1=="Wuhan-Hu-1" & bg_2==all_atom$variable[i],JSD_min3bc]
 }
 ```
 

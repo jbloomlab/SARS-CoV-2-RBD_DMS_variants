@@ -55,7 +55,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.4 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -196,6 +196,22 @@ for(i in 1:nrow(diffs_expr)){
   diffs_expr[i,JSD_min3bc := JS(x_min3bc,y_min3bc)]
   diffs_expr[i,JSD_min5bc := JS(x_min3bc,y_min5bc)]
 }
+```
+
+Output file with the site-pair JS distances.
+
+``` r
+diffs_bind[,.(bg_1,bg_2,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
+  mutate_if(is.numeric, round, digits=6) %>%
+  write.csv(file=config$JSD_v_WH1_file, row.names=F,quote=F)
+```
+
+Output file with the site-pair JS distances.
+
+``` r
+diffs_expr[,.(bg_1,bg_2,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
+  mutate_if(is.numeric, round, digits=6) %>%
+  write.csv(file=config$JSD_v_WH1_expr_file, row.names=F,quote=F)
 ```
 
 Plotting/visualizing:
@@ -398,14 +414,6 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc.pdf",sep=""),useDingbats=F))
 ```
 
-Output file with the site-pair JS distances.
-
-``` r
-temp[,.(target,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
-  mutate_if(is.numeric, round, digits=6) %>%
-  write.csv(file=config$JSD_v_WH1_file, row.names=F,quote=F)
-```
-
 Repeat for expression measurements
 
 ``` r
@@ -462,14 +470,6 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_expr.pdf",sep=""),useDingbats=F))
-```
-
-Output file with the site-pair JS distances.
-
-``` r
-temp[,.(target,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
-  mutate_if(is.numeric, round, digits=6) %>%
-  write.csv(file=config$JSD_v_WH1_expr_file, row.names=F,quote=F)
 ```
 
 ## Map distance to pdb structure
@@ -882,21 +882,90 @@ Do similar but on log2 scale
 subs_N501Y$sub_count_N501_pc <- subs_N501Y$sub_count_N501; subs_N501Y[sub_count_N501_pc==0,sub_count_N501_pc:=0.1]
 subs_N501Y$sub_count_Y501_pc <- subs_N501Y$sub_count_Y501; subs_N501Y[sub_count_Y501_pc==0,sub_count_Y501_pc:=0.1]
 
+#order so that higher abs(dd-bind) are plotted on top
+subs_N501Y <- subs_N501Y[order(abs(delta_delta_bind)),]
+
 set.seed(500)
 ggplot(data=subs_N501Y[!is.na(delta_delta_bind),], aes(x=sub_count_N501_pc, y=sub_count_Y501_pc, color=delta_delta_bind))+
-  geom_jitter(width=0.15,height=0.15,shape=16)+
+  geom_jitter(width=0.15,height=0.15,shape=16,size=2.25)+
   theme_classic()+
   ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
-  scale_color_gradientn(colours=c("#A94E35","#A94E35","#F4836590","#DDDDDD50","#7378B990","#383C6C","#383C6C"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  #scale_color_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da99","#f7f7f755","#b8e18699","#4dac26","#4dac26"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  #scale_color_gradientn(colours=c("#e66101","#e66101","#fdb86398","#f7f7f755","#b2abd298","#5e3c99","#5e3c99"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  #scale_color_gradientn(colours=c("#7b3294","#7b3294","#c2a5cf98","#f7f7f755","#a6dba098","#008837","#008837"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   scale_x_continuous(trans = 'log2')+
   scale_y_continuous(trans = 'log2')+
-  geom_text_repel(aes(label=ifelse(((delta_delta_bind < -1 | delta_delta_bind > 1) & (sub_count_N501 >1 | sub_count_Y501 >1) ),as.character(mutation),'')),size=3,color="gray60")
+  geom_text_repel(aes(label=ifelse(((delta_delta_bind < -0.9 | delta_delta_bind > 0.9) & (sub_count_N501 >1 | sub_count_Y501 >1) ),as.character(mutation),'')),size=3,color="gray60")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/sub_occurrence_divergence_versus_DMS_divergence_log2-1.png" style="display: block; margin: auto;" />
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-ddlog10Kd_logscale.pdf",sep=""),useDingbats=F))
+```
+
+Alternative, try plotting d-d-bind as the y-axis, and x-axis as the
+ratio of counts on each background? Make Y501 the upper-right quadrant
+
+``` r
+subs_N501Y[,sub_count_N501_pc := sub_count_N501 + 1]
+subs_N501Y[,sub_count_Y501_pc := sub_count_Y501 + 1]
+
+#order so that higher abs(dd-bind) are plotted on top
+subs_N501Y <- subs_N501Y[order(abs(delta_delta_bind)),]
+
+#represent as ddKd with Y501 preference being positive
+subs_N501Y[,delta_delta_bind_Y501 := -delta_delta_bind]
+
+set.seed(500)
+ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 >=1 | sub_count_Y501 >=1) ,], aes(x=sub_count_Y501_pc/sub_count_N501_pc, y=delta_delta_bind_Y501, color=delta_delta_bind_Y501))+
+  geom_point(shape=16,size=2.25)+
+  theme_classic()+
+  ylab("delta-delta bind")+xlab("ratio of sub count in Y501 versus N501 bgs")+
+  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_x_continuous(trans = 'log2')+
+  geom_text_repel(aes(label=ifelse(((delta_delta_bind < -0.9 | delta_delta_bind > 0.9) & (sub_count_N501 >=1 | sub_count_Y501 >=1) ),as.character(mutation),'')),size=3,color="gray60")+
+  geom_hline(yintercept=0, linetype=2,color="gray40")+
+  geom_vline(xintercept=sum(subs_N501Y$sub_count_Y501_pc)/sum(subs_N501Y$sub_count_N501_pc),linetype=2,color="gray40")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/ddbind_v_count-ratio_color-by-ddlog10Kd-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/ddbind_v_count-ratio_color-by-ddlog10Kd.pdf",sep=""),useDingbats=F))
+```
+
+Same, but ratio of frequencies instead of raw sub counts
+
+``` r
+subs_N501Y[,sub_count_N501_pc := sub_count_N501 + 1]
+subs_N501Y[,sub_count_Y501_pc := sub_count_Y501 + 1]
+
+#convert sub count +pc to frequency
+subs_N501Y[,sub_freq_N501_pc := sub_count_N501_pc/sum(subs_N501Y$sub_count_N501_pc)]
+subs_N501Y[,sub_freq_Y501_pc := sub_count_Y501_pc/sum(subs_N501Y$sub_count_Y501_pc)]
+
+#order so that higher abs(dd-bind) are plotted on top
+subs_N501Y <- subs_N501Y[order(abs(delta_delta_bind)),]
+
+
+set.seed(500)
+ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 >=1 | sub_count_Y501 >=1) ,], aes(x=sub_freq_N501_pc/sub_freq_Y501_pc, y=delta_delta_bind, color=delta_delta_bind))+
+  geom_point(shape=16,size=2.25)+
+  theme_classic()+
+  ylab("delta-delta bind")+xlab("Ratio of sub frequency in N501 versus Y501 bgs")+
+  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_x_continuous(trans = 'log2')+
+  geom_text_repel(aes(label=ifelse(((delta_delta_bind < -0.9 | delta_delta_bind > 0.9) & (sub_count_N501 >1 | sub_count_Y501 >1) ),as.character(mutation),'')),size=3,color="gray60")+
+  geom_hline(yintercept=0, linetype=2,color="gray80")+
+  geom_vline(xintercept=1, linetype=2,color="gray80")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/ddbind_v_freq-ratio_color-by-ddlog10Kd-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/ddbind_v_freq-ratio_color-by-ddlog10Kd.pdf",sep=""),useDingbats=F))
 ```
 
 Want a figure to illustrate concept of non-specific buffering of
