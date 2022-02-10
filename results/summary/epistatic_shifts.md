@@ -55,7 +55,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -152,9 +152,8 @@ JS <- function(vec1,vec2){
 #generate table with all combinations of bg_1 and bg_2 for each site
 diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta"),bg_1=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta")))
 
-#remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
+#remove duplicates where bg_1 and _2 the same
 diffs_bind <- diffs_bind[bg_1 != bg_2,]
-diffs_bind <- diffs_bind[bg_1 == "Wuhan-Hu-1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","Beta","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("Beta","Delta")) | bg_1=="Beta" & bg_2=="Delta"]
 
 #loop through and compute JSD for each site for each pair of bgs, for bind metric
 diffs_bind$JSD <- as.numeric(NA) #jensen-shannon distance, from raw bind values (lower limit 5)
@@ -177,9 +176,8 @@ for(i in 1:nrow(diffs_bind)){
 #generate table with all combinations of bg_1 and bg_2 for each site
 diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta"),bg_1=c("Wuhan-Hu-1","E484K","N501Y","Beta","Delta")))
 
-#remove duplicates -- either bg_1 and _2 the same, or combinations where the _2 _1 combo is already present in the _1 _2 orientation
+#remove duplicates where either bg_1 and _2 the same
 diffs_expr <- diffs_expr[bg_1 != bg_2,]
-diffs_expr <- diffs_expr[bg_1 == "Wuhan-Hu-1" | (bg_1=="E484K" & bg_2 %in% c("N501Y","Beta","Delta")) | (bg_1=="N501Y" & bg_2 %in% c("Beta","Delta")) | bg_1=="Beta" & bg_2=="Delta"]
 
 #loop through and compute JSD for each site for each pair of bgs, for expr metric
 diffs_expr$JSD <- as.numeric(NA) #jensen-shannon distance, from raw expr values
@@ -361,15 +359,8 @@ label_df <- data.frame(xmin=sig_mAb_sites-0.5,
 ``` r
 #define focal bg for others to compare to
 bg <- "Wuhan-Hu-1"
-temp <- diffs_bind[bg_1==bg | bg_2 == bg]
-temp$target <- as.character(NA)
-for(i in 1:nrow(temp)){
-  if(temp[i,bg_1]!=bg){
-    temp[i,target:=temp[i,bg_1]]
-  }else if(temp[i,bg_2]!=bg){
-    temp[i,target:=temp[i,bg_2]]
-  }
-}
+temp <- diffs_bind[bg_1==bg,]
+temp$target <- as.character(temp$bg_2)
 
 #define colors for each bg
 group.colors <- c("Wuhan-Hu-1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "Beta"=cbPalette[6], "Delta"=cbPalette[7])
@@ -419,15 +410,8 @@ Repeat for expression measurements
 ``` r
 #define focal bg for others to compare to
 bg <- "Wuhan-Hu-1"
-temp <- diffs_expr[bg_1==bg | bg_2 == bg]
-temp$target <- as.character(NA)
-for(i in 1:nrow(temp)){
-  if(temp[i,bg_1]!=bg){
-    temp[i,target:=temp[i,bg_1]]
-  }else if(temp[i,bg_2]!=bg){
-    temp[i,target:=temp[i,bg_2]]
-  }
-}
+temp <- diffs_expr[bg_1==bg,]
+temp$target <- as.character(temp$bg_2)
 
 #define colors for each bg
 group.colors <- c("Wuhan-Hu-1" = cbPalette[1], "N501Y" = cbPalette[3], "E484K" = cbPalette[5], "Beta"=cbPalette[6], "Delta"=cbPalette[7])
@@ -919,7 +903,7 @@ subs_N501Y <- subs_N501Y[order(abs(delta_delta_bind)),]
 subs_N501Y[,delta_delta_bind_Y501 := -delta_delta_bind]
 
 set.seed(500)
-ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 >=1 | sub_count_Y501 >=1) ,], aes(x=sub_count_Y501_pc/sub_count_N501_pc, y=delta_delta_bind_Y501, color=delta_delta_bind_Y501))+
+ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 + sub_count_Y501 >=2) ,], aes(x=sub_count_Y501_pc/sub_count_N501_pc, y=delta_delta_bind_Y501, color=delta_delta_bind_Y501))+
   geom_point(shape=16,size=2.25)+
   theme_classic()+
   ylab("delta-delta bind")+xlab("ratio of sub count in Y501 versus N501 bgs")+
@@ -934,38 +918,6 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 >=1 | sub_coun
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/ddbind_v_count-ratio_color-by-ddlog10Kd.pdf",sep=""),useDingbats=F))
-```
-
-Same, but ratio of frequencies instead of raw sub counts
-
-``` r
-subs_N501Y[,sub_count_N501_pc := sub_count_N501 + 1]
-subs_N501Y[,sub_count_Y501_pc := sub_count_Y501 + 1]
-
-#convert sub count +pc to frequency
-subs_N501Y[,sub_freq_N501_pc := sub_count_N501_pc/sum(subs_N501Y$sub_count_N501_pc)]
-subs_N501Y[,sub_freq_Y501_pc := sub_count_Y501_pc/sum(subs_N501Y$sub_count_Y501_pc)]
-
-#order so that higher abs(dd-bind) are plotted on top
-subs_N501Y <- subs_N501Y[order(abs(delta_delta_bind)),]
-
-
-set.seed(500)
-ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 >=1 | sub_count_Y501 >=1) ,], aes(x=sub_freq_N501_pc/sub_freq_Y501_pc, y=delta_delta_bind, color=delta_delta_bind))+
-  geom_point(shape=16,size=2.25)+
-  theme_classic()+
-  ylab("delta-delta bind")+xlab("Ratio of sub frequency in N501 versus Y501 bgs")+
-  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
-  scale_x_continuous(trans = 'log2')+
-  geom_text_repel(aes(label=ifelse(((delta_delta_bind < -0.9 | delta_delta_bind > 0.9) & (sub_count_N501 >1 | sub_count_Y501 >1) ),as.character(mutation),'')),size=3,color="gray60")+
-  geom_hline(yintercept=0, linetype=2,color="gray80")+
-  geom_vline(xintercept=1, linetype=2,color="gray80")
-```
-
-<img src="epistatic_shifts_files/figure-gfm/ddbind_v_freq-ratio_color-by-ddlog10Kd-1.png" style="display: block; margin: auto;" />
-
-``` r
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/ddbind_v_freq-ratio_color-by-ddlog10Kd.pdf",sep=""),useDingbats=F))
 ```
 
 Want a figure to illustrate concept of non-specific buffering of
