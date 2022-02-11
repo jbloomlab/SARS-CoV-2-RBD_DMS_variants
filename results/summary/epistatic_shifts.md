@@ -4,12 +4,12 @@ Tyler Starr
 10/11/2021
 
 -   [Setup](#setup)
--   [Calculate site-wise Jensen-Shannon distance, a metric of divergence
-    in site-specific mutational
-    profiles](#calculate-site-wise-jensen-shannon-distance-a-metric-of-divergence-in-site-specific-mutational-profiles)
--   [Line plots of JS distance from WH1 across RBD
-    sites](#line-plots-of-js-distance-from-wh1-across-rbd-sites)
--   [Map distance to pdb structure](#map-distance-to-pdb-structure)
+-   [Calculate site-wise Jensen-Shannon divergence, a metric of
+    divergence in site-specific mutational
+    profiles](#calculate-site-wise-jensen-shannon-divergence-a-metric-of-divergence-in-site-specific-mutational-profiles)
+-   [Line plots of JS divergence from WH1 across RBD
+    sites](#line-plots-of-js-divergence-from-wh1-across-rbd-sites)
+-   [Map divergence to pdb structure](#map-divergence-to-pdb-structure)
 -   [Epistatic cycles from binding
     data](#epistatic-cycles-from-binding-data)
 -   [Comparison of mutant accumulation on N501 versus Y501
@@ -55,7 +55,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.4 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -112,10 +112,10 @@ Read in tables of mutant measurements.
 dt <- data.table(read.csv(file=config$final_variant_scores_mut_file,stringsAsFactors=F))
 ```
 
-## Calculate site-wise Jensen-Shannon distance, a metric of divergence in site-specific mutational profiles
+## Calculate site-wise Jensen-Shannon divergence, a metric of divergence in site-specific mutational profiles
 
 For each pair of backgrounds, at each site I want to compute the
-Jensen-Shannon distance between the profile of mutation effects of all
+Jensen-Shannon divergence between the profile of mutation effects of all
 mutations at the site. (Remove any measurements determined for \<3 or
 \<5 bc to avoid measurements with lower precision driving noise in the
 global JSD metric.)
@@ -135,7 +135,7 @@ dt[n_bc_expr < 3, expr_min3bc := NA]
 dt[,expr_min5bc := expr]
 dt[n_bc_expr < 5, expr_min5bc := NA]
 
-#define a function for computing J-S distance between two affinity vectors (where affinity is given currently as log10-Kd)
+#define a function for computing J-S divergence/distance between two affinity vectors (where affinity is given currently as log10-Kd)
 JS <- function(vec1,vec2){
   vec1_pair <- vec1[!is.na(vec1) & !is.na(vec2)]
   vec2_pair <- vec2[!is.na(vec1) & !is.na(vec2)]
@@ -143,8 +143,8 @@ JS <- function(vec1,vec2){
   pi2 <- 10^(vec2_pair)/sum(10^(vec2_pair))
   n <- 0.5 * (pi1+pi2)
   JS <- 0.5 * (sum(pi1*log(pi1/n)) + sum(pi2*log(pi2/n)))
-  #return(sqrt(JS)) #if doing divergence
-  return(JS) #if doing distance
+  #return(sqrt(JS)) #if doing distance
+  return(JS) #if doing divergence
 }
 
 #first, for bind measurements
@@ -156,9 +156,9 @@ diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1
 diffs_bind <- diffs_bind[bg_1 != bg_2,]
 
 #loop through and compute JSD for each site for each pair of bgs, for bind metric
-diffs_bind$JSD <- as.numeric(NA) #jensen-shannon distance, from raw bind values (lower limit 5)
-diffs_bind$JSD_min3bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 3 bcs averaged
-diffs_bind$JSD_min5bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 5 bcs averaged
+diffs_bind$JSD <- as.numeric(NA) #jensen-shannon divergence, from raw bind values (lower limit 5)
+diffs_bind$JSD_min3bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 3 bcs averaged
+diffs_bind$JSD_min5bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 5 bcs averaged
 for(i in 1:nrow(diffs_bind)){
   x_uncens <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind]
   y_uncens <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind]
@@ -180,9 +180,9 @@ diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1
 diffs_expr <- diffs_expr[bg_1 != bg_2,]
 
 #loop through and compute JSD for each site for each pair of bgs, for expr metric
-diffs_expr$JSD <- as.numeric(NA) #jensen-shannon distance, from raw expr values
-diffs_expr$JSD_min3bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 3 bcs averaged
-diffs_expr$JSD_min5bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 5 bcs averaged
+diffs_expr$JSD <- as.numeric(NA) #jensen-shannon divergence, from raw expr values
+diffs_expr$JSD_min3bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 3 bcs averaged
+diffs_expr$JSD_min5bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 5 bcs averaged
 for(i in 1:nrow(diffs_expr)){
   x_uncens <- dt[target==diffs_expr[i,bg_1] & position==diffs_expr[i,site],expr]
   y_uncens <- dt[target==diffs_expr[i,bg_2] & position==diffs_expr[i,site],expr]
@@ -196,7 +196,7 @@ for(i in 1:nrow(diffs_expr)){
 }
 ```
 
-Output file with the site-pair JS distances.
+Output file with the site-pair JS divergences.
 
 ``` r
 diffs_bind[,.(bg_1,bg_2,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
@@ -204,7 +204,7 @@ diffs_bind[,.(bg_1,bg_2,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
   write.csv(file=config$JSD_v_WH1_file, row.names=F,quote=F)
 ```
 
-Output file with the site-pair JS distances.
+Output file with the site-pair JS divergences.
 
 ``` r
 diffs_expr[,.(bg_1,bg_2,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
@@ -328,7 +328,7 @@ plot_scatter(site=506,"Wuhan-Hu-1","Beta",phenotype="expr")
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_expression-sites.pdf",sep=""),useDingbats=F))
 ```
 
-## Line plots of JS distance from WH1 across RBD sites
+## Line plots of JS divergence from WH1 across RBD sites
 
 Make lineplots showing JS-D across sites for each variant compared to
 WH1.
@@ -376,7 +376,7 @@ ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")
+  ylab("JS divergence versus Wuhan-Hu-1")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1-1.png" style="display: block; margin: auto;" />
@@ -395,7 +395,7 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   geom_text_repel(aes(label=ifelse(((JSD_min3bc > 0.15)),as.character(site),'')),size=3,color="gray40")
 ```
 
@@ -427,7 +427,7 @@ ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")
+  ylab("JS divergence versus Wuhan-Hu-1")
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/line_plots_JSD_v_WH1_expr-1.png" style="display: block; margin: auto;" />
@@ -446,7 +446,7 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1, expression DMS")+
+  ylab("JS divergence versus Wuhan-Hu-1, expression DMS")+
   geom_text_repel(aes(label=ifelse(((JSD_min3bc > 0.06)),as.character(site),'')),size=3,color="gray40")
 ```
 
@@ -456,7 +456,7 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_expr.pdf",sep=""),useDingbats=F))
 ```
 
-## Map distance to pdb structure
+## Map divergence to pdb structure
 
 First, bind
 
@@ -467,7 +467,7 @@ pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
     ##    PDB has ALT records, taking A only, rm.alt=TRUE
 
 ``` r
-#iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
+#iterate through backgrounds, output a pdb comparing its divergence to WH1 (using min3bc)
 for(s in c("E484K","N501Y","Beta","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
   for(i in 1:nrow(pdb_wh1$atom)){
@@ -492,7 +492,7 @@ pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
     ##    PDB has ALT records, taking A only, rm.alt=TRUE
 
 ``` r
-#iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
+#iterate through backgrounds, output a pdb comparing its divergence to WH1 (using min3bc)
 for(s in c("E484K","N501Y","Beta","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
   for(i in 1:nrow(pdb_wh1$atom)){
@@ -816,7 +816,7 @@ setkey(subs_N501Y,position,mutant)
 #calc delta-deltaKd as difference in mut effect on N501 minus mut effect on Y501
 subs_N501Y$delta_delta_bind <- subs_N501Y$delta_bind_N501 - subs_N501Y$delta_bind_Y501
 
-#add column given the sitewise JS-distance for that site between WH1 versus N501Y DMS data
+#add column given the sitewise JS-divergence for that site between WH1 versus N501Y DMS data
 subs_N501Y$site_JSD <- as.numeric(NA)
 for(i in 1:nrow(subs_N501Y)){
   subs_N501Y[i,site_JSD := diffs_bind[bg_1=="Wuhan-Hu-1" & bg_2=="N501Y" & site==subs_N501Y[i,position], JSD_min3bc]]

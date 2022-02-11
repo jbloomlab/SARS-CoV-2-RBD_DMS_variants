@@ -53,7 +53,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -405,7 +405,7 @@ ggplot(data=calpha[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("C-alpha displacement versus Wuhan-Hu-1 [6m0j]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
@@ -425,7 +425,7 @@ ggplot(data=cbeta[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("C-beta displacement versus Wuhan-Hu-1 [6m0j]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
@@ -449,7 +449,7 @@ ggplot(data=cgamma[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("C-gamma displacement versus Wuhan-Hu-1 [6m0j]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
@@ -473,7 +473,7 @@ ggplot(data=all_atom[rep==1 & site %in% seq(334,515),],aes(x=abs(value),y=JSD_bi
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("Average atomic displacement versus Wuhan-Hu-1 [6m0j]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
@@ -744,7 +744,7 @@ ggplot(data=calpha[site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=va
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("C-alpha displacement versus Wuhan-Hu-1 [7kmb]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
@@ -768,7 +768,7 @@ ggplot(data=cbeta[site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=var
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("C-beta displacement versus Wuhan-Hu-1 [7kmb]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
@@ -792,7 +792,7 @@ ggplot(data=cgamma[site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=va
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("C-gamma displacement versus Wuhan-Hu-1 [7kmb]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")
@@ -814,7 +814,7 @@ ggplot(data=all_atom[site %in% seq(334,515),],aes(x=abs(value),y=JSD_bind,color=
   scale_color_manual(values=group.colors)+
   theme_classic()+
   xlab("Average atomic displacement versus Wuhan-Hu-1 [7kmb]")+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   facet_wrap(~variable,nrow=1)+
   theme(strip.text.x = element_text(size = 18))+
   geom_text_repel(aes(label=ifelse(((JSD_bind > 0.1 & abs(value) > 0.75) | (JSD_bind > 0.15 & abs(value) > 0.25)),as.character(site),'')),size=3,color="gray40")

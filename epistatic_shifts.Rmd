@@ -62,9 +62,9 @@ Read in tables of mutant measurements.
 dt <- data.table(read.csv(file=config$final_variant_scores_mut_file,stringsAsFactors=F))
 ```
 
-## Calculate site-wise Jensen-Shannon distance, a metric of divergence in site-specific mutational profiles
+## Calculate site-wise Jensen-Shannon divergence, a metric of divergence in site-specific mutational profiles
 
-For each pair of backgrounds, at each site I want to compute the Jensen-Shannon distance between the profile of mutation effects of all mutations at the site. (Remove any measurements determined for <3 or <5 bc to avoid measurements with lower precision driving noise in the global JSD metric.)
+For each pair of backgrounds, at each site I want to compute the Jensen-Shannon divergence between the profile of mutation effects of all mutations at the site. (Remove any measurements determined for <3 or <5 bc to avoid measurements with lower precision driving noise in the global JSD metric.)
 
 
 ```{r setup_table}
@@ -82,7 +82,7 @@ dt[n_bc_expr < 3, expr_min3bc := NA]
 dt[,expr_min5bc := expr]
 dt[n_bc_expr < 5, expr_min5bc := NA]
 
-#define a function for computing J-S distance between two affinity vectors (where affinity is given currently as log10-Kd)
+#define a function for computing J-S divergence/distance between two affinity vectors (where affinity is given currently as log10-Kd)
 JS <- function(vec1,vec2){
   vec1_pair <- vec1[!is.na(vec1) & !is.na(vec2)]
   vec2_pair <- vec2[!is.na(vec1) & !is.na(vec2)]
@@ -90,8 +90,8 @@ JS <- function(vec1,vec2){
   pi2 <- 10^(vec2_pair)/sum(10^(vec2_pair))
   n <- 0.5 * (pi1+pi2)
   JS <- 0.5 * (sum(pi1*log(pi1/n)) + sum(pi2*log(pi2/n)))
-  #return(sqrt(JS)) #if doing divergence
-  return(JS) #if doing distance
+  #return(sqrt(JS)) #if doing distance
+  return(JS) #if doing divergence
 }
 
 #first, for bind measurements
@@ -103,9 +103,9 @@ diffs_bind <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1
 diffs_bind <- diffs_bind[bg_1 != bg_2,]
 
 #loop through and compute JSD for each site for each pair of bgs, for bind metric
-diffs_bind$JSD <- as.numeric(NA) #jensen-shannon distance, from raw bind values (lower limit 5)
-diffs_bind$JSD_min3bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 3 bcs averaged
-diffs_bind$JSD_min5bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 5 bcs averaged
+diffs_bind$JSD <- as.numeric(NA) #jensen-shannon divergence, from raw bind values (lower limit 5)
+diffs_bind$JSD_min3bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 3 bcs averaged
+diffs_bind$JSD_min5bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 5 bcs averaged
 for(i in 1:nrow(diffs_bind)){
   x_uncens <- dt[target==diffs_bind[i,bg_1] & position==diffs_bind[i,site],bind]
   y_uncens <- dt[target==diffs_bind[i,bg_2] & position==diffs_bind[i,site],bind]
@@ -127,9 +127,9 @@ diffs_expr <- data.table(expand.grid(site=unique(dt$position),bg_2=c("Wuhan-Hu-1
 diffs_expr <- diffs_expr[bg_1 != bg_2,]
 
 #loop through and compute JSD for each site for each pair of bgs, for expr metric
-diffs_expr$JSD <- as.numeric(NA) #jensen-shannon distance, from raw expr values
-diffs_expr$JSD_min3bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 3 bcs averaged
-diffs_expr$JSD_min5bc <- as.numeric(NA) #jensen-shannon distance, require a minimum of 5 bcs averaged
+diffs_expr$JSD <- as.numeric(NA) #jensen-shannon divergence, from raw expr values
+diffs_expr$JSD_min3bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 3 bcs averaged
+diffs_expr$JSD_min5bc <- as.numeric(NA) #jensen-shannon divergence, require a minimum of 5 bcs averaged
 for(i in 1:nrow(diffs_expr)){
   x_uncens <- dt[target==diffs_expr[i,bg_1] & position==diffs_expr[i,site],expr]
   y_uncens <- dt[target==diffs_expr[i,bg_2] & position==diffs_expr[i,site],expr]
@@ -144,14 +144,14 @@ for(i in 1:nrow(diffs_expr)){
 
 ```
 
-Output file with the site-pair JS distances.
+Output file with the site-pair JS divergences.
 ```{r save_JSD_bind_file, echo=T}
 diffs_bind[,.(bg_1,bg_2,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
   mutate_if(is.numeric, round, digits=6) %>%
   write.csv(file=config$JSD_v_WH1_file, row.names=F,quote=F)
 ```
 
-Output file with the site-pair JS distances.
+Output file with the site-pair JS divergences.
 ```{r save_JSD_expr_file, echo=T}
 diffs_expr[,.(bg_1,bg_2,site,JSD,JSD_min3bc,JSD_min5bc)] %>%
   mutate_if(is.numeric, round, digits=6) %>%
@@ -247,7 +247,7 @@ plot_scatter(site=506,"Wuhan-Hu-1","Beta",phenotype="expr")
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/bg-scatters_expression-sites.pdf",sep=""),useDingbats=F))
 ```
 
-## Line plots of JS distance from WH1 across RBD sites
+## Line plots of JS divergence from WH1 across RBD sites
 
 Make lineplots showing JS-D across sites for each variant compared to WH1.
 
@@ -292,7 +292,7 @@ ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")
+  ylab("JS divergence versus Wuhan-Hu-1")
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1.pdf",sep=""),useDingbats=F))
 ```
@@ -306,7 +306,7 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")+
+  ylab("JS divergence versus Wuhan-Hu-1")+
   geom_text_repel(aes(label=ifelse(((JSD_min3bc > 0.15)),as.character(site),'')),size=3,color="gray40")
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc.pdf",sep=""),useDingbats=F))
@@ -335,7 +335,7 @@ ggplot(data=temp, aes(x=site, y=JSD, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1")
+  ylab("JS divergence versus Wuhan-Hu-1")
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_expr.pdf",sep=""),useDingbats=F))
 ```
@@ -349,7 +349,7 @@ ggplot(data=temp, aes(x=site, y=JSD_min3bc, color=target))+
   theme_classic()+
   scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
   theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
-  ylab("JS distance versus Wuhan-Hu-1, expression DMS")+
+  ylab("JS divergence versus Wuhan-Hu-1, expression DMS")+
   geom_text_repel(aes(label=ifelse(((JSD_min3bc > 0.06)),as.character(site),'')),size=3,color="gray40")
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_expr.pdf",sep=""),useDingbats=F))
@@ -357,13 +357,13 @@ invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/JSD_v_WH1_min3bc_ex
 
 
 
-## Map distance to pdb structure
+## Map divergence to pdb structure
 
 First, bind
 ```{r map_JSD_to_pdb}
 pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
-#iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
+#iterate through backgrounds, output a pdb comparing its divergence to WH1 (using min3bc)
 for(s in c("E484K","N501Y","Beta","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
   for(i in 1:nrow(pdb_wh1$atom)){
@@ -383,7 +383,7 @@ repeat for expression measures
 ```{r map_JSD_to_pdb_expr}
 pdb_wh1 <- read.pdb(file=config$pdb_6m0j)
 
-#iterate through backgrounds, output a pdb comparing its distance to WH1 (using min3bc)
+#iterate through backgrounds, output a pdb comparing its divergence to WH1 (using min3bc)
 for(s in c("E484K","N501Y","Beta","Delta")){
   b <- rep(0, length(pdb_wh1$atom$b))
   for(i in 1:nrow(pdb_wh1$atom)){
@@ -677,7 +677,7 @@ setkey(subs_N501Y,position,mutant)
 #calc delta-deltaKd as difference in mut effect on N501 minus mut effect on Y501
 subs_N501Y$delta_delta_bind <- subs_N501Y$delta_bind_N501 - subs_N501Y$delta_bind_Y501
 
-#add column given the sitewise JS-distance for that site between WH1 versus N501Y DMS data
+#add column given the sitewise JS-divergence for that site between WH1 versus N501Y DMS data
 subs_N501Y$site_JSD <- as.numeric(NA)
 for(i in 1:nrow(subs_N501Y)){
   subs_N501Y[i,site_JSD := diffs_bind[bg_1=="Wuhan-Hu-1" & bg_2=="N501Y" & site==subs_N501Y[i,position], JSD_min3bc]]
@@ -895,4 +895,49 @@ ggplot(data=subs_omicron_Betaorder, aes(y=delta_bind_Beta, x=delta_bind_WH1))+
   geom_abline(slope=1,intercept=0,lty=2,col="red")
   
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron_mut-diffs-beta-v-wh1.pdf",sep=""),useDingbats=F))
+```
+
+# Validity of additive assumption
+
+How valid is our assumption that mutations should combine addivitely in our DMS measurements?
+
+We have access to some sporadic double (and higher order) mutants that were present in our libraries. Let's compare their measured versus actual affinity at a global level.
+
+```{r additive_assumption, echo=T, fig.width=4, fig.height=4, fig.align="center", dpi=300,dev="png"}
+dt_multi <- data.table(read.csv(file=config$Titeseq_Kds_file,stringsAsFactors = F))[variant_class==">1 nonsynonymous" & n_aa_substitutions==2]
+
+dt_multi[target=="B1351",target:="Beta"]
+dt_multi[target=="Wuhan_Hu_1",target:="Wuhan-Hu-1"]
+
+#split up the two muts
+dt_multi[,sub1:=strsplit(aa_substitutions,split=" ")[[1]][1],by=aa_substitutions]
+dt_multi[,sub2:=strsplit(aa_substitutions,split=" ")[[1]][2],by=aa_substitutions]
+
+dt_multi[,wt1:=strsplit(sub1,split="")[[1]][1],by=sub1]
+dt_multi[,site1:=as.numeric(paste(strsplit(sub1,split="")[[1]][2:(length(strsplit(sub1,split="")[[1]])-1)],collapse="")),by=sub1]
+dt_multi[,mut1:=strsplit(sub1,split="")[[1]][length(strsplit(sub1,split="")[[1]])],by=sub1]
+
+dt_multi[,wt2:=strsplit(sub2,split="")[[1]][1],by=sub2]
+dt_multi[,site2:=as.numeric(paste(strsplit(sub2,split="")[[1]][2:(length(strsplit(sub2,split="")[[1]])-1)],collapse="")),by=sub2]
+dt_multi[,mut2:=strsplit(sub2,split="")[[1]][length(strsplit(sub2,split="")[[1]])],by=sub2]
+
+dt_multi[,site1:=site1+330]
+dt_multi[,site2:=site2+330]
+
+dt_multi$log10Ka_additive <- as.numeric(NA)
+#compute the expected log10Ka
+for(i in 1:nrow(dt_multi)){
+  bind1 <- dt[target==dt_multi[i,target] & position==dt_multi[i,site1] & mutant==dt_multi[i,mut1],delta_bind]
+  bind2 <- dt[target==dt_multi[i,target] & position==dt_multi[i,site2] & mutant==dt_multi[i,mut2],delta_bind]
+  wt <- dt[target==dt_multi[i,target] & mutant==wildtype & position==501,bind]
+  dt_multi[i,"log10Ka_additive"] <- wt+bind1+bind2
+}
+
+ggplot(data=dt_multi, aes(y=log10Ka_additive, x=log10Ka))+
+  geom_point(shape=16,size=2,col="#00000020")+
+  theme_classic()+
+  ylab("predicted binding from component single mutants")+xlab("measured binding of double mutant")+
+  geom_abline(slope=1,intercept=0,lty=2,col="red")
+  
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/dbl-mut_additive_predictions.pdf",sep=""),useDingbats=F))
 ```
