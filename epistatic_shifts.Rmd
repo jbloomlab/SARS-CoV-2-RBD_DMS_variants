@@ -661,9 +661,12 @@ p1
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/N501_v_Y501_sub_affinity-effects_ridgeplot.pdf",sep=""),useDingbats=F))
 ```
 
-Look at specific mutation occurrences on each background. Want to know whether sites with strong differences in mutation effect profiles also differ in rates of substitution occurrence. Doing first "WH1" (proxy: N501 backgrounds) versus Y501 backgrounds
+Look at specific mutation occurrences on each background. Want to know whether sites with strong differences in mutation effect profiles also differ in rates of substitution occurrence. Doing for N501 versus Y501, DMS and sub accrual.
 
-```{r sub_occurrence_divergence_versus_DMS_divergence, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
+First, showing counts of sub accrual on each background, colored by d-d-log10Ka
+
+
+```{r sub_occurrence_divergence_versus_DMS_divergence_log2, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
 #make talbe for N501 versus Y501. Note, this is all done very hackily...
 subs_N501Y <- dt[target=="Wuhan-Hu-1",.(wildtype,position,mutant,mutation,delta_bind,n_bc_bind)] 
 setnames(subs_N501Y, "delta_bind", "delta_bind_N501")
@@ -701,26 +704,6 @@ for(i in 1:nrow(subs)){
 subs_N501Y$sub_freq_N501 <- subs_N501Y$sub_count_N501/sum(subs_N501Y$sub_count_N501)
 subs_N501Y$sub_freq_Y501 <- subs_N501Y$sub_count_Y501/sum(subs_N501Y$sub_count_Y501)
 
-#plot(log2(subs_N501Y$sub_freq_N501+min(subs_N501Y[sub_freq_N501>0,sub_freq_N501])/4),log2(subs_N501Y$sub_freq_Y501+min(subs_N501Y[sub_freq_Y501>0,sub_freq_Y501])/4),pch=19,col="#00000067",xlab="sub frequency on N501 backgrounds",ylab="sub frequency on Y501 backgrounds")
-
-#plot(subs_N501Y$sub_count_N501,subs_N501Y$sub_freq_Y501,pch=19,col="#00000067",xlab="sub count on N501 backgrounds",ylab="sub count on Y501 backgrounds")
-
-ggplot(data=subs_N501Y, aes(x=sub_count_N501, y=sub_count_Y501, color=delta_delta_bind))+
-  geom_point()+
-  theme_classic()+
-  ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
-  scale_color_gradientn(colours=c("#A94E35","#A94E35","#F48365","#FFFFFF","#7378B9","#383C6C","#383C6C"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))
-
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-ddlog10Kd.pdf",sep=""),useDingbats=F))
-
-```
-
-Do similar but on log2 scale
-
-```{r sub_occurrence_divergence_versus_DMS_divergence_log2, echo=T, fig.width=5, fig.height=4, fig.align="center", dpi=300,dev="png"}
-#subs_N501Y$sub_count_N501_log2pc <- log2(subs_N501Y$sub_count_N501+1)
-#subs_N501Y$sub_count_Y501_log2pc <- log2(subs_N501Y$sub_count_Y501+1)
-
 subs_N501Y$sub_count_N501_pc <- subs_N501Y$sub_count_N501; subs_N501Y[sub_count_N501_pc==0,sub_count_N501_pc:=0.1]
 subs_N501Y$sub_count_Y501_pc <- subs_N501Y$sub_count_Y501; subs_N501Y[sub_count_Y501_pc==0,sub_count_Y501_pc:=0.1]
 
@@ -732,8 +715,8 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind),], aes(x=sub_count_N501_pc, y=su
   geom_jitter(width=0.15,height=0.15,shape=16,size=2.25)+
   theme_classic()+
   ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
-  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
-  #scale_color_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da99","#f7f7f755","#b8e18699","#4dac26","#4dac26"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  #scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_color_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da99","#f7f7f755","#b8e18699","#4dac26","#4dac26"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   #scale_color_gradientn(colours=c("#e66101","#e66101","#fdb86398","#f7f7f755","#b2abd298","#5e3c99","#5e3c99"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   #scale_color_gradientn(colours=c("#7b3294","#7b3294","#c2a5cf98","#f7f7f755","#a6dba098","#008837","#008837"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   scale_x_continuous(trans = 'log2')+
@@ -761,7 +744,8 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 + sub_count_Y5
   geom_point(shape=16,size=2.25)+
   theme_classic()+
   ylab("delta-delta bind")+xlab("ratio of sub count in Y501 versus N501 bgs")+
-  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  #scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_color_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da99","#f7f7f755","#b8e18699","#4dac26","#4dac26"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   scale_x_continuous(trans = 'log2')+
   geom_text_repel(aes(label=ifelse(((delta_delta_bind < -0.9 | delta_delta_bind > 0.9) & (sub_count_N501 >=1 | sub_count_Y501 >=1) ),as.character(mutation),'')),size=3,color="gray60")+
   geom_hline(yintercept=0, linetype=2,color="gray40")+

@@ -14,6 +14,7 @@ Tyler Starr
     data](#epistatic-cycles-from-binding-data)
 -   [Comparison of mutant accumulation on N501 versus Y501
     backgrounds](#comparison-of-mutant-accumulation-on-n501-versus-y501-backgrounds)
+-   [Validity of additive assumption](#validity-of-additive-assumption)
 
 This notebook analyzes sites whose mutation effects deviate most
 strongly among the variant RBD backgrounds.
@@ -55,7 +56,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -799,8 +800,11 @@ invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/N501_v_Y501_sub_aff
 
 Look at specific mutation occurrences on each background. Want to know
 whether sites with strong differences in mutation effect profiles also
-differ in rates of substitution occurrence. Doing first “WH1” (proxy:
-N501 backgrounds) versus Y501 backgrounds
+differ in rates of substitution occurrence. Doing for N501 versus Y501,
+DMS and sub accrual.
+
+First, showing counts of sub accrual on each background, colored by
+d-d-log10Ka
 
 ``` r
 #make talbe for N501 versus Y501. Note, this is all done very hackily...
@@ -840,29 +844,6 @@ for(i in 1:nrow(subs)){
 subs_N501Y$sub_freq_N501 <- subs_N501Y$sub_count_N501/sum(subs_N501Y$sub_count_N501)
 subs_N501Y$sub_freq_Y501 <- subs_N501Y$sub_count_Y501/sum(subs_N501Y$sub_count_Y501)
 
-#plot(log2(subs_N501Y$sub_freq_N501+min(subs_N501Y[sub_freq_N501>0,sub_freq_N501])/4),log2(subs_N501Y$sub_freq_Y501+min(subs_N501Y[sub_freq_Y501>0,sub_freq_Y501])/4),pch=19,col="#00000067",xlab="sub frequency on N501 backgrounds",ylab="sub frequency on Y501 backgrounds")
-
-#plot(subs_N501Y$sub_count_N501,subs_N501Y$sub_freq_Y501,pch=19,col="#00000067",xlab="sub count on N501 backgrounds",ylab="sub count on Y501 backgrounds")
-
-ggplot(data=subs_N501Y, aes(x=sub_count_N501, y=sub_count_Y501, color=delta_delta_bind))+
-  geom_point()+
-  theme_classic()+
-  ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
-  scale_color_gradientn(colours=c("#A94E35","#A94E35","#F48365","#FFFFFF","#7378B9","#383C6C","#383C6C"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))
-```
-
-<img src="epistatic_shifts_files/figure-gfm/sub_occurrence_divergence_versus_DMS_divergence-1.png" style="display: block; margin: auto;" />
-
-``` r
-invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/sub_count_Y501-v-N501_color-by-ddlog10Kd.pdf",sep=""),useDingbats=F))
-```
-
-Do similar but on log2 scale
-
-``` r
-#subs_N501Y$sub_count_N501_log2pc <- log2(subs_N501Y$sub_count_N501+1)
-#subs_N501Y$sub_count_Y501_log2pc <- log2(subs_N501Y$sub_count_Y501+1)
-
 subs_N501Y$sub_count_N501_pc <- subs_N501Y$sub_count_N501; subs_N501Y[sub_count_N501_pc==0,sub_count_N501_pc:=0.1]
 subs_N501Y$sub_count_Y501_pc <- subs_N501Y$sub_count_Y501; subs_N501Y[sub_count_Y501_pc==0,sub_count_Y501_pc:=0.1]
 
@@ -874,8 +855,8 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind),], aes(x=sub_count_N501_pc, y=su
   geom_jitter(width=0.15,height=0.15,shape=16,size=2.25)+
   theme_classic()+
   ylab("sub count on Y501 backgrounds")+xlab("sub count on N501 backgrounds")+
-  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
-  #scale_color_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da99","#f7f7f755","#b8e18699","#4dac26","#4dac26"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  #scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_color_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da99","#f7f7f755","#b8e18699","#4dac26","#4dac26"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   #scale_color_gradientn(colours=c("#e66101","#e66101","#fdb86398","#f7f7f755","#b2abd298","#5e3c99","#5e3c99"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   #scale_color_gradientn(colours=c("#7b3294","#7b3294","#c2a5cf98","#f7f7f755","#a6dba098","#008837","#008837"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   scale_x_continuous(trans = 'log2')+
@@ -907,7 +888,8 @@ ggplot(data=subs_N501Y[!is.na(delta_delta_bind) & (sub_count_N501 + sub_count_Y5
   geom_point(shape=16,size=2.25)+
   theme_classic()+
   ylab("delta-delta bind")+xlab("ratio of sub count in Y501 versus N501 bgs")+
-  scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  #scale_color_gradientn(colours=c("#ca0020","#ca0020","#f4a58298","#e6e7e855","#92c5de98","#0571b0","#0571b0"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
+  scale_color_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da99","#f7f7f755","#b8e18699","#4dac26","#4dac26"),limits=c(-3.5,3.5),values=c(0/7,2.5/7,3/7,3.5/7,4/7,4.5/7,7/7))+
   scale_x_continuous(trans = 'log2')+
   geom_text_repel(aes(label=ifelse(((delta_delta_bind < -0.9 | delta_delta_bind > 0.9) & (sub_count_N501 >=1 | sub_count_Y501 >=1) ),as.character(mutation),'')),size=3,color="gray60")+
   geom_hline(yintercept=0, linetype=2,color="gray40")+
@@ -1063,4 +1045,58 @@ ggplot(data=subs_omicron_Betaorder, aes(y=delta_bind_Beta, x=delta_bind_WH1))+
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron_mut-diffs-beta-v-wh1.pdf",sep=""),useDingbats=F))
+```
+
+# Validity of additive assumption
+
+How valid is our assumption that mutations should combine addivitely in
+our DMS measurements?
+
+We have access to some sporadic double (and higher order) mutants that
+were present in our libraries. Let’s compare their measured versus
+actual affinity at a global level.
+
+``` r
+dt_multi <- data.table(read.csv(file=config$Titeseq_Kds_file,stringsAsFactors = F))[variant_class==">1 nonsynonymous" & n_aa_substitutions==2]
+
+dt_multi[target=="B1351",target:="Beta"]
+dt_multi[target=="Wuhan_Hu_1",target:="Wuhan-Hu-1"]
+
+#split up the two muts
+dt_multi[,sub1:=strsplit(aa_substitutions,split=" ")[[1]][1],by=aa_substitutions]
+dt_multi[,sub2:=strsplit(aa_substitutions,split=" ")[[1]][2],by=aa_substitutions]
+
+dt_multi[,wt1:=strsplit(sub1,split="")[[1]][1],by=sub1]
+dt_multi[,site1:=as.numeric(paste(strsplit(sub1,split="")[[1]][2:(length(strsplit(sub1,split="")[[1]])-1)],collapse="")),by=sub1]
+dt_multi[,mut1:=strsplit(sub1,split="")[[1]][length(strsplit(sub1,split="")[[1]])],by=sub1]
+
+dt_multi[,wt2:=strsplit(sub2,split="")[[1]][1],by=sub2]
+dt_multi[,site2:=as.numeric(paste(strsplit(sub2,split="")[[1]][2:(length(strsplit(sub2,split="")[[1]])-1)],collapse="")),by=sub2]
+dt_multi[,mut2:=strsplit(sub2,split="")[[1]][length(strsplit(sub2,split="")[[1]])],by=sub2]
+
+dt_multi[,site1:=site1+330]
+dt_multi[,site2:=site2+330]
+
+dt_multi$log10Ka_additive <- as.numeric(NA)
+#compute the expected log10Ka
+for(i in 1:nrow(dt_multi)){
+  bind1 <- dt[target==dt_multi[i,target] & position==dt_multi[i,site1] & mutant==dt_multi[i,mut1],delta_bind]
+  bind2 <- dt[target==dt_multi[i,target] & position==dt_multi[i,site2] & mutant==dt_multi[i,mut2],delta_bind]
+  wt <- dt[target==dt_multi[i,target] & mutant==wildtype & position==501,bind]
+  dt_multi[i,"log10Ka_additive"] <- wt+bind1+bind2
+}
+
+ggplot(data=dt_multi, aes(y=log10Ka_additive, x=log10Ka))+
+  geom_point(shape=16,size=2,col="#00000020")+
+  theme_classic()+
+  ylab("predicted binding from component single mutants")+xlab("measured binding of double mutant")+
+  geom_abline(slope=1,intercept=0,lty=2,col="red")
+```
+
+    ## Warning: Removed 9769 rows containing missing values (geom_point).
+
+<img src="epistatic_shifts_files/figure-gfm/additive_assumption-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/dbl-mut_additive_predictions.pdf",sep=""),useDingbats=F))
 ```
