@@ -50,7 +50,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 18.04.4 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -521,8 +521,18 @@ dt_final$mutant <- factor(dt_final$mutant, levels=c("C","P","G","V","M","L","I",
 dt_final[,wildtype_indicator := ""]
 dt_final[as.character(mutant)==as.character(wildtype),wildtype_indicator := "x"]
 
+#delta-delta bind versus WH1
+dt_final$delta_delta_bind_WH1 <- as.numeric(NA)
+for(i in 1:nrow(dt_final)){
+  if(dt_final[i,target]!="Wuhan-Hu-1" & dt_final[i,wildtype] == dt_final[target=="Wuhan-Hu-1" & position==dt_final[i,position] & mutant==dt_final[i,mutant],wildtype]){
+    dt_final[i,"delta_delta_bind_WH1"] <- dt_final[i,delta_bind] - dt_final[target=="Wuhan-Hu-1" & mutation==dt_final[i,mutation],delta_bind]
+  }else if(dt_final[i,target] != "Wuhan-Hu-1"){
+    dt_final[i,"delta_delta_bind_WH1"] <- dt_final[i,delta_bind] - (dt_final[target=="Wuhan-Hu-1" & position==dt_final[i,position] & mutant==dt_final[i,mutant], bind] - dt_final[target=="Wuhan-Hu-1" & position==dt_final[i,position] & mutant==dt_final[i,wildtype],bind])
+  }
+}
+
 #make temp long-form data frame
-temp <- data.table::melt(dt_final[, .(target,position,mutant,bind,delta_bind,expr,delta_expr,wildtype_indicator)],id.vars=c("target","position","mutant","wildtype_indicator"),measure.vars=c("bind","delta_bind","expr","delta_expr"),variable.name="measurement",value.name="value")
+temp <- data.table::melt(dt_final[, .(target,position,mutant,bind,delta_bind,delta_delta_bind_WH1,expr,delta_expr,wildtype_indicator)],id.vars=c("target","position","mutant","wildtype_indicator"),measure.vars=c("bind","delta_bind","delta_delta_bind_WH1","expr","delta_expr"),variable.name="measurement",value.name="value")
 
 #for method to duplicate aa labels on right side of plot https://github.com/tidyverse/ggplot2/issues/3171
 guide_axis_label_trans <- function(label_trans = identity, ...) {
@@ -585,6 +595,29 @@ p1
 invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/heatmap_SSM_delta-log10Ka-by-target.pdf",sep="")))
 ```
 
+Make heatmaps for the four variants illustrating the 4
+delta-delta-log10Kds versus WH1
+
+``` r
+p1 <- ggplot(temp[measurement=="delta_delta_bind_WH1" & target != "Wuhan-Hu-1",],aes(position,mutant))+geom_tile(aes(fill=value),color="black",lwd=0.1)+
+  scale_fill_gradientn(colours=c("#d01c8b","#d01c8b","#f1b6da","#f7f7f7","#b8e186","#4dac26","#4dac26"),limits=c(-4,4),values=c(0/8,2/8,3/8,4/8,5/8,6/8,8/8),na.value="yellow")+
+  scale_x_continuous(expand=c(0,0),breaks=c(331,seq(335,530,by=5)))+
+  labs(x="",y="")+theme_classic(base_size=9)+
+  coord_equal()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10),axis.text.y=element_text(face="bold",size=10))+
+  facet_wrap(~target,nrow=5)+
+  guides(y.sec=guide_axis_label_trans())+
+  geom_text(aes(label=wildtype_indicator),size=2,color="gray10")+
+  theme(strip.text.x = element_text(size = 18))
+
+p1
+```
+
+<img src="collapse_scores_files/figure-gfm/heatmap_DMS_delta-delta-log10Ka-by-target-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/heatmap_SSM_delta-delta-log10Ka-v-WH1-by-target.pdf",sep="")))
+```
+
 Make heatmaps faceted by target, showing raw expression and
 delta-expression of muts relative to respective wildtype
 
@@ -630,8 +663,6 @@ p1
 ``` r
 invisible(dev.print(pdf, paste(config$final_variant_scores_dir,"/heatmap_SSM_delta-expression-by-target.pdf",sep="")))
 ```
-
-That’s the data! Other analyses in additional notebooks
 
 Save output files.
 
