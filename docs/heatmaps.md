@@ -13,6 +13,6 @@ To use this tool, select the RBD variants that you wish to display in each heatm
 
 ### Technical Details
 
-The impact on ACE2 receptor-binding affinity (delta log10(KD)) or RBD expression of every single amino-acid mutation in SARS-CoV-2 RBDs, as determined by high-throughput titration assays. Wildtype amino acids are indicated by an 'x', and gray squares indicate missing mutations from each library. The number of internally replicated barcodes with which a mutation was measured is visible as `Barcode Count` in the tooltips, where higher numbers indicate higher-confidence measurements.
+The impact on ACE2 receptor-binding affinity (delta log10(KD)) or RBD expression (log(MFI)) of every single amino-acid mutation in SARS-CoV-2 RBDs, as determined by high-throughput titration assays. Wildtype amino acids are indicated by an 'x', and gray squares indicate missing mutations from each library. The number of internally replicated barcodes with which a mutation was measured is visible as `Barcode Count` in the tooltips, where higher numbers indicate higher-confidence measurements.
 
 More information can be found in our preprint [here](). Raw data can be found [here](https://github.com/jbloomlab/SARS-CoV-2-RBD_DMS_variants/blob/main/results/final_variant_scores/final_variant_scores.csv).
