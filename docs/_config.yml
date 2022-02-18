@@ -18,9 +18,9 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: SARS-CoV-2 RBD-DMS in circulating Variants of Concern 
+title: SARS-CoV-2 RBD Deep Mutational Scanning in Variant of Concern backgrounds
 email: whannon@fredhutch.org 
-description: Interactive visualizations of epistatic shifts between circulating variants of concern. 
+description: Interactive visualizations of epistatic shifts between variants of concern. 
 baseurl: "/SARS-CoV-2-RBD_DMS_variants" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
