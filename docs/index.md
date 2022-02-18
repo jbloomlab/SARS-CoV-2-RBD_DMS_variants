@@ -15,7 +15,7 @@ Here, we link to two interactive visualizations that help explore the results of
 
 We have made two tools to help visualize the data from our deep mutations scans:
 
-1. A set of interactive heatmaps that you can use to explore the change in binding affinity ($$/Delta$$ log10 $$K_D$$) to ACE2 or the change in expression of the RBD (log10(MFI)) between the mutant and wildtype amino acids from each experiment. To use this tool, click [here]({{ site.baseurl }}{% link heatmaps.md %}).
+1. A set of interactive heatmaps that you can use to explore the change in binding affinity ($$\Delta$$log10 $$K_D$$) to ACE2 or the change in expression of the RBD (log10(MFI)) between the mutant and wildtype amino acids from each experiment. To use this tool, click [here]({{ site.baseurl }}{% link heatmaps.md %}).
 
 2. An interactive widget that you can use to visualize the epistatic shift in ACE2 binding affinity (-log10 $$K_D$$) between the five variant RBD backgrounds. To use this tool, click [here]({{ site.baseurl }}{% link epistasis.md %}).  
 
