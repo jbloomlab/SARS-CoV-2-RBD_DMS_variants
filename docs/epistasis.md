@@ -15,6 +15,6 @@ Now that you've selected two variants to compare between, you can investigate si
 
 ### Technical Details
 
-The epistatic shift is calculated as the Jensen-Shannon divergence in the set of Boltzmann-weighted affinities for all amino acids at each site. Mutation affinities were experimentally measured via high-throughput ACE2-binding titrations with yeast-displayed RBDs.
+The epistatic shift is calculated as the Jensen-Shannon divergence in the set of Boltzmann-weighted affinities for all amino acids at each site. Mutation affinities were experimentally measured via high-throughput ACE2-binding titrations with yeast-displayed RBDs. The "Barcodes" quantity in per-mutation tooltips indicates the number of internally replicated barcodes with which a mutation was measured, where higher numbers indicate higher-confidence measurements. Mutations with fewer than 3 barcodes in either background are excluded from the Jensen-Shannon divergence calculation.
 
 More information can be found in our preprint [here](). Raw data can be found [here](https://github.com/jbloomlab/SARS-CoV-2-RBD_DMS_variants/blob/main/results/epistatic_shifts/JSD_versus_Wuhan1_by_target.csv) for a table of all pairwise RBD epistatic shifts, and [here](https://github.com/jbloomlab/SARS-CoV-2-RBD_DMS_variants/blob/main/results/final_variant_scores/final_variant_scores.csv) for individual measurements of RBD mutant affinities.
