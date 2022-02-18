@@ -758,7 +758,7 @@ invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/ddbind_v_count-rati
 
 Want a figure to illustrate concept of non-specific buffering of mutations in Omicron. Make a table and diagram illustrating the DMS effect of each of the 15 BA.1 RBD mutations as measured in the WH1 versus N501Y DMS datasets. Mutations in BA.1 RBD: G339D, S371L, S373P, S375P, K417N, N440K, G446S, S477N, T478K, E484A, Q493R, G496S, Q498R, N501Y, Y505H
 
-```{r omicron_sub_compensation_WH1, echo=T, fig.width=3, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r omicron_sub_compensation_WH1, echo=T, fig.width=3, fig.height=3.25, fig.align="center", dpi=300,dev="png"}
 subs_omicron <- data.table(data.table(mut=c("G339D", "S371L", "S373P", "S375P", "K417N", "N440K", "G446S", "S477N", "T478K", "E484A", "Q493R", "G496S", "Q498R", "N501Y", "Y505H"),site=c(339, 371, 373, 375, 417, 440, 446, 477, 478, 484, 493, 496, 498, 501, 505),aa=c("D", "L", "P", "P", "N", "K", "S", "N", "K", "A", "R", "S", "R", "Y", "H")))
 
 subs_omicron$delta_bind_WH1 <- as.numeric(NA)
@@ -821,33 +821,36 @@ ggplot(data=subs_omicron_WH1order, aes(y=value, x=as.numeric(row.names(subs_omic
   ylim(-2.75,3.8)+
   ylab("cumulative additive affinity relative to Wuhan-Hu-1")+xlab("")+
   geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
-  geom_hline(yintercept=0,linetype=2,color="red")
+  geom_hline(yintercept=0,linetype=2,color="red")+
+  geom_hline(yintercept=log10(60) - log10(25.3),linetype=2,color="yellow") #relative affinity of omicron measured by Cameroni et al.
   
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron-cumulative_affinity_WH1-muts.pdf",sep=""),useDingbats=F))
 
 ```
-```{r omicron_sub_compensation_N501Y, echo=T, fig.width=3, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r omicron_sub_compensation_N501Y, echo=T, fig.width=3, fig.height=3.25, fig.align="center", dpi=300,dev="png"}
 ggplot(data=subs_omicron_N501Yorder, aes(y=value, x=as.numeric(row.names(subs_omicron_N501Yorder))))+
   geom_point(shape=16,size=2)+geom_line()+
   theme_classic()+
   ylim(-2.75,3.8)+
   ylab("cumulative additive affinity relative to Wuhan-Hu-1 [N501Y measures]")+xlab("")+
   geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
-  geom_hline(yintercept=0,linetype=2,color="red")
+  geom_hline(yintercept=0,linetype=2,color="red")+
+  geom_hline(yintercept=log10(60) - log10(25.3),linetype=2,color="yellow") #relative affinity of omicron measured by Cameroni et al.
   
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron-cumulative_affinity_N501Y-muts.pdf",sep=""),useDingbats=F))
 
 ```
-```{r omicron_sub_compensation_Beta, echo=T, fig.width=3, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r omicron_sub_compensation_Beta, echo=T, fig.width=3, fig.height=3.25, fig.align="center", dpi=300,dev="png"}
 ggplot(data=subs_omicron_Betaorder, aes(y=value, x=as.numeric(row.names(subs_omicron_Betaorder))))+
   geom_point(shape=16,size=2)+geom_line()+
   theme_classic()+
   ylim(-2.75,3.8)+
   ylab("cumulative additive affinity relative to Wuhan-Hu-1 [Beta measures]")+xlab("")+
   geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
-  geom_hline(yintercept=0,linetype=2,color="red")
+  geom_hline(yintercept=0,linetype=2,color="red")+
+  geom_hline(yintercept=log10(60) - log10(25.3),linetype=2,color="yellow") #relative affinity of omicron measured by Cameroni et al.
   
 
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron-cumulative_affinity_Beta-muts.pdf",sep=""),useDingbats=F))
@@ -857,7 +860,7 @@ invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron-cumulative_
 Why difference in Beta and Alpha plots? Likely what we've seen in other contexts, some global effect in N501Y likely due to it having significantly higher base affinity than the other wildtype backgrounds? Can see this in the plot below, where mutations are biased to being slightly to the left of the 1:1 line.
 
 
-```{r omicron_sub_compensation_alpha-v-beta, echo=T, fig.width=4, fig.height=4, fig.align="center", dpi=300,dev="png"}
+```{r omicron_sub_compensation_alpha-v-beta, echo=T, fig.width=4, fig.height=3, fig.align="center", dpi=300,dev="png"}
 ggplot(data=subs_omicron_Betaorder, aes(y=delta_bind_Beta, x=delta_bind_N501Y))+
   geom_point(shape=16,size=2)+
   theme_classic()+
