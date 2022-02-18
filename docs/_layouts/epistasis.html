@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+  <body>
+<style>
+ h1 {margin-left: 15px; margin-top: 15px}
+ div {margin-left: 15px; margin-right: 15px}
+</style>
+    <main class="page-content" aria-label="Content">
+      {%- include epistasis.html -%}
+      <div >
+        {{ content }}
+      </div>
+    </main>
+
+  </body>
+
+</html>
