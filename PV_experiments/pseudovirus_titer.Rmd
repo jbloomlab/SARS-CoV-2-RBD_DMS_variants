@@ -24,6 +24,7 @@ invisible(lapply(packages, library, character.only=T))
 if(!file.exists("results")){
  dir.create(file.path("results"))
 }
+
 ```
 
 ## Experiment: Titer Spike point mutant pseudovirus
@@ -31,9 +32,10 @@ if(!file.exists("results")){
 **2022-01-17 (ACE2hi)**
 **2022-01-24 (ACE2lo)**
 **2022-01-17 (p24 ELISA)**
+**2022-02-18 (ACE2lo [reps 4-6]), by ANL and RE**
 
 ### Define colorblind-friendly palette
-```{r}
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
 # The palette with grey:
 cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
                "#0072B2", "#D55E00", "#CC79A7")
@@ -49,7 +51,11 @@ head(dt)
 ```
 
 ### Plot absolute (RLU/uL) titers as measured by luciferase activity for WH1 cycle, HEK-ACE2 cell line
-```{r}
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+dt_WH1 <- dt[dt$background=="WH1_D614G",] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "Y449H", "N501Y", "Y449H/N501Y")))
+
 ggplot(dt_WH1,
        aes(genotype, RLU_per_uL_ACE2hi)) +
   geom_point(size=3.5,
@@ -61,48 +67,56 @@ ggplot(dt_WH1,
   ylab("entry titer (RLU/uL)") +
   theme_bw()  +
   ggtitle("D614G background, ACE2-high cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+
+  stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
   "./results/titers_D614G-cycle_absolute_ACE2hi.pdf",
   scale = 1,
-  width = 6,
-  height = 4,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 ```
 
 
 ### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, HEK-ACE2 cell line
-```{r}
-dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+dt_omicron_rep1 <- dt[dt$background=="omicron" & dt$rep %in% c(1,2,3),] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+dt_omicron_rep2 <- dt[dt$background=="omicron" & dt$rep %in% c(4,5,6),] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+dt_omicron_all <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
                                 levels=c("none", "wt", 
                                          "R498Q", "Y501N", "R498Q/Y501N")))
 
-ggplot(dt_omicron,
+ggplot(dt_omicron_rep1,
        aes(genotype, RLU_per_uL_ACE2hi)) +
   geom_point(size=3.5,
              shape=16,
              position=position_jitter(width = 0.1, height = 0, seed = 0)) +
   #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
-  scale_y_log10(lim=c(1e0, 1e6)) +
+  scale_y_log10(lim=c(4e-2, 1e6)) +
   xlab("Spike gene") +
   ylab("entry titer (RLU/uL)") +
   theme_bw()  +
   ggtitle("Omicron background, ACE2-high cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+
+  stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
-  "./results/titers_omicron-cycle_absolute_ACE2hi.pdf",
+  "./results/titers-omicron-cycle_absolute_ACE2hi.pdf",
   scale = 1,
-  width = 6,
-  height = 4,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 ```
 
 ### Plot absolute (RLU/uL) titers as measured by luciferase activity for WH1 cycle, "clone A" cell line
-```{r}
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
 ggplot(dt_WH1,
        aes(genotype, RLU_per_uL_ACE2lo)) +
   geom_point(size=3.5,
@@ -114,25 +128,21 @@ ggplot(dt_WH1,
   ylab("entry titer (RLU/uL)") +
   theme_bw()  +
   ggtitle("D614G background, ACE2-low cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
   "./results/titers_D614G-cycle_absolute_ACE2lo.pdf",
   scale = 1,
-  width = 6,
-  height = 4,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 ```
 
 
-### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, "clone A" cell line
-```{r}
-dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
-                                levels=c("none", "wt", 
-                                         "R498Q", "Y501N", "R498Q/Y501N")))
-
-ggplot(dt_omicron,
+### Plot absolute (RLU/uL) titers as measured by luciferase activity for omicron cycle, "clone A" cell line, two reps and pooled
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(dt_omicron_rep1,
        aes(genotype, RLU_per_uL_ACE2lo)) +
   geom_point(size=3.5,
              shape=16,
@@ -143,26 +153,47 @@ ggplot(dt_omicron,
   ylab("entry titer (RLU/uL)") +
   theme_bw()  +
   ggtitle("Omicron background, ACE2-low cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
-  "./results/titers_omicron-cycle_absolute_ACE2lo.pdf",
+  "./results/titers_omicron-cycle1_absolute_ACE2lo.pdf",
   scale = 1,
-  width = 6,
-  height = 4,
+  width = 3.5,
+  height = 3,
+  useDingbats=F
+)
+```
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(dt_omicron_rep2,
+       aes(genotype, RLU_per_uL_ACE2lo)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(5e-1, 5e4)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/uL)") +
+  theme_bw()  +
+  ggtitle("Omicron background, ACE2-low cell line") +
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
+
+ggsave(
+  "./results/titers_omicron-cycle2_absolute_ACE2lo.pdf",
+  scale = 1,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 ```
 
-
 ### Plot titers as RLU per pg p24 for WH1 cycle, HEK-ACE2 cell line
 
-```{r}
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
 dt$RLU_per_pg_p24_ACE2hi <- dt$RLU_per_uL_ACE2hi * 1000 / dt$p24_pg_per_mL
 dt$RLU_per_pg_p24_ACE2lo <- dt$RLU_per_uL_ACE2lo * 1000 / dt$p24_pg_per_mL
 ```
 
-```{r}
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
 dt_WH1 <- dt[dt$background=="WH1_D614G",] %>% mutate(genotype = factor(genotype, 
                                 levels=c("none", "wt", 
                                          "Y449H", "N501Y", "Y449H/N501Y")))
@@ -178,13 +209,13 @@ ggplot(dt_WH1,
   ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
   ggtitle("D614G background, ACE2-high cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
   "./results/titers_D614G-cycle_RLU-per-pg-p24_ACE2hi.pdf",
   scale = 1,
-  width = 6,
-  height = 4,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 
@@ -192,7 +223,7 @@ ggsave(
 
 
 ### Plot titers as RLU per pg p24 for WH1 cycle, "clone A" cell line
-```{r}
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
 dt_WH1 <- dt[dt$background=="WH1_D614G",] %>% mutate(genotype = factor(genotype, 
                                 levels=c("none", "wt", 
                                          "Y449H", "N501Y", "Y449H/N501Y")))
@@ -208,13 +239,13 @@ ggplot(dt_WH1,
   ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
   ggtitle("D614G background, ACE2-low cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
   "./results/titers_D614G-cycle_RLU-per-pg-p24_ACE2lo.pdf",
   scale = 1,
-  width = 6,
-  height = 4,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 
@@ -222,12 +253,18 @@ ggsave(
 
 ### Plot titers as RLU per pg p24 for Omicron cycle, HEK-ACE2 cell line
 
-```{r}
-dt_omicron <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+dt_omicron_rep1 <- dt[dt$background=="omicron" & dt$rep %in% c(1,2,3),] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+dt_omicron_rep2 <- dt[dt$background=="omicron" & dt$rep %in% c(4,5,6),] %>% mutate(genotype = factor(genotype, 
+                                levels=c("none", "wt", 
+                                         "R498Q", "Y501N", "R498Q/Y501N")))
+dt_omicron_all <- dt[dt$background=="omicron",] %>% mutate(genotype = factor(genotype, 
                                 levels=c("none", "wt", 
                                          "R498Q", "Y501N", "R498Q/Y501N")))
 
-ggplot(dt_omicron,
+ggplot(dt_omicron_rep1,
        aes(genotype, RLU_per_pg_p24_ACE2hi)) +
   geom_point(size=3.5,
              shape=16,
@@ -238,13 +275,13 @@ ggplot(dt_omicron,
   ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
   ggtitle("Omicron background, ACE2-high cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
   "./results/titers_omicron-cycle_RLU-per-pg-p24_ACE2hi.pdf",
   scale = 1,
-  width = 6,
-  height = 4,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 
@@ -252,8 +289,8 @@ ggsave(
 
 
 ### Plot titers as RLU per pg p24 for omicron cycle, "clone A" cell line
-```{r}
-ggplot(dt_omicron,
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(dt_omicron_rep1,
        aes(genotype, RLU_per_pg_p24_ACE2lo)) +
   geom_point(size=3.5,
              shape=16,
@@ -264,55 +301,114 @@ ggplot(dt_omicron,
   ylab("entry titer (RLU/pg p24)") +
   theme_bw()  +
   ggtitle("Omicron background, ACE2-low cell line") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
 
 ggsave(
-  "./results/titers_omicron-cycle_RLU-per-pg-p24_ACE2lo.pdf",
+  "./results/titers_omicron-cycle1_RLU-per-pg-p24_ACE2lo.pdf",
   scale = 1,
-  width = 6,
-  height = 6,
+  width = 3.5,
+  height = 3,
+  useDingbats=F
+)
+
+```
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(dt_omicron_rep2,
+       aes(genotype, RLU_per_pg_p24_ACE2lo)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e-4, 1e2)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/pg p24)") +
+  theme_bw()  +
+  ggtitle("Omicron background, ACE2-low cell line") +
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
+
+ggsave(
+  "./results/titers_omicron-cycle2_RLU-per-pg-p24_ACE2lo.pdf",
+  scale = 1,
+  width = 3.5,
+  height = 3,
+  useDingbats=F
+)
+
+```
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+ggplot(dt_omicron_all,
+       aes(genotype, RLU_per_pg_p24_ACE2lo)) +
+  geom_point(size=3.5,
+             shape=16,
+             position=position_jitter(width = 0.1, height = 0, seed = 0)) +
+  #geom_hline(yintercept=25/exp(mean(log(dt[dt$genotype=="wildtype" & dt$uL_virus=="50","virus_per_mL_stringent"]))), color="grey", linetype="dashed") + #Limit of detection
+  scale_y_log10(lim=c(1e-4, 1e2)) +
+  xlab("Spike gene") +
+  ylab("entry titer (RLU/pg p24)") +
+  theme_bw()  +
+  ggtitle("Omicron background, ACE2-low cell line") +
+  theme(plot.title = element_text(hjust = 0.5),text=element_text(size=10))+   stat_summary(fun=mean,geom="point",size=10,color="red",shape=95)
+
+ggsave(
+  "./results/titers_omicron-cycleall_RLU-per-pg-p24_ACE2lo.pdf",
+  scale = 1,
+  width = 3.5,
+  height = 3,
   useDingbats=F
 )
 
 ```
 ### quants and t-tests for titer differences in omicron cycle
-```{r}
-#geomean function
-geomean <- function(x){
-  return(exp(mean(log(x))))
-}
+```{r, fig.width=3.5, fig.height=3, fig.align="center", dpi=300,dev="png"}
+
 
 #calc fold-change in geomean titer compared to wt, absolute titer, ACE2hi
-#omicron R498Q vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"])
-#omicron Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"])
-#omicron R498Q/Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"])
+#omicron R498Q vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2hi"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2hi"])
+#omicron Y501N vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2hi"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2hi"])
+#omicron R498Q/Y501N vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2hi"])
 
 #calc fold-change in geomean titer compared to wt, absolute titer, ACE2lo
-#omicron R498Q vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"])
-#omicron Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"])
-#omicron R498Q/Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"])
+#omicron R498Q vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2lo"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2lo"])
+#omicron Y501N vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2lo"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2lo"])
+#omicron R498Q/Y501N vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2lo"])
 
 #calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2hi
 #omicron R498Q vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
 #omicron Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
 #omicron R498Q/Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2hi"])
 
 #calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2lo
-#omicron R498Q vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
-#omicron Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
-#omicron R498Q/Y501N vs wt
-geomean(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron R498Q vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron Y501N vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron R498Q/Y501N vs wt, rep1
+geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+
+#calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2lo
+#omicron R498Q vs wt, rep2
+geomean(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_rep2[dt_omicron_rep2$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron Y501N vs wt, rep2
+geomean(dt_omicron_rep2[dt_omicron_rep2$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_rep2[dt_omicron_rep2$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron R498Q/Y501N vs wt, rep2
+geomean(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_rep2[dt_omicron_rep2$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+
+#calc fold-change in geomean titer compared to wt, RLU/pg p24 titer, ACE2lo
+#omicron R498Q vs wt, all reps
+geomean(dt_omicron_all[dt_omicron_all$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_all[dt_omicron_all$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron Y501N vs wt, all reps
+geomean(dt_omicron_all[dt_omicron_all$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_all[dt_omicron_all$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
+#omicron R498Q/Y501N vs wt, all reps
+geomean(dt_omicron_all[dt_omicron_all$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"])/geomean(dt_omicron_all[dt_omicron_all$genotype=="wt","RLU_per_pg_p24_ACE2lo"])
 
 #calc fold-change in geomean titer compared to wt, absolute titer, ACE2hi
 #WH1 Y449H vs wt
@@ -348,44 +444,64 @@ geomean(dt_WH1[dt_WH1$genotype=="Y449H/N501Y","RLU_per_pg_p24_ACE2lo"])/geomean(
 
 
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2hi"]))
+
+#rep1, ACE2lo, omicron cycle t tests
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+#rep2, ACE2lo, omicron cycle t tests
+t.test(log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_rep2[dt_omicron_rep2$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+#all reps, ACE2lo, omicron cycle t tests
+t.test(log10(dt_omicron_all[dt_omicron_all$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_all[dt_omicron_all$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_all[dt_omicron_all$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_all[dt_omicron_all$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_all[dt_omicron_all$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_all[dt_omicron_all$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron_all[dt_omicron_all$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_all[dt_omicron_all$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_all[dt_omicron_all$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_all[dt_omicron_all$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+
+t.test(log10(dt_omicron_all[dt_omicron_all$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron_all[dt_omicron_all$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
 
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_pg_p24_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_pg_p24_ACE2lo"]))
-
-
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
-
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
-
-t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2hi"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2hi"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2hi"]))
 
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="wt","RLU_per_uL_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"]))
-t.test(log10(dt_omicron[dt_omicron$genotype=="R498Q","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q","RLU_per_uL_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
 
-t.test(log10(dt_omicron[dt_omicron$genotype=="Y501N","RLU_per_uL_ACE2lo"]),log10(dt_omicron[dt_omicron$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
+t.test(log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="Y501N","RLU_per_uL_ACE2lo"]),log10(dt_omicron_rep1[dt_omicron_rep1$genotype=="R498Q/Y501N","RLU_per_uL_ACE2lo"]))
 
 
 ```

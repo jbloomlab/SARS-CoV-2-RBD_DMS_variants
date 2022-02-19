@@ -1,0 +1,16 @@
+background,genotype,rep,RLU_per_uL
+omicron,wt,1,1005.376667
+omicron,wt,2,2666.9
+omicron,wt,3,5487.966667
+omicron,R498Q,1,2758.183333
+omicron,R498Q,2,1018.453333
+omicron,R498Q,3,1358.906667
+omicron,Y501N,1,2548.383333
+omicron,Y501N,2,1312
+omicron,Y501N,3,3014.9
+omicron,R498Q/Y501N,1,260.6366667
+omicron,R498Q/Y501N,2,359.5933333
+omicron,R498Q/Y501N,3,536.7133333
+omicron,none,1,9.82
+omicron,none,2,0.6225
+omicron,none,3,0.622
