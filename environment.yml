@@ -4,7 +4,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - altair=4.1
+  - altair=4.2
   - entrez-direct=13.9
   - git-lfs
   - jupyter
