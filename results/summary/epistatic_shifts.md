@@ -14,6 +14,8 @@ Tyler Starr
     data](#epistatic-cycles-from-binding-data)
 -   [Comparison of mutant accumulation on N501 versus Y501
     backgrounds](#comparison-of-mutant-accumulation-on-n501-versus-y501-backgrounds)
+-   [Compare affinity arc to escape arc from escape calculator
+    here](#compare-affinity-arc-to-escape-arc-from-escape-calculator-here)
 -   [Validity of additive assumption](#validity-of-additive-assumption)
 
 This notebook analyzes sites whose mutation effects deviate most
@@ -56,7 +58,7 @@ sessionInfo()
 
     ## R version 3.6.2 (2019-12-12)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.4 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS/LAPACK: /app/software/OpenBLAS/0.3.7-GCC-8.3.0/lib/libopenblas_haswellp-r0.3.7.so
@@ -972,7 +974,8 @@ ggplot(data=subs_omicron_WH1order, aes(y=value, x=as.numeric(row.names(subs_omic
   ylim(-2.75,3.8)+
   ylab("cumulative additive affinity relative to Wuhan-Hu-1")+xlab("")+
   geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
-  geom_hline(yintercept=0,linetype=2,color="red")
+  geom_hline(yintercept=0,linetype=2,color="red")+
+  geom_hline(yintercept=log10(60) - log10(25.3),linetype=2,color="yellow") #relative affinity of omicron measured by Cameroni et al.
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_WH1-1.png" style="display: block; margin: auto;" />
@@ -988,7 +991,8 @@ ggplot(data=subs_omicron_N501Yorder, aes(y=value, x=as.numeric(row.names(subs_om
   ylim(-2.75,3.8)+
   ylab("cumulative additive affinity relative to Wuhan-Hu-1 [N501Y measures]")+xlab("")+
   geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
-  geom_hline(yintercept=0,linetype=2,color="red")
+  geom_hline(yintercept=0,linetype=2,color="red")+
+  geom_hline(yintercept=log10(60) - log10(25.3),linetype=2,color="yellow") #relative affinity of omicron measured by Cameroni et al.
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_N501Y-1.png" style="display: block; margin: auto;" />
@@ -1004,7 +1008,8 @@ ggplot(data=subs_omicron_Betaorder, aes(y=value, x=as.numeric(row.names(subs_omi
   ylim(-2.75,3.8)+
   ylab("cumulative additive affinity relative to Wuhan-Hu-1 [Beta measures]")+xlab("")+
   geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
-  geom_hline(yintercept=0,linetype=2,color="red")
+  geom_hline(yintercept=0,linetype=2,color="red")+
+  geom_hline(yintercept=log10(60) - log10(25.3),linetype=2,color="yellow") #relative affinity of omicron measured by Cameroni et al.
 ```
 
 <img src="epistatic_shifts_files/figure-gfm/omicron_sub_compensation_Beta-1.png" style="display: block; margin: auto;" />
@@ -1045,6 +1050,51 @@ ggplot(data=subs_omicron_Betaorder, aes(y=delta_bind_Beta, x=delta_bind_WH1))+
 
 ``` r
 invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron_mut-diffs-beta-v-wh1.pdf",sep=""),useDingbats=F))
+```
+
+## Compare affinity arc to escape arc from escape calculator [here](https://jbloomlab.github.io/SARS2_RBD_Ab_escape_maps/escape-calc/)
+
+``` r
+#used escape calculator to look at cumulative fraction of antibody binding retained as we follow the order of the mutations in the affinity arc
+subs_omicron_Betaorder$antibody_escape <- c(0.020, 0.035, 0.043, 0.055, 0.063, 0.069, 0.073, 0.10, 0.11, 0.18, 0.41, 0.42, 0.43, 0.58, 0.63)
+
+ggplot(data=subs_omicron_Betaorder, aes(y=value, x=antibody_escape))+
+  geom_point(shape=16,size=2)+geom_line()+
+  theme_classic()+
+  ylab("cumulative affinity relative to Wuhan-Hu-1 [Beta measures]")+xlab("cumulative antibody escape")+
+  geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
+  geom_hline(yintercept=0,linetype=2,color="red")+
+  geom_hline(yintercept=log10(60) - log10(25.3),linetype=2,color="yellow") #relative affinity of omicron measured by Cameroni et al.
+```
+
+<img src="epistatic_shifts_files/figure-gfm/omicron_sub_affinity-v-escape-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron_mut-affinity-v-escape.pdf",sep=""),useDingbats=F))
+```
+
+``` r
+#used escape calculator to look at cumulative fraction of antibody binding retained as we follow the order of the mutations in the affinity arc
+# subs_omicron_Betaorder$delta_antibody_escape <- 0.02
+# for(i in 2:nrow(subs_omicron_Betaorder)){
+#   subs_omicron_Betaorder[i,"delta_antibody_escape"] <- subs_omicron_Betaorder[i,"antibody_escape"] - subs_omicron_Betaorder[i-1,"antibody_escape"]
+# }
+
+subs_omicron_Betaorder$delta_antibody_escape <- c(0.020, 0.021, 0.0097, 0.013, 0.011, 0.0085, 0.0069, 0.048, 0.0070, 0.088, 0.30, 0.014, 0.0068, 0.20, 0.077)
+
+
+ggplot(data=subs_omicron_Betaorder, aes(y=delta_bind_Beta, x=delta_antibody_escape))+
+  geom_point(shape=16,size=2)+
+  theme_classic()+
+  ylab("mutation delta-log10Kd [Beta measures]")+xlab("mutant antibody escape")+
+  geom_text_repel(aes(label=as.character(mut)),size=3,color="gray40")+
+  geom_hline(yintercept=0,lty=2,col="red")
+```
+
+<img src="epistatic_shifts_files/figure-gfm/omicron_sub_delta-affinity-v-delta-escape-1.png" style="display: block; margin: auto;" />
+
+``` r
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/omicron_mut_delta-affinity-v-deltaescape.pdf",sep=""),useDingbats=F))
 ```
 
 # Validity of additive assumption
