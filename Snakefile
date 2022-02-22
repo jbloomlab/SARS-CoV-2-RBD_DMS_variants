@@ -67,7 +67,9 @@ rule make_summary:
         sars2_subs=config['UShER_annotated_subs'],
         parsed_subs_N501Y=config['UShER_parsed_subs_N501Y'],
         epistatic_shifts='results/summary/epistatic_shifts.md',
-        structural_shifts='results/summary/structural_shifts.md'
+        structural_shifts='results/summary/structural_shifts.md',
+        epistasis_viz=os.path.join(config['visualization_dir'], "epistasis.html"),
+        heatmap_viz=os.path.join(config['visualization_dir'], "heatmap.html")
     output:
         summary = os.path.join(config['summary_dir'], 'summary.md')
     run:
@@ -122,6 +124,30 @@ rule make_dag:
         os.path.join(config['summary_dir'], 'dag.svg')
     shell:
         "snakemake --forceall --dag | dot -Tsvg > {output}"
+
+
+rule interactive_jsd_plot:
+    """ Make the interactive plot for visualizing epistatic shifts.
+    """
+    input: 
+        scores=config['final_variant_scores_mut_file'],
+        jsd=config['JSD_v_WH1_file']
+    output:
+        html=os.path.join(config['visualization_dir'], "epistasis.html")
+    notebook: "Epistatic-Shifts-Interactive-Visualization.ipynb"
+
+
+rule interactive_heatmap_plot:
+    """ Make the interactive heatmap for expression and binding.
+    """
+    input: 
+        scores=config['final_variant_scores_mut_file']
+    params:
+        annotations=config['RBD_sites']
+    output:
+        html=os.path.join(config['visualization_dir'], "heatmap.html")
+    notebook: "RBD-Heatmaps-Interactive-Visualization.ipynb"
+
 
 rule structural_shifts:
     input:
