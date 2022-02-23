@@ -31,3 +31,5 @@ workflow:
 8. [Analyze patterns of epistasis in the DMS data and in SARS-CoV-2 genomic data](epistatic_shifts.md).
 
 9. [Analyze structural perturbations in variant RBD structures and compare to DMS data](structural_shifts.md).
+
+10. Make interactive data visualizations, available [here](https://jbloomlab.github.io/SARS-CoV-2-RBD_DMS_variants/)
