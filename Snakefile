@@ -112,6 +112,7 @@ rule make_summary:
             
             9. [Analyze structural perturbations in variant RBD structures and compare to DMS data]({path(input.structural_shifts)}).
 
+            10. Make interactive data visualizations, available [here](https://jbloomlab.github.io/SARS-CoV-2-RBD_DMS_variants/)
 
             """
             ).strip())
