@@ -108,6 +108,7 @@ epistatic_shifts_dir: results/epistatic_shifts
 JSD_v_WH1_file: results/epistatic_shifts/JSD_versus_Wuhan1_by_target.csv
 JSD_v_WH1_expr_file: results/epistatic_shifts/JSD_versus_Wuhan1_EXPRESSION_by_target.csv
 structural_shifts_dir: results/structural_shifts
+visualization_dir: docs/_includes
 
 
 # parameters for running PacBio `ccs` program
