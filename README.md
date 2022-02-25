@@ -14,6 +14,12 @@ Study and analysis by Tyler Starr, Allie Greaney, [Jesse Bloom](https://research
 For a summary of the workflow and links to key results files, [click here](results/summary/summary.md).
 Reading this summary is the best way to understand the analysis.
 
+We have also made [two tools](https://jbloomlab.github.io/SARS-CoV-2-RBD_DMS_variants/) to help visualize the results of our analysis:
+
+1. You can use a set of interactive heatmaps to explore the change in ACE2-binding affinity or the change in RBD expression caused by mutations in each RBD variant. To use this tool, click [here](https://jbloomlab.github.io/SARS-CoV-2-RBD_DMS_variants/RBD-heatmaps/).
+
+2. You can use an interactive widget to visualize epistatic shifts in mutational effects on ACE2-binding affinity between variant RBDs. To use this tool, click [here](https://jbloomlab.github.io/SARS-CoV-2-RBD_DMS_variants/epistatic-shifts/).
+
 ## Running the analysis
 The analysis consists of three components, all of which are contained in this repository:
 
