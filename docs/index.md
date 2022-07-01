@@ -9,7 +9,7 @@ layout: default
 
 SARS-CoV-2 has evolved variants with substitutions in the spike receptor-binding domain (RBD) that impact its affinity for ACE2 receptor and recognition by antibodies. These substitutions could also shape future evolution by modulating the effects of mutations at other sites—a phenomenon called epistasis. To investigate this possibility, we performed deep mutational scans to measure the impact on ACE2 binding of all single amino-acid mutations in the Wuhan-Hu-1, Alpha, Beta, Delta, and Eta variant RBDs.
 
-Here, we link to two interactive visualizations that enable exploration of the data from these deep mutational scans across SARS_CoV-2 variants. The manuscript detailing the results of these experiments is published [here](https://www.biorxiv.org/content/10.1101/2022.02.24.481899v1). 
+Here, we link to two interactive visualizations that enable exploration of the data from these deep mutational scans across SARS_CoV-2 variants. The manuscript detailing the results of these experiments is published [here](https://doi.org/10.1126/science.abo7896). 
 
 ### Instructions 
 

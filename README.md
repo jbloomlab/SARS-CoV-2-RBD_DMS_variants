@@ -1,7 +1,7 @@
 # Deep mutational scanning of the SARS-CoV-2 RBD in variant backgrounds.
 
 Analysis of deep mutational scanning of barcoded codon variants of SARS-CoV-2 RBD in variant backgrounds.
-This study is described in [this pre-print](https://www.biorxiv.org/content/10.1101/2022.02.24.481899v1).
+This study is described in [this manuscript](https://doi.org/10.1126/science.abo7896).
 
 The 4 backgrounds examined here are:
   1. Wuhan-Hu-1 background ("wildtype")
