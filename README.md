@@ -9,6 +9,8 @@ The 4 backgrounds examined here are:
   3. N501Y (found in the B.1.1.7 lineage)
   4. K417N-E484K-N501Y (found in the B.1.351 lineage)
 
+In addition, we incorporate the RBD DMS data measured via the same experimental platform in the Delta background (L452R+T478K), downloaded from [this repository](https://github.com/jbloomlab/SARS-CoV-2-RBD_Delta).
+
 Study and analysis by Tyler Starr, Allie Greaney, [Jesse Bloom](https://research.fhcrc.org/bloom/en.html), and co-authors.
 
 ## Summary of workflow and results
