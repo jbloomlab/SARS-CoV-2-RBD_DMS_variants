@@ -272,6 +272,29 @@ label_df <- data.frame(xmin=sig_mAb_sites-0.5,
 
 ```
 
+Plot mAb escape versus average DMS effect (in WH1 background?)
+
+```{r mAb-escape-v-constraint, echo=T, fig.width=3.5, fig.height=3.5, fig.align="center", dpi=300,dev="png"}
+site_escape$site_average_ACE2 <- as.numeric(NA)
+for(i in 1:nrow(site_escape)){
+  site_escape$site_average_ACE2[i] <- median(dt[target=="Wuhan-Hu-1" & position==site_escape[i,site] & wildtype!=mutant,delta_bind],na.rm=T)
+  
+}
+
+
+ggplot(data=site_escape, aes(x=site_average_ACE2, y=site_average_escape))+
+  geom_point()+
+  theme_classic()+
+  #scale_x_continuous(expand=c(0.01,0.01),breaks=c(331,seq(335,530,by=5)))+
+  #theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.6,face="bold",size=10))+
+  ylab("average mutation effect on antibody escape (arbitrary units)")+
+  xlab("average mutation effect on ACE2-binding (delta-log10Ka)")+
+  geom_text_repel(aes(label=ifelse((site_average_escape > 0.1),as.character(site),'')),size=3,color="gray40")
+
+invisible(dev.print(pdf, paste(config$epistatic_shifts_dir,"/mAb-escape_v_ACE2_by-site.pdf",sep=""),useDingbats=F))
+```
+
+
 ```{r line_plots_JSD_v_WH1, echo=T, fig.width=12, fig.height=4, fig.align="center", dpi=300,dev="png"}
 #define focal bg for others to compare to
 bg <- "Wuhan-Hu-1"
